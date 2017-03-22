@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{EEA88589-0D2B-45E6-A993-92CC9B0AE6E0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D183D927-D855-4111-824B-AC1D291BFB0D}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "eLearning", "src\eLearning\eLearning.xproj", "{5674AD1E-C109-4B0E-A363-259D5CCBD7AA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5674AD1E-C109-4B0E-A363-259D5CCBD7AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5674AD1E-C109-4B0E-A363-259D5CCBD7AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5674AD1E-C109-4B0E-A363-259D5CCBD7AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5674AD1E-C109-4B0E-A363-259D5CCBD7AA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5674AD1E-C109-4B0E-A363-259D5CCBD7AA} = {EEA88589-0D2B-45E6-A993-92CC9B0AE6E0}
+	EndGlobalSection
+EndGlobal
