@@ -13,18 +13,17 @@ namespace eLearning.Controllers
             return View();
         }
 
-        public IActionResult About()
+        [HttpPost]
+        public JsonResult Signin()
         {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
+            return Json(new {message = "Success" });
         }
 
-        public IActionResult Contact()
+        [HttpPost]
+        public JsonResult Signup()
         {
-            ViewData["Message"] = "Your contact page.";
 
-            return View();
+            return Json(new { message = "Success" });
         }
 
         public IActionResult Error()

@@ -130,8 +130,14 @@ app.service('validateService', ['constants', function(constants) {
 
 }]);
 
-app.controller('home',['$scope', 'validateService', 'constants', ($scope, validateService, constants) => {
-    $('.modal-dialog').click((e) =>  e.stopPropagation()); //when modal backdrop is clicked modals data is cleared,this function prevents it from activating when modal itself is clicked
+app.controller('home',['$scope', '$http', 'validateService', 'constants', ($scope, $http, validateService, constants) => {
+    $('#signupModal').on('hidden.bs.modal', function () {
+        $scope.clearSignupData();
+    });
+
+    $('#signinModal').on('hidden.bs.modal', function () {
+        $scope.clearSigninData();
+    });
 
     $scope.errorExists = false;
     $scope.clearSignupErrors = () => {
@@ -163,11 +169,26 @@ app.controller('home',['$scope', 'validateService', 'constants', ($scope, valida
     $scope.signup = () => {
         $scope.clearSignupErrors();
         $scope.signupValidate(); //sets $scope.errorExists to true if theres any error
-        if ($scope.errorExists) {
-            alert('cant sign up');
-        }
-        else {
-            alert('sign up succeeded')
+        if (!$scope.errorExists) {
+            $http({
+                method: "POST",
+                url: "/Home/Signup",
+                data: {
+                    user: {
+                        firstName: $scope.signupFirstName,
+                        lastName: $scope.signupLastName,
+                        email: $scope.signupEmail.toLowerCase(),
+                        password: $scope.signupPassword
+                    }
+                }
+            }).then((response) => {
+                if (response.data.message === 'Success') {
+                    alert('Congratulations, you have signed up!');
+                }
+                else {
+                    alert('Sign up failed!');
+                }
+            });
         }
     };
 
@@ -191,11 +212,24 @@ app.controller('home',['$scope', 'validateService', 'constants', ($scope, valida
     $scope.signin = () => {
         $scope.clearSigninErrors();
         $scope.signinValidate();
-        if ($scope.errorExists) {
-            alert('cant sign in');
-        }
-        else {
-            alert('sign in succeeded')
+        if (!$scope.errorExists) {
+            $http({
+                method: "POST",
+                url: "/Home/Signin",
+                data: {
+                    user: {
+                        email: $scope.signinEmail.toLowerCase(),
+                        password: $scope.signinPassword
+                    }
+                }
+            }).then((response) => {
+                if (response.data.message === 'Success') {
+                    alert('Congratulations, you have signed in!');
+                }
+                else {
+                    alert('Sign in failed!');
+                }
+            });
         }
     }
 }]);
