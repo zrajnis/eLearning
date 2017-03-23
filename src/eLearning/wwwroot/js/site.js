@@ -1,30 +1,139 @@
 ﻿const app = angular.module('eLearning', []);
 
-const firstNameRegex = /^[a-zA-Z0-9.\s]{2,}$/;
-const lastNameRegex = /^[a-zA-Z0-9.\s]{2,}$/;
-const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const passwordRegex = /^[\s\S]{4,16}$/;
+app.constant('constants', {
+    firstNameRegex: /^[a-zA-Z0-9.\s]{2,}$/,
+    lastNameRegex: /^[a-zA-Z0-9.\s]{2,}$/,
+    emailRegex: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    passwordRegex: /^[\s\S]{4,16}$/,
 
-const firstNameError = 'Please enter a valid first name.';
-const lastNameError = 'Please enter a valid last name.';
-const emailError = 'Please enter a valid email address.';
-const passwordError = 'Password must be 4-16 characters long.';
-const rePasswordError = 'Passwords must match';
+    firstNameError: 'Please enter a valid first name.',
+    lastNameError: 'Please enter a valid last name.',
+    emailError: 'Please enter a valid email address.',
+    passwordError: 'Password must be 4-16 characters long.',
+    rePasswordError: 'Passwords must match.'
+});
 
-let errorMsg = (errorName, message) => {
-    $('#' + errorName + 'Error').text(message);
-    $('#' + errorName).addClass('hasError');
-    return true;
-};
+app.service('validateService', ['constants', function(constants) {
 
-let removeErrorMsg = (errorName) => {
-    $('#' + errorName + 'Error').text('');
-    $('#' + errorName).removeClass('hasError');
-};
+    this.errorMsg = (errorName, message) => {
+        $('#' + errorName + 'Error').text(message);
+        $('#' + errorName).addClass('hasError');
+        return true;
+    };
 
-app.controller('home', function ($scope) {
+    this.removeErrorMsg = (errorName) => {
+        $('#' + errorName + 'Error').text('');
+        $('#' + errorName).removeClass('hasError');
+    };
+
+    this.signupValidate = ($scope) => {
+        if (!constants.firstNameRegex.test($scope.signupFirstName) || !$scope.signupFirstName) { //alternative is pre writing all errors, hiding them and then showing ones that do come up
+            $scope.errorExists = this.errorMsg('signupFirstName', constants.firstNameError);
+        }
+
+        if (!constants.lastNameRegex.test($scope.signupLastName) || !$scope.signupLastName) {
+            $scope.errorExists = this.errorMsg('signupLastName', constants.lastNameError);
+        }
+
+        if (!constants.emailRegex.test($scope.signupEmail) || !$scope.signupEmail) { // or statement isnt needed for this case ,but still ,consistency
+            $scope.errorExists = this.errorMsg('signupEmail', constants.emailError);
+        }
+
+        if (!constants.passwordRegex.test($scope.signupPassword) || !$scope.signupPassword) {
+            $scope.errorExists = this.errorMsg('signupPassword', constants.passwordError);
+        }
+
+        if ($scope.signupPassword !== $scope.signupRePassword || !$scope.signupRePassword) {
+            $scope.errorExists = this.errorMsg('signupRePassword', constants.rePasswordError);
+        }
+    }
+
+    this.signupValidateField = (fieldName, $scope) => { //is invoked dynamically on input change
+        switch (fieldName) {
+            case 'signupFirstName':
+                if (!constants.firstNameRegex.test($scope.signupFirstName) || !$scope.signupFirstName) {
+                    $scope.errorExists = this.errorMsg('signupFirstName', constants.firstNameError);
+                }
+                else {
+                    this.removeErrorMsg('signupFirstName');
+                }
+                break;
+            case 'signupLastName':
+                if (!constants.lastNameRegex.test($scope.signupLastName) || !$scope.signupLastName) {
+                    $scope.errorExists = this.errorMsg('signupLastName', constants.lastNameError);
+                }
+                else {
+                    this.removeErrorMsg('signupLastName');
+                }
+                break;
+            case 'signupEmail':
+                if (!constants.emailRegex.test($scope.signupEmail) || !$scope.signupEmail) {
+                    $scope.errorExists = this.errorMsg('signupEmail', constants.emailError);
+                }
+                else {
+                    this.removeErrorMsg('signupEmail');
+                }
+                break;
+            case 'signupPassword':
+                if (!constants.passwordRegex.test($scope.signupPassword) || !$scope.signupPassword) {
+                    $scope.errorExists = this.errorMsg('signupPassword', constants.passwordError);
+                }
+                else {
+                    this.removeErrorMsg('signupPassword');
+                }
+                break;
+            case 'signupRePassword':
+                if ($scope.signupPassword !== $scope.signupRePassword || !$scope.signupRePassword) {
+                    $scope.errorExists = this.errorMsg('signupRePassword', constants.rePasswordError);
+                }
+                else {
+                    this.removeErrorMsg('signupRePassword');
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+   this.signinValidate = ($scope) => {
+        if (!constants.emailRegex.test($scope.signinEmail) || !$scope.signinEmail) {
+            $scope.errorExists = this.errorMsg('signinEmail', constants.emailError);
+        }
+
+        if (!constants.passwordRegex.test($scope.signinPassword) || !$scope.signinPassword) {
+            $scope.errorExists = this.errorMsg('signinPassword', constants.passwordError);
+        }
+   }
+
+   this.signinValidateField = (fieldName, $scope) => {
+       switch (fieldName) {
+           case 'signinEmail':
+               if (!constants.emailRegex.test($scope.signinEmail) || !$scope.signinEmail) {
+                   $scope.errorExists = this.errorMsg('signinEmail', constants.emailError);
+               }
+               else {
+                   this.removeErrorMsg('signinEmail');
+               }
+               break;
+           case 'signinPassword':
+               if (!constants.passwordRegex.test($scope.signinPassword) || !$scope.signinPassword) {
+                   $scope.errorExists = this.errorMsg('signinPassword', constants.passwordError);
+               }
+               else {
+                   this.removeErrorMsg('signinPassword');
+               }
+               break;
+           default:
+               break;
+       }
+   }
+
+}]);
+
+app.controller('home',['$scope', 'validateService', 'constants', ($scope, validateService, constants) => {
+    $('.modal-dialog').click((e) =>  e.stopPropagation()); //when modal backdrop is clicked modals data is cleared,this function prevents it from activating when modal itself is clicked
+
     $scope.errorExists = false;
-
     $scope.clearSignupErrors = () => {
         $scope.errorExists = false;
         $('#signupFirstNameError').text('');
@@ -48,74 +157,8 @@ app.controller('home', function ($scope) {
         $('#signupRePassword').val('');
     }
 
-    $scope.signupValidate = () => {
-        if (!firstNameRegex.test($scope.signupFirstName) || !$scope.signupFirstName) { //alternative is pre writing all errors, hiding them and then showing ones that do come up
-            $scope.errorExists = errorMsg('signupFirstName', firstNameError);
-        }
-
-        if (!lastNameRegex.test($scope.signupLastName) || !$scope.signupLastName) {
-            $scope.errorExists = errorMsg('signupLastName', lastNameError);
-        }
-
-        if (!emailRegex.test($scope.signupEmail) || !$scope.signupEmail) { // or statement isnt needed for this case ,but still ,consistency
-            $scope.errorExists = errorMsg('signupEmail', emailError);
-        }
-
-        if (!passwordRegex.test($scope.signupPassword) || !$scope.signupPassword) {
-            $scope.errorExists = errorMsg('signupPassword', passwordError);
-        }
-
-        if ($scope.signupPassword !== $scope.signupRePassword || !$scope.signupRePassword) {
-            $scope.errorExists = errorMsg('signupRePassword', rePasswordError);
-        }
-    }
-
-    $scope.signupValidateField = (fieldName) => { //is invoked dynamically on input change
-        switch (fieldName) {
-            case 'signupFirstName':
-                if (!firstNameRegex.test($scope.signupFirstName) || !$scope.signupFirstName) {
-                    $scope.errorExists = errorMsg('signupFirstName', firstNameError);
-                }
-                else {
-                    removeErrorMsg('signupFirstName');
-                }
-                break;
-            case 'signupLastName':
-                if (!lastNameRegex.test($scope.signupLastName) || !$scope.signupLastName) {
-                    $scope.errorExists = errorMsg('signupLastName', lastNameError);
-                }
-                else {
-                    removeErrorMsg('signupLastName');
-                }
-                break;
-            case 'signupEmail':
-                if (!emailRegex.test($scope.signupEmail) || !$scope.signupEmail) { 
-                    $scope.errorExists = errorMsg('signupEmail', emailError);
-                }
-                else {
-                    removeErrorMsg('signupEmail');
-                }
-                break;
-            case 'signupPassword':
-                if (!passwordRegex.test($scope.signupPassword) || !$scope.signupPassword) {
-                    $scope.errorExists = errorMsg('signupPassword', passwordError);
-                }
-                else {
-                    removeErrorMsg('signupPassword');
-                }
-                break;
-            case 'signupRePassword':
-                if ($scope.signupPassword !== $scope.signupRePassword || !$scope.signupRePassword) {
-                    $scope.errorExists = errorMsg('signupRePassword', rePasswordError);
-                }
-                else {
-                    removeErrorMsg('signupRePassword');
-                }
-                break;
-            default:
-                break;
-        }  
-    }
+    $scope.signupValidate = () => validateService.signupValidate($scope);
+    $scope.signupValidateField = (fieldName) => validateService.signupValidateField(fieldName, $scope);
 
     $scope.signup = () => {
         $scope.clearSignupErrors();
@@ -142,42 +185,12 @@ app.controller('home', function ($scope) {
         $('#signinPassword').val('');
     }
 
-    $scope.signinValidate = () => {
-        if (!emailRegex.test($scope.signinEmail) || !$scope.signinEmail) {
-            $scope.errorExists = errorMsg('signinEmail', emailError);
-        }
-
-        if (!passwordRegex.test($scope.signinPassword) || !$scope.signinPassword) {
-            $scope.errorExists = errorMsg('signinPassword', passwordError);
-        }
-    }
-
-    $scope.signinValidateField = (fieldName) => {
-        switch (fieldName) {
-            case 'signinEmail':
-                if (!emailRegex.test($scope.signinEmail) || !$scope.signinEmail) {
-                    $scope.errorExists = errorMsg('signinEmail', emailError);
-                }
-                else {
-                    removeErrorMsg('signinEmail');
-                }
-                break;
-            case 'signinPassword':
-                if (!passwordRegex.test($scope.signinPassword) || !$scope.signinPassword) {
-                    $scope.errorExists = errorMsg('signinPassword', passwordError);
-                }
-                else {
-                    removeErrorMsg('signinPassword');
-                }
-                break;
-            default:
-                break;
-        }
-    }
+    $scope.signinValidate = () => validateService.signinValidate($scope);
+    $scope.signinValidateField = (fieldName) => validateService.signinValidateField(fieldName, $scope);
 
     $scope.signin = () => {
         $scope.clearSigninErrors();
-        $scope.signinValidate(); //sets $scope.errorExists to true if theres any error
+        $scope.signinValidate();
         if ($scope.errorExists) {
             alert('cant sign in');
         }
@@ -185,4 +198,4 @@ app.controller('home', function ($scope) {
             alert('sign in succeeded')
         }
     }
-});
+}]);
