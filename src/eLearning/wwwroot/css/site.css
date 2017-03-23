@@ -44,13 +44,13 @@ textarea {
 #greetingContainer {
     margin-top: 50px;
     margin-bottom: 50px;
-    background: #3b679e; /* Old browsers */
-    background: -moz-linear-gradient(top, #3b679e 0%, #2b88d9 27%, #207cca 75%, #7db9e8 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top, #3b679e 0%,#2b88d9 27%,#207cca 75%,#7db9e8 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, #3b679e 0%,#2b88d9 27%,#207cca 75%,#7db9e8 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3b679e', endColorstr='#7db9e8',GradientType=0 ); /* IE6-9 */
+  background: rgb(107,186,112); /* Old browsers */
+background: -moz-linear-gradient(top, rgba(107,186,112,1) 0%, rgba(107,186,112,1) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top, rgba(107,186,112,1) 0%,rgba(107,186,112,1) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom, rgba(107,186,112,1) 0%,rgba(107,186,112,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6bba70', endColorstr='#6bba70',GradientType=0 ); /* IE6-9 */
     border-radius: 0;
-    border: 1px solid steelblue;
+    border: 1px solid green;
     text-align:center;
     color: whitesmoke;
     padding-bottom: 50px;
@@ -80,6 +80,11 @@ textarea {
     text-align: center;
     color: whitesmoke;
     border-radius: 0;
+    background: #3b679e; /* Old browsers */
+    background: -moz-linear-gradient(top, #3b679e 0%, #2b88d9 27%, #207cca 75%, #7db9e8 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #3b679e 0%,#2b88d9 27%,#207cca 75%,#7db9e8 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #3b679e 0%,#2b88d9 27%,#207cca 75%,#7db9e8 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3b679e', endColorstr='#7db9e8',GradientType=0 ); /* IE6-9 */
 }
 
 #searchBar {
@@ -102,4 +107,34 @@ textarea {
     margin-left: 30%;
     margin-top: 8px;
     height: 50px;
+}
+
+.modal-title {
+    color: whitesmoke;
+}
+
+.close {
+    color: whitesmoke;
+}
+
+.close:hover {
+    color: white;
+}
+
+.error {
+    display: inline-block;
+    margin-left: 10px;
+    color: red;
+}
+
+.block-label {
+    display: block;
+}
+
+.signup-input, .signin-input {
+    display: inline-block;
+}
+
+.hasError {
+    border-color: red;
 }
