@@ -11,7 +11,5 @@ namespace eLearning.Models
         public string Password { get; set; }
 
         public List<UserCourse> UserCourses { get; set; }
-
-        public virtual ICollection<Course> Courses { get; set; }
     }
 }

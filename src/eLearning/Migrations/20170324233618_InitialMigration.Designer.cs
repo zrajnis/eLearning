@@ -8,7 +8,7 @@ using eLearning.Models;
 namespace eLearning.Migrations
 {
     [DbContext(typeof(eLearningContext))]
-    [Migration("20170324232549_InitialMigration")]
+    [Migration("20170324233618_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,11 +44,7 @@ namespace eLearning.Migrations
 
                     b.Property<string>("Owner");
 
-                    b.Property<int?>("UserId");
-
                     b.HasKey("CourseId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Courses");
                 });
@@ -169,13 +165,6 @@ namespace eLearning.Migrations
                         .WithMany("Answers")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("eLearning.Models.Course", b =>
-                {
-                    b.HasOne("eLearning.Models.User")
-                        .WithMany("Courses")
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("eLearning.Models.Exercise", b =>
