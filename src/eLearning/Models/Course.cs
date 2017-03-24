@@ -8,8 +8,8 @@ namespace eLearning.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public string Owner { get; set; }
-        
-        public ICollection<User> Users { get; set; }
+
+        public List<UserCourse> UserCourses { get; set; }
 
         public IList<Lesson> Lessons { get; set; }
         public IList<Exercise> Exercises { get; set; }

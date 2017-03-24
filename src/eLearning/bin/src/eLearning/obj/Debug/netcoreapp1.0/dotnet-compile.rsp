@@ -1,5 +1,5 @@
---temp-output:C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\obj\Debug\netcoreapp1.0\
---out:C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\bin\Debug\netcoreapp1.0\eLearning.dll
+--temp-output:C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\bin\src\eLearning\obj\Debug\netcoreapp1.0\
+--out:C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\bin\src\eLearning\bin\Debug\netcoreapp1.0\eLearning.dll
 --define:DEBUG
 --define:TRACE
 --define:NETCOREAPP1_0
@@ -208,10 +208,13 @@
 --reference:C:\Users\Zvone\.nuget\packages\System.Threading.Timer\4.3.0\ref\netstandard1.2\System.Threading.Timer.dll
 --reference:C:\Users\Zvone\.nuget\packages\System.Xml.ReaderWriter\4.3.0\ref\netstandard1.3\System.Xml.ReaderWriter.dll
 --reference:C:\Users\Zvone\.nuget\packages\System.Xml.XDocument\4.3.0\ref\netstandard1.3\System.Xml.XDocument.dll
---resource:"C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\obj\Debug\netcoreapp1.0\eLearningdotnet-compile.deps.json",eLearning.deps.json
+--resource:"C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\bin\src\eLearning\obj\Debug\netcoreapp1.0\eLearningdotnet-compile.deps.json",eLearning.deps.json
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Program.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Startup.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Controllers\HomeController.cs
+C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Migrations\20170324232549_InitialMigration.cs
+C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Migrations\20170324232549_InitialMigration.Designer.cs
+C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Migrations\eLearningContextModelSnapshot.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Models\Answer.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Models\Course.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Models\eLearningContext.cs

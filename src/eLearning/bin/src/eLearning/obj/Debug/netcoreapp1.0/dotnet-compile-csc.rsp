@@ -7,8 +7,8 @@
 -debug:full
 -nostdlib
 -nologo
-"C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\obj\Debug\netcoreapp1.0\dotnet-compile.assemblyinfo.cs"
--out:"C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\bin\Debug\netcoreapp1.0\eLearning.dll"
+"C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\bin\src\eLearning\obj\Debug\netcoreapp1.0\dotnet-compile.assemblyinfo.cs"
+-out:"C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\bin\src\eLearning\bin\Debug\netcoreapp1.0\eLearning.dll"
 -r:"C:\Users\Zvone\.nuget\packages\Microsoft.ApplicationInsights\2.1.0\lib\dotnet5.4\Microsoft.ApplicationInsights.dll"
 -r:"C:\Users\Zvone\.nuget\packages\Microsoft.ApplicationInsights.AspNetCore\1.0.0\lib\netstandard1.6\Microsoft.ApplicationInsights.AspNetCore.dll"
 -r:"C:\Users\Zvone\.nuget\packages\Microsoft.AspNetCore.Antiforgery\1.0.0\lib\netstandard1.3\Microsoft.AspNetCore.Antiforgery.dll"
@@ -204,10 +204,13 @@
 -r:"C:\Users\Zvone\.nuget\packages\System.Threading.Timer\4.3.0\ref\netstandard1.2\System.Threading.Timer.dll"
 -r:"C:\Users\Zvone\.nuget\packages\System.Xml.ReaderWriter\4.3.0\ref\netstandard1.3\System.Xml.ReaderWriter.dll"
 -r:"C:\Users\Zvone\.nuget\packages\System.Xml.XDocument\4.3.0\ref\netstandard1.3\System.Xml.XDocument.dll"
--resource:"C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\obj\Debug\netcoreapp1.0\eLearningdotnet-compile.deps.json",eLearning.deps.json
+-resource:"C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\bin\src\eLearning\obj\Debug\netcoreapp1.0\eLearningdotnet-compile.deps.json",eLearning.deps.json
 "C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Program.cs"
 "C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Startup.cs"
 "C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Controllers\HomeController.cs"
+"C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Migrations\20170324232549_InitialMigration.cs"
+"C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Migrations\20170324232549_InitialMigration.Designer.cs"
+"C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Migrations\eLearningContextModelSnapshot.cs"
 "C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Models\Answer.cs"
 "C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Models\Course.cs"
 "C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Models\eLearningContext.cs"
