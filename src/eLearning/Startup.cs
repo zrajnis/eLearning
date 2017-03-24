@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using eLearning.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -34,6 +32,8 @@ namespace eLearning
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+            var connection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=eLearningDb;Integrated Security=True;Connect Timeout=30;";
+            services.AddDbContext<eLearningContext>(options => options.UseSqlServer(connection));
             services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddMvc();
