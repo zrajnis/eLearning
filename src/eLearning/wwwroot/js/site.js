@@ -174,12 +174,10 @@ app.controller('home',['$scope', '$http', 'validateService', 'constants', ($scop
                 method: "POST",
                 url: "/Home/Signup",
                 data: {
-                    user: {
-                        firstName: $scope.signupFirstName,
-                        lastName: $scope.signupLastName,
-                        email: $scope.signupEmail.toLowerCase(),
-                        password: $scope.signupPassword
-                    }
+                    FirstName: $scope.signupFirstName,
+                    LastName: $scope.signupLastName,
+                    Email: $scope.signupEmail.toLowerCase(),
+                    Password: $scope.signupPassword
                 }
             }).then((response) => {
                 if (response.data.message === 'Success') {
@@ -218,8 +216,8 @@ app.controller('home',['$scope', '$http', 'validateService', 'constants', ($scop
                 url: "/Home/Signin",
                 data: {
                     user: {
-                        email: $scope.signinEmail.toLowerCase(),
-                        password: $scope.signinPassword
+                        Email: $scope.signinEmail.toLowerCase(),
+                        Password: $scope.signinPassword
                     }
                 }
             }).then((response) => {
