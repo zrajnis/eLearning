@@ -182,7 +182,8 @@ app.controller('home',['$scope', '$http', 'validateService', 'constants', ($scop
                 }
             }).then((response) => {
                 if (response.data.message === 'Success') {
-                    alert('Congratulations, you have signed up!');
+                    $('#signupModal').modal('hide');
+                    $('#signinSuccessModal').modal('show');
                 }
                 else {
                     if (response.data.message === 'Email already in use.') {

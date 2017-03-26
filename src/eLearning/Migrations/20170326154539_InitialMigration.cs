@@ -31,8 +31,8 @@ namespace eLearning.Migrations
                     UserId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Email = table.Column<string>(nullable: false),
-                    FirstName = table.Column<string>(maxLength: 16, nullable: false),
-                    LastName = table.Column<string>(maxLength: 16, nullable: false),
+                    FirstName = table.Column<string>(maxLength: 32, nullable: false),
+                    LastName = table.Column<string>(maxLength: 32, nullable: false),
                     Password = table.Column<string>(maxLength: 16, nullable: false)
                 },
                 constraints: table =>

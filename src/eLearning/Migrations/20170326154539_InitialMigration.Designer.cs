@@ -8,7 +8,7 @@ using eLearning.Models;
 namespace eLearning.Migrations
 {
     [DbContext(typeof(eLearningContext))]
-    [Migration("20170326152922_InitialMigration")]
+    [Migration("20170326154539_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -179,11 +179,11 @@ namespace eLearning.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 16);
+                        .HasAnnotation("MaxLength", 32);
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 16);
+                        .HasAnnotation("MaxLength", 32);
 
                     b.Property<string>("Password")
                         .IsRequired()

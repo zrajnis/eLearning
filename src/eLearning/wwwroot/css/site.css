@@ -142,3 +142,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6bba70', end
 #signinError, #signupError {
     float: left;
 }
+
+#signupSuccess {
+    text-align: center;
+    color: forestgreen;
+}

@@ -34,8 +34,8 @@
             </div>
             <div class="navbar-collapse collapse pull-right">
                 <ul class="nav navbar-nav">
-                    <li><a href=""  data-toggle="modal" data-target="#signinModal">Sign in</a></li>
-                    <li><a  href="" data-toggle="modal" data-target="#signupModal">Sign up</a></li>
+                    <li><a href="" data-toggle="modal" data-target="#signinModal">Sign in</a></li>
+                    <li><a href="" data-toggle="modal" data-target="#signupModal">Sign up</a></li>
                 </ul>
             </div>
         </div>
@@ -95,7 +95,7 @@
                         <input type="password" class="form-control signup-input" placeholder="i.e. ******" name="RePassword" ng-model="signupRePassword" ng-change="signupValidateField('signupRePassword')" id="signupRePassword" /><div class="error" id="signupRePasswordError"></div>
                     </div>
                     <div class="modal-footer">
-                        <div class="error" id="signupError"></div><button type="submit" class="btn btn-primary" >Sign up</button>
+                        <div class="error" id="signupError"></div><button type="submit" class="btn btn-primary">Sign up</button>
                     </div>
                 </form>
             </div>
@@ -119,13 +119,26 @@
                         <input type="password" class="form-control signin-input" placeholder="i.e. ******" name="Password" ng-model="signinPassword" ng-change="signinValidateField('signinPassword')" id="signinPassword" /><div class="error" id="signinPasswordError"></div>
                     </div>
                     <div class="modal-footer">
-                        <div class="error" id="signinError"></div><button type="submit" class="btn btn-success" >Sign in</button>
+                        <div class="error" id="signinError"></div><button type="submit" class="btn btn-success">Sign in</button>
                     </div>
                 </form>
             </div>
 
         </div>
     </div>
-    
+
+    <div class="modal fade" id="signinSuccessModal" role="dialog">
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+                <div id="signupSuccess">
+                    <h3>You have signed up!</h3>
+                    <p>In order to get the full experience, please sign in.</p>
+                </div>
+            </div>
+              
+         </div>
+     </div>
+
 </body>
 </html>

@@ -178,11 +178,11 @@ namespace eLearning.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 16);
+                        .HasAnnotation("MaxLength", 32);
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 16);
+                        .HasAnnotation("MaxLength", 32);
 
                     b.Property<string>("Password")
                         .IsRequired()
