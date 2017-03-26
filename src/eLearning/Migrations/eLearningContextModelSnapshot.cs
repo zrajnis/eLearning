@@ -39,9 +39,11 @@ namespace eLearning.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
-                    b.Property<string>("Owner");
+                    b.Property<string>("Owner")
+                        .IsRequired();
 
                     b.HasKey("CourseId");
 
@@ -57,15 +59,29 @@ namespace eLearning.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<string>("Name");
-
-                    b.Property<int>("Score");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.HasKey("ExerciseId");
 
                     b.HasIndex("CourseId");
 
                     b.ToTable("Exercises");
+                });
+
+            modelBuilder.Entity("eLearning.Models.ExerciseResult", b =>
+                {
+                    b.Property<int>("UserId");
+
+                    b.Property<int>("ExerciseId");
+
+                    b.Property<float>("Score");
+
+                    b.HasKey("UserId", "ExerciseId");
+
+                    b.HasIndex("ExerciseId");
+
+                    b.ToTable("ExerciseResults");
                 });
 
             modelBuilder.Entity("eLearning.Models.Lesson", b =>
@@ -77,7 +93,8 @@ namespace eLearning.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.HasKey("LessonId");
 
@@ -93,7 +110,10 @@ namespace eLearning.Migrations
 
                     b.Property<int>("ExerciseId");
 
-                    b.Property<string>("Sentence");
+                    b.Property<int>("Points");
+
+                    b.Property<string>("Sentence")
+                        .IsRequired();
 
                     b.HasKey("QuestionId");
 
@@ -109,7 +129,8 @@ namespace eLearning.Migrations
 
                     b.Property<int>("LessonId");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.Property<string>("Path")
                         .IsRequired();
@@ -124,28 +145,7 @@ namespace eLearning.Migrations
                     b.ToTable("Resources");
                 });
 
-            modelBuilder.Entity("eLearning.Models.User", b =>
-                {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Email")
-                        .IsRequired();
-
-                    b.Property<string>("FirstName");
-
-                    b.Property<string>("LastName");
-
-                    b.Property<string>("Password");
-
-                    b.HasKey("UserId");
-
-                    b.HasAlternateKey("Email");
-
-                    b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("eLearning.Models.UserCourse", b =>
+            modelBuilder.Entity("eLearning.Models.Subscription", b =>
                 {
                     b.Property<int>("UserId");
 
@@ -155,7 +155,31 @@ namespace eLearning.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("UserCourses");
+                    b.ToTable("Subscriptions");
+                });
+
+            modelBuilder.Entity("eLearning.Models.User", b =>
+                {
+                    b.Property<int>("UserId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Email")
+                        .IsRequired();
+
+                    b.Property<string>("FirstName")
+                        .IsRequired();
+
+                    b.Property<string>("LastName")
+                        .IsRequired();
+
+                    b.Property<string>("Password")
+                        .IsRequired();
+
+                    b.HasKey("UserId");
+
+                    b.HasAlternateKey("Email");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("eLearning.Models.Answer", b =>
@@ -171,6 +195,19 @@ namespace eLearning.Migrations
                     b.HasOne("eLearning.Models.Course", "Course")
                         .WithMany("Exercises")
                         .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("eLearning.Models.ExerciseResult", b =>
+                {
+                    b.HasOne("eLearning.Models.Exercise", "Exercise")
+                        .WithMany("ExerciseResults")
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("eLearning.Models.User", "User")
+                        .WithMany("ExerciseResults")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -198,15 +235,15 @@ namespace eLearning.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("eLearning.Models.UserCourse", b =>
+            modelBuilder.Entity("eLearning.Models.Subscription", b =>
                 {
                     b.HasOne("eLearning.Models.Course", "Course")
-                        .WithMany("UserCourses")
+                        .WithMany("Subscriptions")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("eLearning.Models.User", "User")
-                        .WithMany("UserCourses")
+                        .WithMany("Subscriptions")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

@@ -22,26 +22,40 @@ namespace eLearning.Models
             modelBuilder.Entity<Resource>()
                 .HasAlternateKey(c => c.Path);
 
-            modelBuilder.Entity<UserCourse>()
-                .HasKey(u => new { u.UserId, u.CourseId});
+            modelBuilder.Entity<Subscription>()
+                .HasKey(s => new { s.UserId, s.CourseId});
 
-            modelBuilder.Entity<UserCourse>()
-                .HasOne(uc => uc.User)
-                .WithMany(u => u.UserCourses)
-                .HasForeignKey(uc => uc.UserId);
+            modelBuilder.Entity<Subscription>()
+                .HasOne(s => s.User)
+                .WithMany(s => s.Subscriptions)
+                .HasForeignKey(s => s.UserId);
 
-            modelBuilder.Entity<UserCourse>()
-                .HasOne(uc => uc.Course)
-                .WithMany(c => c.UserCourses)
-                .HasForeignKey(uc => uc.CourseId);
+            modelBuilder.Entity<Subscription>()
+                .HasOne(s => s.Course)
+                .WithMany(s => s.Subscriptions)
+                .HasForeignKey(s => s.CourseId);
+
+            modelBuilder.Entity<ExerciseResult>()
+                .HasKey(er => new { er.UserId, er.ExerciseId });
+
+            modelBuilder.Entity<ExerciseResult>()
+                .HasOne(er => er.User)
+                .WithMany(er => er.ExerciseResults)
+                .HasForeignKey(er => er.UserId);
+
+            modelBuilder.Entity<ExerciseResult>()
+                .HasOne(er => er.Exercise)
+                .WithMany(er => er.ExerciseResults)
+                .HasForeignKey(er => er.ExerciseId);
         }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Course> Courses { get; set; }
-        public DbSet<UserCourse> UserCourses { get; set; }
+        public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
         public DbSet<Resource> Resources { get; set; }
         public DbSet<Exercise> Exercises { get; set; }
+        public DbSet<ExerciseResult> ExerciseResults { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; } 
     } 
