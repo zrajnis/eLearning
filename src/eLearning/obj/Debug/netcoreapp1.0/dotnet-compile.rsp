@@ -212,12 +212,16 @@
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Program.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Startup.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Controllers\HomeController.cs
+C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Migrations\20170326154539_InitialMigration.cs
+C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Migrations\20170326154539_InitialMigration.Designer.cs
+C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Migrations\eLearningContextModelSnapshot.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Models\Answer.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Models\Course.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Models\eLearningContext.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Models\Exercise.cs
+C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Models\ExerciseResult.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Models\Lesson.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Models\Question.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Models\Resource.cs
+C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Models\Subscription.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Models\User.cs
-C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Models\UserCourse.cs

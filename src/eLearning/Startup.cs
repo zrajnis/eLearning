@@ -10,6 +10,8 @@ namespace eLearning
 {
     public class Startup
     {
+        private string _contentRootPath = "";
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -24,6 +26,8 @@ namespace eLearning
                 builder.AddApplicationInsightsSettings(developerMode: true);
             }
             Configuration = builder.Build();
+
+            _contentRootPath = env.ContentRootPath;
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -31,9 +35,15 @@ namespace eLearning
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string conn = Configuration.GetConnectionString("DefaultConnection");
+
+            if (conn.Contains("%CONTENTROOTPATH%"))
+            {
+                conn = conn.Replace("%CONTENTROOTPATH%", _contentRootPath);
+            }
+
             // Add framework services.
-            var connection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=eLearningDb;Integrated Security=True;Connect Timeout=30;";
-            services.AddDbContext<eLearningContext>(options => options.UseSqlServer(connection));
+            services.AddDbContext<eLearningContext>(options => options.UseSqlServer(conn));  //use conn
             services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddMvc();

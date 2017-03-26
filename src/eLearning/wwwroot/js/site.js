@@ -1,8 +1,8 @@
 ﻿const app = angular.module('eLearning', []);
 
 app.constant('constants', {
-    firstNameRegex: /^[a-zA-Z0-9.\s]{2,}$/,
-    lastNameRegex: /^[a-zA-Z0-9.\s]{2,}$/,
+    firstNameRegex: /^[a-zA-Z0-9.\s]{2,32}$/,
+    lastNameRegex: /^[a-zA-Z0-9.\s]{2,32}$/,
     emailRegex: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
     passwordRegex: /^[\s\S]{4,16}$/,
 
@@ -152,15 +152,17 @@ app.controller('home',['$scope', '$http', 'validateService', 'constants', ($scop
         $('#signupPassword').removeClass('hasError');
         $('#signupRePasswordError').text('');
         $('#signupRePassword').removeClass('hasError');
+        $('#signupError').text('');
     }
 
     $scope.clearSignupData = () => { //resets all values ( input values ,input borders and errors
         $scope.clearSignupErrors();
-        $('#signupFirstName').val('');
-        $('#signupLastName').val('');
-        $('#signupEmail').val('');
-        $('#signupPassword').val('');
-        $('#signupRePassword').val('');
+        $scope.signupFirstName = '';
+        $scope.signupLastName = '';
+        $scope.signupEmail = '';
+        $scope.signupPassword = '';
+        $scope.signupRePassword = '';
+        $scope.$apply();
     }
 
     $scope.signupValidate = () => validateService.signupValidate($scope);
@@ -174,19 +176,23 @@ app.controller('home',['$scope', '$http', 'validateService', 'constants', ($scop
                 method: "POST",
                 url: "/Home/Signup",
                 data: {
-                    user: {
-                        firstName: $scope.signupFirstName,
-                        lastName: $scope.signupLastName,
-                        email: $scope.signupEmail.toLowerCase(),
-                        password: $scope.signupPassword
-                    }
+                    FirstName: $scope.signupFirstName,
+                    LastName: $scope.signupLastName,
+                    Email: $scope.signupEmail.toLowerCase(),
+                    Password: $scope.signupPassword
                 }
             }).then((response) => {
                 if (response.data.message === 'Success') {
-                    alert('Congratulations, you have signed up!');
+                    $('#signupModal').modal('hide');
+                    $('#signinSuccessModal').modal('show');
                 }
                 else {
-                    alert('Sign up failed!');
+                    if (response.data.message === 'Email already in use.') {
+                        $('#signupEmailError').text(response.data.message);
+                        $('#signupEmail').addClass('hasError');
+                    }
+
+                    $('#signupError').text('Sign up failed!');
                 }
             });
         }
@@ -198,12 +204,14 @@ app.controller('home',['$scope', '$http', 'validateService', 'constants', ($scop
         $('#signinEmail').removeClass('hasError');
         $('#signinPasswordError').text('');
         $('#signinPassword').removeClass('hasError');
+        $('#signinError').text('');
     }
 
     $scope.clearSigninData = () => {
         $scope.clearSigninErrors();
-        $('#signinEmail').val('');
-        $('#signinPassword').val('');
+        $scope.signinEmail = '';
+        $scope.signinPassword = '';
+        $scope.$apply();
     }
 
     $scope.signinValidate = () => validateService.signinValidate($scope);
@@ -218,8 +226,8 @@ app.controller('home',['$scope', '$http', 'validateService', 'constants', ($scop
                 url: "/Home/Signin",
                 data: {
                     user: {
-                        email: $scope.signinEmail.toLowerCase(),
-                        password: $scope.signinPassword
+                        Email: $scope.signinEmail.toLowerCase(),
+                        Password: $scope.signinPassword
                     }
                 }
             }).then((response) => {
