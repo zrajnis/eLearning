@@ -23,7 +23,9 @@ namespace eLearning.Migrations
 
                     b.Property<int>("QuestionId");
 
-                    b.Property<string>("Sentence");
+                    b.Property<string>("Sentence")
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 120);
 
                     b.HasKey("AnswerId");
 
@@ -37,10 +39,12 @@ namespace eLearning.Migrations
                     b.Property<int>("CourseId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasAnnotation("MaxLength", 240);
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 64);
 
                     b.Property<string>("Owner")
                         .IsRequired();
@@ -57,10 +61,12 @@ namespace eLearning.Migrations
 
                     b.Property<int>("CourseId");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasAnnotation("MaxLength", 120);
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 64);
 
                     b.HasKey("ExerciseId");
 
@@ -91,10 +97,12 @@ namespace eLearning.Migrations
 
                     b.Property<int>("CourseId");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasAnnotation("MaxLength", 120);
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 64);
 
                     b.HasKey("LessonId");
 
@@ -113,7 +121,8 @@ namespace eLearning.Migrations
                     b.Property<int>("Points");
 
                     b.Property<string>("Sentence")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 120);
 
                     b.HasKey("QuestionId");
 
@@ -130,7 +139,8 @@ namespace eLearning.Migrations
                     b.Property<int>("LessonId");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 64);
 
                     b.Property<string>("Path")
                         .IsRequired();
@@ -167,13 +177,16 @@ namespace eLearning.Migrations
                         .IsRequired();
 
                     b.Property<string>("FirstName")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 16);
 
                     b.Property<string>("LastName")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 16);
 
                     b.Property<string>("Password")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 16);
 
                     b.HasKey("UserId");
 

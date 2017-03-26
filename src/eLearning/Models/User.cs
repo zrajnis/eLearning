@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.IO;
 
 namespace eLearning.Models
 {
     public class User
     {
         public int UserId { get; set; }
-        [Required, RegularExpression(@"^[a-zA-Z0-9.\s]{2,32}$")]
+        [Required, RegularExpression(@"^[a-zA-Z.'\s]+$"), MinLength(2), MaxLength(16)]
         public string FirstName { get; set; }
-        [Required, RegularExpression(@"^[a-zA-Z0-9.\s]{2,32}$")]
+        [Required, RegularExpression(@"^[a-zA-Z.'\s]+$"), MinLength(2), MaxLength(16)]
         public string LastName { get; set; }
         [Required, EmailAddress]
         public string Email { get; set; }
-        [Required, RegularExpression(@"^[\s\S]{4, 16}$")]
+        [Required, MinLength(4), MaxLength(16)]
         public string Password { get; set; }
 
         public List<Subscription> Subscriptions { get; set; }

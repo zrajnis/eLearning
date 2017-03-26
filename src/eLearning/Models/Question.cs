@@ -6,7 +6,7 @@ namespace eLearning.Models
     public class Question
     {
         public int QuestionId { get; set; }
-        [Required, RegularExpression(@"^[\s\S]{2,120}$")]
+        [Required, MinLength(2), MaxLength(120)]
         public string Sentence { get; set; }
         [Required, Range(0, 100.0)]
         public int Points { get; set; }

@@ -152,6 +152,7 @@ app.controller('home',['$scope', '$http', 'validateService', 'constants', ($scop
         $('#signupPassword').removeClass('hasError');
         $('#signupRePasswordError').text('');
         $('#signupRePassword').removeClass('hasError');
+        $('#signupError').text('');
     }
 
     $scope.clearSignupData = () => { //resets all values ( input values ,input borders and errors
@@ -184,7 +185,12 @@ app.controller('home',['$scope', '$http', 'validateService', 'constants', ($scop
                     alert('Congratulations, you have signed up!');
                 }
                 else {
-                    alert('Sign up failed!');
+                    if (response.data.message === 'Email already in use.') {
+                        $('#signupEmailError').text(response.data.message);
+                        $('#signupEmail').addClass('hasError');
+                    }
+
+                    $('#signupError').text('Sign up failed!');
                 }
             });
         }
@@ -196,6 +202,7 @@ app.controller('home',['$scope', '$http', 'validateService', 'constants', ($scop
         $('#signinEmail').removeClass('hasError');
         $('#signinPasswordError').text('');
         $('#signinPassword').removeClass('hasError');
+        $('#signinError').text('');
     }
 
     $scope.clearSigninData = () => {

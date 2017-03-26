@@ -6,9 +6,9 @@ namespace eLearning.Models
     public class Exercise
     {
         public int ExerciseId { get; set; }
-        [Required, RegularExpression(@"^[\s\S]{2,64}$")]
+        [Required, MinLength(2), MaxLength(64)]
         public string Name { get; set; }
-        [RegularExpression(@"^[\s\S]{2,120}$")]
+        [MinLength(2), MaxLength(120)]
         public string Description { get; set; }
 
         public int CourseId { get; set; }

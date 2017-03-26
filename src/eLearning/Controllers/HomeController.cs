@@ -31,15 +31,25 @@ namespace eLearning.Controllers
         [HttpPost]
         public IActionResult Signup([FromBody]User user)
         {
-            var emailInUse = db.Users.Count(u => u.Email == user.Email);
-            if(emailInUse > 0)
+            if (ModelState.IsValid)
             {
-                return Json(new { message = "Email already in use" });
-            }
+                var emailCount = db.Users.Count(u => u.Email == user.Email);
 
-            db.Users.Add(user);
-            db.SaveChanges();
-            return Json(new { message = "Success" });
+                if (emailCount > 0)
+                {
+                    return Json(new { message = "Email already in use." });
+                }
+
+                db.Users.Add(user);
+                db.SaveChanges();
+
+                return Json(new { message = "Success" });
+            }
+            else
+            {
+                return Json(new { message = "Failed!" });
+            }
+            
         }
 
         public IActionResult Error()
