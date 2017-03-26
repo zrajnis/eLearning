@@ -157,11 +157,12 @@ app.controller('home',['$scope', '$http', 'validateService', 'constants', ($scop
 
     $scope.clearSignupData = () => { //resets all values ( input values ,input borders and errors
         $scope.clearSignupErrors();
-        $('#signupFirstName').val('');
-        $('#signupLastName').val('');
-        $('#signupEmail').val('');
-        $('#signupPassword').val('');
-        $('#signupRePassword').val('');
+        $scope.signupFirstName = '';
+        $scope.signupLastName = '';
+        $scope.signupEmail = '';
+        $scope.signupPassword = '';
+        $scope.signupRePassword = '';
+        $scope.$apply();
     }
 
     $scope.signupValidate = () => validateService.signupValidate($scope);
@@ -208,8 +209,9 @@ app.controller('home',['$scope', '$http', 'validateService', 'constants', ($scop
 
     $scope.clearSigninData = () => {
         $scope.clearSigninErrors();
-        $('#signinEmail').val('');
-        $('#signinPassword').val('');
+        $scope.signinEmail = '';
+        $scope.signinPassword = '';
+        $scope.$apply();
     }
 
     $scope.signinValidate = () => validateService.signinValidate($scope);
