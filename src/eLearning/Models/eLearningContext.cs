@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace eLearning.Models
 {
-    public class eLearningContext : DbContext
+    public class eLearningContext : IdentityDbContext<User>
     {
         public eLearningContext(DbContextOptions<eLearningContext> options) : base(options) 
         {
@@ -16,8 +17,12 @@ namespace eLearning.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<User>()
                 .HasAlternateKey(c => c.Email);
+            modelBuilder.Entity<User>().Ignore(u => u.Password); //only hashed password is saved to the db(security reasons)
+            modelBuilder.Entity<User>().ToTable("Users");
 
             modelBuilder.Entity<Resource>()
                 .HasAlternateKey(c => c.Path);
@@ -49,7 +54,6 @@ namespace eLearning.Models
                 .HasForeignKey(er => er.ExerciseId);
         }
 
-        public DbSet<User> Users { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<Lesson> Lessons { get; set; }

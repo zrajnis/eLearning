@@ -5,7 +5,7 @@ namespace eLearning.Models
 {
     public class ExerciseResult //exercise result for specific test written by specific user (N:M relationship)
     {
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public virtual User User { get; set; }
 
         public int ExerciseId { get; set; }
