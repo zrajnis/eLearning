@@ -1,6 +1,7 @@
 ﻿using eLearning.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -44,6 +45,17 @@ namespace eLearning
 
             // Add framework services.
             services.AddDbContext<eLearningContext>(options => options.UseSqlServer(conn));  //use conn
+
+            services.AddIdentity<User, IdentityRole>(options => {
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+            })
+                .AddEntityFrameworkStores<eLearningContext>()
+                .AddDefaultTokenProviders();
+
             services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddMvc();
@@ -66,6 +78,8 @@ namespace eLearning
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            app.UseIdentity();
 
             app.UseApplicationInsightsExceptionTelemetry();
 
