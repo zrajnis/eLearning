@@ -44,7 +44,7 @@ namespace eLearning.Controllers
 
             if(result.Succeeded)
             {
-                await _signInManager.SignInAsync(newUser, true);
+                //await _signInManager.SignInAsync(newUser, true);
                 return Json(new { message = "Success!" });
             }
             else
