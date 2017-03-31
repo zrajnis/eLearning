@@ -1,4 +1,20 @@
-﻿const app = angular.module('eLearning', []);
+﻿const app = angular.module('eLearning', ['ngRoute']);
+
+app.config(function ($routeProvider) {
+    $routeProvider
+    .when("/", {
+        templateUrl: "Home"
+    })
+    .when("/User", {
+        templateUrl: "User"
+    })
+    .when("/Search", {
+        templateUrl: "Home/Search"
+    })
+    .when("/User/Search", {
+        templateUrl: "/User/Search"
+    });
+});
 
 app.constant('constants', {
     firstNameRegex: /^[a-zA-Z0-9.\s]{2,32}$/,
@@ -10,7 +26,9 @@ app.constant('constants', {
     lastNameError: 'Please enter a valid last name.',
     emailError: 'Please enter a valid email address.',
     passwordError: 'Must have at least 1 digit and length over 5.',
-    rePasswordError: 'Passwords must match.'
+    rePasswordError: 'Passwords must match.',
+    signUpError: 'Sign up failed.',
+    signInError: 'Sign in failed.'
 });
 
 app.service('validateService', ['constants', function(constants) {
@@ -97,40 +115,17 @@ app.service('validateService', ['constants', function(constants) {
 
    this.signInValidate = ($scope) => {
         if (!constants.emailRegex.test($scope.signInEmail) || !$scope.signInEmail) {
-            $scope.errorExists = this.errorMsg('signInEmail', constants.emailError);
+            $scope.errorExists = this.errorMsg('signIn', constants.signInError);
         }
 
         if (!constants.passwordRegex.test($scope.signInPassword) || !$scope.signInPassword) {
-            $scope.errorExists = this.errorMsg('signInPassword', constants.passwordError);
+            $scope.errorExists = this.errorMsg('signIn', constants.signInError);
         }
-   }
-
-   this.signInValidateField = (fieldName, $scope) => {
-       switch (fieldName) {
-           case 'signInEmail':
-               if (!constants.emailRegex.test($scope.signInEmail) || !$scope.signInEmail) {
-                   $scope.errorExists = this.errorMsg('signInEmail', constants.emailError);
-               }
-               else {
-                   this.removeErrorMsg('signInEmail');
-               }
-               break;
-           case 'signInPassword':
-               if (!constants.passwordRegex.test($scope.signInPassword) || !$scope.signInPassword) {
-                   $scope.errorExists = this.errorMsg('signInPassword', constants.passwordError);
-               }
-               else {
-                   this.removeErrorMsg('signInPassword');
-               }
-               break;
-           default:
-               break;
-       }
    }
 
 }]);
 
-app.controller('home',['$scope', '$http', 'validateService', 'constants', ($scope, $http, validateService, constants) => {
+app.controller('home',['$scope', '$http', '$window', 'validateService', 'constants', ($scope, $http, $window, validateService, constants) => {
     $('#signUpModal').on('hidden.bs.modal', function () {
         $scope.clearSignUpData();
         $scope.$apply();
@@ -185,7 +180,7 @@ app.controller('home',['$scope', '$http', 'validateService', 'constants', ($scop
             }).then((response) => {
                 if (response.data.message === 'Success!') {
                     $('#signUpModal').modal('hide');
-                    $('#signInSuccessModal').modal('show');
+                    $('#signUpSuccessModal').modal('show');
                 }
                 else {
                     if (response.data.message === 'Email already in use.') {
@@ -193,7 +188,7 @@ app.controller('home',['$scope', '$http', 'validateService', 'constants', ($scop
                         $('#signUpEmail').addClass('hasError');
                     }
 
-                    $('#signUpError').text('Sign up failed!');
+                    $('#signUpError').text(constants.signUpError);
                 }
             });
         }
@@ -215,7 +210,6 @@ app.controller('home',['$scope', '$http', 'validateService', 'constants', ($scop
     }
 
     $scope.signInValidate = () => validateService.signInValidate($scope);
-    $scope.signInValidateField = (fieldName) => validateService.signInValidateField(fieldName, $scope);
 
     $scope.signIn = () => {
         $scope.clearSignInErrors();
@@ -223,19 +217,17 @@ app.controller('home',['$scope', '$http', 'validateService', 'constants', ($scop
         if (!$scope.errorExists) {
             $http({
                 method: "POST",
-                url: "/Home/signIn",
+                url: "/Account/SignIn",
                 data: {
-                    user: {
                         Email: $scope.signInEmail.toLowerCase(),
                         Password: $scope.signInPassword
-                    }
                 }
             }).then((response) => {
-                if (response.data.message === 'Success') {
-                    alert('Congratulations, you have signed in!');
+                if (response.data.message === 'Success!') {
+                    $window.location.href = '/User';
                 }
                 else {
-                    alert('Sign in failed!');
+                    $('#signUpError').text(constants.signInError);
                 }
             });
         }

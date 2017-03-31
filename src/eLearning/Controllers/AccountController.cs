@@ -25,32 +25,49 @@ namespace eLearning.Controllers
             db = context;
         }
 
+        [HttpPost]
         public async Task<IActionResult> SignUp([FromBody]User user)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return Json(new { message = "Sign up failed." });
+                var emailCount = db.Users.Count(u => u.Email == user.Email);
+
+                if (emailCount > 0)
+                {
+                    return Json(new { message = "Email already in use." });
+                }
+
+                var newUser = new User { UserName = user.Email, Email = user.Email, FirstName = user.FirstName, LastName = user.LastName };
+                var result = await _userManager.CreateAsync(newUser, user.Password);
+
+                if (result.Succeeded)
+                {
+                    return Json(new { message = "Success!" });
+                }
+                else
+                {
+                    return Json(new { message = "Sign up failed." });
+                } 
             }
 
-            var emailCount = db.Users.Count(u => u.Email == user.Email);
+            return Json(new { message = "Sign up failed." });
+        }
 
-            if (emailCount > 0)
+        [HttpPost]
+        public async Task<IActionResult> SignIn([FromBody]SignInModel user)
+        {
+            if (ModelState.IsValid)
             {
-                return Json(new { message = "Email already in use." });
+                var result = await _signInManager.PasswordSignInAsync(user.Email, user.Password, true, false);
+
+                if (result.Succeeded)
+                {
+                    return Json(new { message = "Success!" });
+                }
+                return Json(new { message = "Sign in failed." });
             }
 
-            var newUser = new User { UserName = user.Email, Email = user.Email, FirstName = user.FirstName, LastName = user.LastName};
-            var result = await _userManager.CreateAsync(newUser, user.Password);
-
-            if(result.Succeeded)
-            {
-                //await _signInManager.SignInAsync(newUser, true);
-                return Json(new { message = "Success!" });
-            }
-            else
-            {
-                return Json(new { message = "Sign up failed." });
-            }
+            return Json(new { message = "Sign in failed." });
         }
     }
 }
