@@ -1,4 +1,7 @@
 ﻿/// <autosync enabled="true" />
+/// <reference path="js/controllers/homecontroller.js" />
+/// <reference path="js/services/cleanupservice.js" />
+/// <reference path="js/services/validateservice.js" />
 /// <reference path="js/site.js" />
 /// <reference path="lib/angular/angular.js" />
 /// <reference path="lib/angular-route/angular-route.js" />
