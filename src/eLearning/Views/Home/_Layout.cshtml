@@ -52,6 +52,7 @@
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/angular/angular.js"></script>
+        <script src="~/lib/angular-route/angular-route.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
@@ -114,9 +115,9 @@
                 <form ng-submit="signIn()">
                     <div class="modal-body">
                         <label for="signInEmail" class="block-label">Enter email:</label>
-                        <input type="text" class="form-control signIn-input" placeholder="i.e. john@gmail.com" name="Email" ng-model="signInEmail" ng-change="signInValidateField('signInEmail')" id="signInEmail" /><div class="error" id="signInEmailError"></div>
+                        <input type="text" class="form-control signIn-input" placeholder="i.e. john@gmail.com" name="Email" ng-model="signInEmail" id="signInEmail" /><div class="error" id="signInEmailError"></div>
                         <label for="signInPassword" class="block-label">Enter password:</label>
-                        <input type="password" class="form-control signIn-input" placeholder="i.e. ******" name="Password" ng-model="signInPassword" ng-change="signInValidateField('signInPassword')" id="signInPassword" /><div class="error" id="signInPasswordError"></div>
+                        <input type="password" class="form-control signIn-input" placeholder="i.e. ******" name="Password" ng-model="signInPassword" id="signInPassword" /><div class="error" id="signInPasswordError"></div>
                     </div>
                     <div class="modal-footer">
                         <div class="error" id="signInError"></div><button type="submit" class="btn btn-success">Sign in</button>
@@ -127,7 +128,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="signInSuccessModal" role="dialog">
+    <div class="modal fade" id="signUpSuccessModal" role="dialog">
         <div class="modal-dialog">
 
             <div class="modal-content">
@@ -136,7 +137,6 @@
                     <p>In order to get the full experience, please sign in.</p>
                 </div>
             </div>
-              
          </div>
      </div>
 
