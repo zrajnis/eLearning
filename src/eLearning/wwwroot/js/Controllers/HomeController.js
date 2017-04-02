@@ -1,10 +1,10 @@
 ﻿angular.module('eLearning').controller('HomeCtrl', ['$scope', '$http', '$window', 'validateService', 'cleanUpService', 'constants', ($scope, $http, $window, validateService, cleanUpService, constants) => {
-    $('#signUpModal').on('hidden.bs.modal', function () {
+    $('#signUpModal').on('hidden.bs.modal', () => {
         $scope.clearSignUpData();
         $scope.$apply();
     });
 
-    $('#signInModal').on('hidden.bs.modal', function () {
+    $('#signInModal').on('hidden.bs.modal', () => {
         cleanUpService.clearSignInData($scope);
         $scope.$apply();
     });
