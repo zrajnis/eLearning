@@ -17,7 +17,7 @@
     </environment>
     @Html.ApplicationInsightsJavaScript(TelemetryConfiguration)
 </head>
-<body ng-app="eLearning" ng-controller="home">
+<body ng-app="eLearning" ng-controller="HomeCtrl">
     <div class="navbar navbar-inverse navbar-fixed-top" id="navbar">
         <div class="container">
             <div class="navbar-header">
@@ -55,6 +55,9 @@
         <script src="~/lib/angular-route/angular-route.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/js/Controllers/HomeController.js" asp-append-version="true"></script>
+        <script src="~/js/Services/ValidateService.js" asp-append-version="true"></script>
+        <script src="~/js/Services/CleanUpService.js" asp-append-version="true"></script>
     </environment>
     <environment names="Staging,Production">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
