@@ -4,10 +4,11 @@ app.config(function ($routeProvider) {
     $routeProvider
     .when("/", {
         templateUrl: "Home",
-        controller: 'HomeCtrl'
+        controller: "HomeCtrl"
     })
     .when("/User", {
-        templateUrl: "User"
+        templateUrl: "User",
+        controller: "UserCtrl"
     })
     .when("/Search", {
         templateUrl: "Home/Search"

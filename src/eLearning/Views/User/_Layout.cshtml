@@ -17,7 +17,7 @@
     </environment>
     @Html.ApplicationInsightsJavaScript(TelemetryConfiguration)
 </head>
-<body ng-app="eLearning" ng-controller="home">
+<body ng-app="eLearning" ng-controller="UserCtrl">
     <div class="navbar navbar-inverse navbar-fixed-top" id="navbar">
         <div class="container">
             <div class="navbar-header">
@@ -35,7 +35,7 @@
             <div class="navbar-collapse collapse pull-right">
                 <ul class="nav navbar-nav">
                     <li><a href="" data-toggle="modal" data-target="#settingsModal">Settings</a></li>
-                    <li><a href="" >Sign out</a></li>
+                    <li><a href="" ng-click="signOut()">Sign out</a></li>
                 </ul>
             </div>
         </div>
@@ -55,7 +55,7 @@
         <script src="~/lib/angular-route/angular-route.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
-        <script src="~/js/Controllers/HomeController.js" asp-append-version="true"></script>
+        <script src="~/js/Controllers/UserController.js" asp-append-version="true"></script>
         <script src="~/js/Services/ValidateService.js" asp-append-version="true"></script>
         <script src="~/js/Services/CleanUpService.js" asp-append-version="true"></script>
     </environment>
