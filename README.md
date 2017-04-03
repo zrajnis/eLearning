@@ -1,7 +1,7 @@
 # eLearning
 
-eLearning portal dedicated to providing classes for web technologies.<br>
-Its oriented towards social aspect, enabling users to create their own classes and share their knowledge!
+eLearning portal dedicated to providing courses for web technologies.<br>
+Its oriented towards social aspect, enabling users to create their own courses and share their knowledge!
 
 To run this project:
 1. Install Visual Studio 2015 or higher
