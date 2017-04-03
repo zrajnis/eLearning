@@ -1,6 +1,7 @@
 ﻿using eLearning.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -53,8 +54,13 @@ namespace eLearning
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;
             })
-                .AddEntityFrameworkStores<eLearningContext>()
-                .AddDefaultTokenProviders();
+                .AddEntityFrameworkStores<eLearningContext>();
+            //.AddDefaultTokenProviders(); //Not needed at the moment since I didnt implement password retrieval etc.
+
+            services.Configure<IdentityOptions>(opt =>
+            {
+                opt.Cookies.ApplicationCookie.LoginPath = new PathString("/"); //override returl url so it returns unauthorized user to index page
+            });
 
             services.AddApplicationInsightsTelemetry(Configuration);
 
