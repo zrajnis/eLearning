@@ -69,5 +69,12 @@ namespace eLearning.Controllers
 
             return Json(new { message = "Sign in failed." });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> SignOut()
+        {
+            await _signInManager.SignOutAsync();
+            return Json(new { message = "Success!" });
+        }
     }
 }
