@@ -89,4 +89,51 @@
         }
     };
 
+    this.settingsValidateField = (fieldName, $scope) => { //is invoked dynamically on input change
+        switch (fieldName) {
+            case 'settingsFirstName':
+                if (!constants.firstNameRegex.test($scope.settingsFirstName) || !$scope.settingsFirstName) {
+                    $scope.errorExists = this.errorMsg('settingsFirstName', constants.firstNameError);
+                }
+                else {
+                    this.removeErrorMsg('settingsFirstName');
+                }
+                break;
+            case 'settingsLastName':
+                if (!constants.lastNameRegex.test($scope.settingsLastName) || !$scope.settingsLastName) {
+                    $scope.errorExists = this.errorMsg('settingsLastName', constants.lastNameError);
+                }
+                else {
+                    this.removeErrorMsg('settingsLastName');
+                }
+                break;
+            case 'settingsOldPassword':
+                if (!constants.passwordRegex.test($scope.settingsOldPassword) || !$scope.settingsOldPassword) {
+                    $scope.errorExists = this.errorMsg('settingsOldPassword', constants.passwordError);
+                }
+                else {
+                    this.removeErrorMsg('settingsOldPassword');
+                }
+                break;
+            case 'settingsNewPassword':
+                if (!constants.passwordRegex.test($scope.settingsNewPassword) || !$scope.settingsNewPassword) {
+                    $scope.errorExists = this.errorMsg('settingsNewPassword', constants.passwordError);
+                }
+                else {
+                    this.removeErrorMsg('settingsNewPassword');
+                }
+                break;
+            case 'settingsRePassword':
+                if ($scope.settingsNewPassword !== $scope.settingsRePassword || !$scope.settingsRePassword) {
+                    $scope.errorExists = this.errorMsg('settingsRePassword', constants.rePasswordError);
+                }
+                else {
+                    this.removeErrorMsg('settingsRePassword');
+                }
+                break;
+            default:
+                break;
+        }
+    };
+
 }]);

@@ -12,4 +12,6 @@
             }
         });
     }
+
+    $scope.settingsValidateField = (fieldName) => validateService.settingsValidateField(fieldName, $scope);
 }]);
