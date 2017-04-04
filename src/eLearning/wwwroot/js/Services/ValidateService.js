@@ -32,50 +32,17 @@
         }
     };
 
-    this.signUpValidateField = (fieldName, $scope) => { //is invoked dynamically on input change
-        switch (fieldName) {
-            case 'signUpFirstName':
-                if (!constants.firstNameRegex.test($scope.signUpFirstName) || !$scope.signUpFirstName) {
-                    $scope.errorExists = this.errorMsg('signUpFirstName', constants.firstNameError);
-                }
-                else {
-                    this.removeErrorMsg('signUpFirstName');
-                }
-                break;
-            case 'signUpLastName':
-                if (!constants.lastNameRegex.test($scope.signUpLastName) || !$scope.signUpLastName) {
-                    $scope.errorExists = this.errorMsg('signUpLastName', constants.lastNameError);
-                }
-                else {
-                    this.removeErrorMsg('signUpLastName');
-                }
-                break;
-            case 'signUpEmail':
-                if (!constants.emailRegex.test($scope.signUpEmail) || !$scope.signUpEmail) {
-                    $scope.errorExists = this.errorMsg('signUpEmail', constants.emailError);
-                }
-                else {
-                    this.removeErrorMsg('signUpEmail');
-                }
-                break;
-            case 'signUpPassword':
-                if (!constants.passwordRegex.test($scope.signUpPassword) || !$scope.signUpPassword) {
-                    $scope.errorExists = this.errorMsg('signUpPassword', constants.passwordError);
-                }
-                else {
-                    this.removeErrorMsg('signUpPassword');
-                }
-                break;
-            case 'signUpRePassword':
-                if ($scope.signUpPassword !== $scope.signUpRePassword || !$scope.signUpRePassword) {
-                    $scope.errorExists = this.errorMsg('signUpRePassword', constants.rePasswordError);
-                }
-                else {
-                    this.removeErrorMsg('signUpRePassword');
-                }
-                break;
-            default:
-                break;
+    this.signUpValidateField = (fieldID, $scope) => { //is invoked dynamically on input change
+        const fieldName = fieldID.substr(6, 1).toLowerCase() + fieldID.substr(7, fieldID.length - 7); // convert field's id to fields name i.e. signUpFirstName -> firstName
+
+        if (fieldID !== 'signUpRePassword' && !constants[fieldName + 'Regex'].test($scope[fieldID])) {
+            $scope.errorExists = this.errorMsg(fieldID, constants[fieldName + 'Error']);
+        }
+        else if (fieldID === 'signUpRePassword' && ($scope.signUpPassword !== $scope.signUpRePassword || !$scope.signUpRePassword)) { //has different validation condition
+            $scope.errorExists = this.errorMsg(fieldID, constants.rePasswordError)
+        }
+        else {
+            this.removeErrorMsg(fieldID);
         }
     };
 
@@ -89,50 +56,21 @@
         }
     };
 
-    this.settingsValidateField = (fieldName, $scope) => { //is invoked dynamically on input change
-        switch (fieldName) {
-            case 'settingsFirstName':
-                if (!constants.firstNameRegex.test($scope.settingsFirstName) || !$scope.settingsFirstName) {
-                    $scope.errorExists = this.errorMsg('settingsFirstName', constants.firstNameError);
-                }
-                else {
-                    this.removeErrorMsg('settingsFirstName');
-                }
-                break;
-            case 'settingsLastName':
-                if (!constants.lastNameRegex.test($scope.settingsLastName) || !$scope.settingsLastName) {
-                    $scope.errorExists = this.errorMsg('settingsLastName', constants.lastNameError);
-                }
-                else {
-                    this.removeErrorMsg('settingsLastName');
-                }
-                break;
-            case 'settingsOldPassword':
-                if (!constants.passwordRegex.test($scope.settingsOldPassword) || !$scope.settingsOldPassword) {
-                    $scope.errorExists = this.errorMsg('settingsOldPassword', constants.passwordError);
-                }
-                else {
-                    this.removeErrorMsg('settingsOldPassword');
-                }
-                break;
-            case 'settingsNewPassword':
-                if (!constants.passwordRegex.test($scope.settingsNewPassword) || !$scope.settingsNewPassword) {
-                    $scope.errorExists = this.errorMsg('settingsNewPassword', constants.passwordError);
-                }
-                else {
-                    this.removeErrorMsg('settingsNewPassword');
-                }
-                break;
-            case 'settingsRePassword':
-                if ($scope.settingsNewPassword !== $scope.settingsRePassword || !$scope.settingsRePassword) {
-                    $scope.errorExists = this.errorMsg('settingsRePassword', constants.rePasswordError);
-                }
-                else {
-                    this.removeErrorMsg('settingsRePassword');
-                }
-                break;
-            default:
-                break;
+    this.settingsValidateField = (fieldID, $scope) => { //is invoked dynamically on input change
+        const fieldName = fieldID.includes('Password') ?
+                            fieldID.substr(11, 1).toLowerCase() + fieldID.substr(12, fieldID.length - 12) //cuts off 3 more letters i.e settingsOldPassword -> password
+                        :
+                            fieldID.substr(8, 1).toLowerCase() + fieldID.substr(9, fieldID.length - 9); // i.e settingsLastName -> lastName
+
+        if (fieldID !== 'settingsRePassword' && !constants[fieldName + 'Regex'].test($scope[fieldID])) {
+            $scope[fieldName + 'Error'] = this.errorMsg(fieldID, constants[fieldName + 'Error']);
+        }
+        else if (fieldID === 'settingsRePassword' && ($scope.settingsNewPassword !== $scope.settingsRePassword || !$scope.settingsRePassword)) {
+            $scope['rePasswordError'] = this.errorMsg(fieldID, constants.rePasswordError);
+        }
+        else {
+            this.removeErrorMsg(fieldID);
+            fieldID === 'settingsRePassword' ? $scope['rePasswordError'] = false : $scope[fieldName + 'Error'] = false;
         }
     };
 

@@ -12,7 +12,7 @@
     $scope.errorExists = false;
     $scope.clearSignUpData = () => cleanUpService.clearSignUpData($scope);
     $scope.clearSignInData = () => cleanUpService.clearSignInData($scope);
-    $scope.signUpValidateField = (fieldName) => validateService.signUpValidateField(fieldName, $scope);
+    $scope.signUpValidateField = (fieldID) => validateService.signUpValidateField(fieldID, $scope);
 
     $scope.signUp = () => {
         cleanUpService.clearSignUpErrors($scope);

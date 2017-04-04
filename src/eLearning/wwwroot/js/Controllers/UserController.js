@@ -18,7 +18,7 @@
         });
     }
 
-    $scope.settingsValidateField = (fieldName) => validateService.settingsValidateField(fieldName, $scope);
+    $scope.settingsValidateField = (fieldID) => validateService.settingsValidateField(fieldID, $scope);
     $scope.clearSettingsData = () => cleanUpService.clearSettingsData($scope);
 
 }]);
