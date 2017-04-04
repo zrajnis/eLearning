@@ -37,5 +37,28 @@
         $scope.signInEmail = '';
         $scope.signInPassword = '';
     };
+    
+    this.clearSettingsErrors = ($scope) => {
+        $scope.errorExist = false;
+        $('#settingsFirstNameError').text('');
+        $('#settingsFirstName').removeClass('hasError');
+        $('#settingsLastNameError').text('');
+        $('#settingsLastName').removeClass('hasError');
+        $('#settingsOldPasswordError').text('');
+        $('#settingsOldPassword').removeClass('hasError');
+        $('#settingsNewPasswordError').text('');
+        $('#settingsNewPassword').removeClass('hasError');
+        $('#settingsRePasswordError').text('');
+        $('#settingsRePassword').removeClass('hasError');
+    }
+
+    this.clearSettingsData = ($scope) => {
+        this.clearSettingsErrors($scope);
+        $scope.settingsFirstName = '';
+        $scope.settingsLastName = '';
+        $scope.settingsOldPassword = '';
+        $scope.settingsNewPassword = '';
+        $scope.settingsRePassword = '';
+    }
 
 }]);

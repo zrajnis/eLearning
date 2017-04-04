@@ -1,4 +1,9 @@
 ﻿angular.module('eLearning').controller('UserCtrl', ['$scope', '$http', '$window', 'validateService', 'cleanUpService', 'constants', ($scope, $http, $window, validateService, cleanUpService, constants) => {
+    $('#settingsModal').on('hidden.bs.modal', () => {
+        $scope.clearSettingsData();
+        $scope.$apply();
+    });
+
     $scope.signOut = () => {
         $http({
             method: "POST",
@@ -14,4 +19,6 @@
     }
 
     $scope.settingsValidateField = (fieldName) => validateService.settingsValidateField(fieldName, $scope);
+    $scope.clearSettingsData = () => cleanUpService.clearSettingsData($scope);
+
 }]);
