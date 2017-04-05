@@ -8,6 +8,7 @@
     this.removeErrorMsg = (errorName) => {
         $('#' + errorName + 'Error').text('');
         $('#' + errorName).removeClass('hasError');
+        return false;
     };
 
     this.signUpValidate = ($scope) => {
@@ -32,20 +33,6 @@
         }
     };
 
-    this.signUpValidateField = (fieldID, $scope) => { //is invoked dynamically on input change
-        const fieldName = fieldID.substr(6, 1).toLowerCase() + fieldID.substr(7, fieldID.length - 7); // convert field's id to fields name i.e. signUpFirstName -> firstName
-
-        if (fieldID !== 'signUpRePassword' && !constants[fieldName + 'Regex'].test($scope[fieldID])) {
-            $scope.errorExists = this.errorMsg(fieldID, constants[fieldName + 'Error']);
-        }
-        else if (fieldID === 'signUpRePassword' && ($scope.signUpPassword !== $scope.signUpRePassword || !$scope.signUpRePassword)) { //has different validation condition
-            $scope.errorExists = this.errorMsg(fieldID, constants.rePasswordError)
-        }
-        else {
-            this.removeErrorMsg(fieldID);
-        }
-    };
-
     this.signInValidate = ($scope) => {
         if (!constants.emailRegex.test($scope.signInEmail) || !$scope.signInEmail) {
             $scope.errorExists = this.errorMsg('signIn', constants.signInError);
@@ -56,21 +43,19 @@
         }
     };
 
-    this.settingsValidateField = (fieldID, $scope) => { //is invoked dynamically on input change
-        const fieldName = fieldID.includes('Password') ?
-                            fieldID.substr(11, 1).toLowerCase() + fieldID.substr(12, fieldID.length - 12) //cuts off 3 more letters i.e settingsOldPassword -> password
-                        :
-                            fieldID.substr(8, 1).toLowerCase() + fieldID.substr(9, fieldID.length - 9); // i.e settingsLastName -> lastName
+    this.validateField = (inputID, $scope) => { //is invoked dynamically on input change, works for any kind of field
+        const inputName = document.getElementById(inputID).name;
+        const errorVariable = inputName + 'Error';
+        const errorName = inputID.includes('Old') ? 'passwordError' : inputName + 'Error'; //if input is for old password set error name to passwordError, 
+        const regexName = inputID.includes('Old') ? 'passwordRegex' : inputName + 'Regex'; //same logic for regex, since it abides passwordRegex
 
-        if (fieldID !== 'settingsRePassword' && !constants[fieldName + 'Regex'].test($scope[fieldID])) {
-            $scope[fieldName + 'Error'] = this.errorMsg(fieldID, constants[fieldName + 'Error']);
-        }
-        else if (fieldID === 'settingsRePassword' && ($scope.settingsNewPassword !== $scope.settingsRePassword || !$scope.settingsRePassword)) {
-            $scope['rePasswordError'] = this.errorMsg(fieldID, constants.rePasswordError);
+        if ((!inputID.includes('Re') && !constants[regexName].test($scope[inputID])) || //if field doesnt pass regex test or if its password confirmation that doesnt match the password
+            (inputID.includes('settingsRe') && ($scope.settingsNewPassword !== $scope.settingsRePassword || !$scope.settingsRePassword)) ||
+            (inputID.includes('signUpRe') && ($scope.signUpPassword !== $scope.signUpRePassword || !$scope.signUpRePassword))) { 
+            inputID.includes('settings') ? $scope[errorVariable] = this.errorMsg(inputID, constants[errorName]) : this.errorMsg(inputID, constants[errorName]);
         }
         else {
-            this.removeErrorMsg(fieldID);
-            fieldID === 'settingsRePassword' ? $scope['rePasswordError'] = false : $scope[fieldName + 'Error'] = false;
+            inputID.includes('settings') ? $scope[errorVariable] = this.removeErrorMsg(inputID) : this.removeErrorMsg(inputID);  //remove error if field belongs to settings form
         }
     };
 

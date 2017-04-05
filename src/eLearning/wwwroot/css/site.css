@@ -176,3 +176,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6bba70', end
     position: relative;
     float: left;
 }
+
+.successBtn {
+    background:  rgba(107,186,112,1);
+    border: 1px solid  rgba(107,186,112,1);
+    pointer-events: none;
+}

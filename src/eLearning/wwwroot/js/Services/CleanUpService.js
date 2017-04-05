@@ -39,7 +39,11 @@
     };
     
     this.clearSettingsErrors = ($scope) => {
-        $scope.errorExist = false;
+        $scope.firstNameError = true,
+        $scope.lastNameError = true;
+        $scope.oldPasswordError = true;
+        $scope.passwordError = true;
+        $scope.rePasswordError = true; //in case empty field is submitted without it ever being validated this will make it fail without validating
         $('#settingsFirstNameError').text('');
         $('#settingsFirstName').removeClass('hasError');
         $('#settingsLastNameError').text('');

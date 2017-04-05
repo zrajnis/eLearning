@@ -76,5 +76,24 @@ namespace eLearning.Controllers
             await _signInManager.SignOutAsync();
             return Json(new { message = "Success!" });
         }
+
+        [HttpPost][Route("/Account/Change/FirstName")]
+        public async Task<IActionResult> ChangeFirstName()
+        {
+            return Json(new { message = "Success!" });
+        }
+
+        [HttpPost][Route("/Account/Change/LastName")]
+        public async Task<IActionResult> ChangeLastName()
+        {
+            return Json(new { message = "Success!" });
+        }
+
+        [HttpPost][Route("/Account/Change/Password")]
+        public async Task<IActionResult> ChangePassword()
+        {
+            return Json(new { message = "Success!" });
+        }
+
     }
 }
