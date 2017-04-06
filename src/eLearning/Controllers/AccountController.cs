@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using eLearning.Models;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -78,21 +79,45 @@ namespace eLearning.Controllers
         }
 
         [HttpPost][Route("/Account/Change/FirstName")]
-        public async Task<IActionResult> ChangeFirstName()
+        public async Task<IActionResult> ChangeFirstName([FromBody]SettingsModel sm)
         {
-            return Json(new { message = "Success!" });
+            var nameRegex = new Regex(@"^[a-zA-Z.'\s]{2,32}$");
+            if (nameRegex.IsMatch(sm.FirstName))
+            {
+                return Json(new { message = "Success!" });
+            }
+            return Json(new { message = "Please enter a valid first name!" });
         }
 
         [HttpPost][Route("/Account/Change/LastName")]
-        public async Task<IActionResult> ChangeLastName()
+        public async Task<IActionResult> ChangeLastName([FromBody]SettingsModel sm)
         {
-            return Json(new { message = "Success!" });
+            var nameRegex = new Regex(@"^[a-zA-Z.'\s]{2,32}$");
+            if (nameRegex.IsMatch(sm.LastName))
+            {
+                return Json(new { message = "Success!" });
+            }
+            return Json(new { message = "Please enter a valid last name!" });
         }
 
         [HttpPost][Route("/Account/Change/Password")]
-        public async Task<IActionResult> ChangePassword()
+        public async Task<IActionResult> ChangePassword([FromBody]SettingsModel sm)
         {
-            return Json(new { message = "Success!" });
+            var passwordRegex = new Regex(@"^(?=.*\d).{6,}$");
+            if (passwordRegex.IsMatch(sm.OldPassword) && passwordRegex.IsMatch(sm.NewPassword) && sm.NewPassword == sm.RePassword)
+            {
+                //var result = await _userManager.ChangePasswordAsync()
+                return Json(new { message = "Success!" });
+            }
+            else if (!passwordRegex.IsMatch(sm.OldPassword))
+            {
+                return Json(new { message = "Invalid old password!" });
+            }
+            else if (!passwordRegex.IsMatch(sm.NewPassword))
+            {
+                return Json(new { message = "Invalid new password!" });
+            }
+            return Json(new { message = "Passwords must match!" });
         }
 
     }
