@@ -75,50 +75,45 @@ namespace eLearning.Controllers
         }
 
         [HttpPost][Route("/Account/Change/FirstName")]
-        public async Task<IActionResult> ChangeFirstName([FromBody]SettingsModel sm)
+        public IActionResult ChangeFirstName([FromBody]SettingsModel sm)
         {
             var nameRegex = new Regex(@"^[a-zA-Z.'\s]{2,32}$");
-            if (nameRegex.IsMatch(sm.FirstName))
+            if (!String.IsNullOrWhiteSpace(sm.FirstName) && nameRegex.IsMatch(sm.FirstName))
             {
-                var identity = User.Identity.Name;
-
-                User updatedUser = db.Users.FirstOrDefault(u => u.UserName == identity);
+                User updatedUser = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
                 updatedUser.FirstName = sm.FirstName;
                 db.Users.Update(updatedUser);
                 db.SaveChanges();
 
                 return Json(new { message = "Success!" });
             }
-            return Json(new { message = "Please enter a valid first name!" });
+            return Json(new { message = "Please enter a valid first name!", inputID = "settingsFirstName" });
         }
 
         [HttpPost][Route("/Account/Change/LastName")]
-        public async Task<IActionResult> ChangeLastName([FromBody]SettingsModel sm)
+        public IActionResult ChangeLastName([FromBody]SettingsModel sm)
         {
             var nameRegex = new Regex(@"^[a-zA-Z.'\s]{2,32}$");
-            if (nameRegex.IsMatch(sm.LastName))
+            if (!String.IsNullOrWhiteSpace(sm.LastName) && nameRegex.IsMatch(sm.LastName))
             {
-                var identity = User.Identity.Name;
-
-                User updatedUser = db.Users.FirstOrDefault(u => u.UserName == identity);
+                User updatedUser = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
                 updatedUser.LastName = sm.LastName;
                 db.Users.Update(updatedUser);
                 db.SaveChanges();
 
                 return Json(new { message = "Success!" });
             }
-            return Json(new { message = "Please enter a valid last name!" });
+            return Json(new { message = "Please enter a valid last name!", inputID = "settingsLastName" });
         }
 
         [HttpPost][Route("/Account/Change/Password")]
         public async Task<IActionResult> ChangePassword([FromBody]SettingsModel sm)
         {
             var passwordRegex = new Regex(@"^(?=.*\d).{6,}$");
-            if (passwordRegex.IsMatch(sm.OldPassword) && passwordRegex.IsMatch(sm.NewPassword) && sm.NewPassword == sm.RePassword)
+            if (!String.IsNullOrWhiteSpace(sm.OldPassword) && !String.IsNullOrWhiteSpace(sm.NewPassword) && !String.IsNullOrWhiteSpace(sm.RePassword) && 
+                passwordRegex.IsMatch(sm.OldPassword) && passwordRegex.IsMatch(sm.NewPassword) && sm.NewPassword == sm.RePassword)
             {
-                var identity = User.Identity.Name;
-
-                User updatedUser = db.Users.FirstOrDefault(u => u.UserName == identity);
+                User updatedUser = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
                 var result = await _userManager.ChangePasswordAsync(updatedUser, sm.OldPassword, sm.NewPassword);
                 if (result.Succeeded)
                 {
@@ -126,18 +121,18 @@ namespace eLearning.Controllers
                 }
                 else //only reason that can cause failure is that current password is incorrect (since we already found user and new password passed validations)
                 {
-                    return Json(new { message = "Incorrect current password!" });
+                    return Json(new { message = "Incorrect current password!", inputID = "settingsOldPassword" });
                 }
             }
-            else if (!passwordRegex.IsMatch(sm.OldPassword))
+            else if (String.IsNullOrWhiteSpace(sm.OldPassword) || !passwordRegex.IsMatch(sm.OldPassword))
             {
-                return Json(new { message = "Invalid old password!" });
+                return Json(new { message = "Invalid old password!", inputID = "settingsOldPassword" });
             }
-            else if (!passwordRegex.IsMatch(sm.NewPassword))
+            else if (String.IsNullOrWhiteSpace(sm.NewPassword) || !passwordRegex.IsMatch(sm.NewPassword))
             {
-                return Json(new { message = "Invalid new password!" });
+                return Json(new { message = "Invalid new password!", inputID = "settingsNewPassword" });
             }
-            return Json(new { message = "Passwords must match!" });
+            return Json(new { message = "Passwords must match!", inputID = "settingsRePassword" });
         }
     }
 }

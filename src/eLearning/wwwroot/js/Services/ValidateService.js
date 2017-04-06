@@ -1,13 +1,13 @@
 ﻿angular.module('eLearning').service('validateService', ['constants', function (constants) {
-    this.errorMsg = (errorName, message) => {
-        $('#' + errorName + 'Error').text(message);
-        $('#' + errorName).addClass('hasError');
+    this.errorMsg = (inputID, message) => {
+        $('#' + inputID + 'Error').text(message);
+        $('#' + inputID).addClass('hasError');
         return true;
     };
 
-    this.removeErrorMsg = (errorName) => {
-        $('#' + errorName + 'Error').text('');
-        $('#' + errorName).removeClass('hasError');
+    this.removeErrorMsg = (inputID) => {
+        $('#' + inputID + 'Error').text('');
+        $('#' + inputID).removeClass('hasError');
         return false;
     };
 
@@ -44,7 +44,7 @@
     };
 
     this.validateField = (inputID, $scope) => { //is invoked dynamically on input change, works for any kind of field
-        const inputName = document.getElementById(inputID).name;
+        const inputName = $('#'+inputID).attr('name');
         const errorVariable = inputName + 'Error';
         const errorName = inputID.includes('Old') ? 'passwordError' : inputName + 'Error'; //if input is for old password set error name to passwordError, 
         const regexName = inputID.includes('Old') ? 'passwordRegex' : inputName + 'Regex'; //same logic for regex, since it abides passwordRegex
