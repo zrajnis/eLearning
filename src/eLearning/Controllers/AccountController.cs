@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using eLearning.Models;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
-
-// For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace eLearning.Controllers
 {
@@ -63,6 +58,7 @@ namespace eLearning.Controllers
 
                 if (result.Succeeded)
                 {
+                    
                     return Json(new { message = "Success!" });
                 }
                 return Json(new { message = "Sign in failed." });
@@ -84,6 +80,13 @@ namespace eLearning.Controllers
             var nameRegex = new Regex(@"^[a-zA-Z.'\s]{2,32}$");
             if (nameRegex.IsMatch(sm.FirstName))
             {
+                var identity = User.Identity.Name;
+
+                User updatedUser = db.Users.FirstOrDefault(u => u.UserName == identity);
+                updatedUser.FirstName = sm.FirstName;
+                db.Users.Update(updatedUser);
+                db.SaveChanges();
+
                 return Json(new { message = "Success!" });
             }
             return Json(new { message = "Please enter a valid first name!" });
@@ -95,6 +98,13 @@ namespace eLearning.Controllers
             var nameRegex = new Regex(@"^[a-zA-Z.'\s]{2,32}$");
             if (nameRegex.IsMatch(sm.LastName))
             {
+                var identity = User.Identity.Name;
+
+                User updatedUser = db.Users.FirstOrDefault(u => u.UserName == identity);
+                updatedUser.LastName = sm.LastName;
+                db.Users.Update(updatedUser);
+                db.SaveChanges();
+
                 return Json(new { message = "Success!" });
             }
             return Json(new { message = "Please enter a valid last name!" });
@@ -106,8 +116,18 @@ namespace eLearning.Controllers
             var passwordRegex = new Regex(@"^(?=.*\d).{6,}$");
             if (passwordRegex.IsMatch(sm.OldPassword) && passwordRegex.IsMatch(sm.NewPassword) && sm.NewPassword == sm.RePassword)
             {
-                //var result = await _userManager.ChangePasswordAsync()
-                return Json(new { message = "Success!" });
+                var identity = User.Identity.Name;
+
+                User updatedUser = db.Users.FirstOrDefault(u => u.UserName == identity);
+                var result = await _userManager.ChangePasswordAsync(updatedUser, sm.OldPassword, sm.NewPassword);
+                if (result.Succeeded)
+                {
+                    return Json(new { message = "Success!" });
+                }
+                else //only reason that can cause failure is that current password is incorrect (since we already found user and new password passed validations)
+                {
+                    return Json(new { message = "Incorrect current password!" });
+                }
             }
             else if (!passwordRegex.IsMatch(sm.OldPassword))
             {
@@ -119,6 +139,5 @@ namespace eLearning.Controllers
             }
             return Json(new { message = "Passwords must match!" });
         }
-
     }
 }
