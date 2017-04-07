@@ -54,10 +54,12 @@
         $('#settingsNewPassword').removeClass('hasError');
         $('#settingsRePasswordError').text('');
         $('#settingsRePassword').removeClass('hasError');
+        $('#settingsDeactivateError').text('');
     };
 
     this.clearSettingsData = ($scope) => {
         this.clearSettingsErrors($scope);
+        $scope.deactivateDecision = false;
         $scope.settingsFirstName = '';
         $scope.settingsLastName = '';
         $scope.settingsOldPassword = '';

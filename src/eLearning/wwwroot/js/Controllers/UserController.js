@@ -27,7 +27,7 @@
     $scope.settingsValidateField = (fieldID) => validateService.validateField(fieldID, $scope);
     $scope.clearSettingsData = () => cleanUpService.clearSettingsData($scope);
 
-    $scope.settingsHttpRequest = (name, inputID, data) => {
+    $scope.changeDataHttpRequest = (name, inputID, data) => {
         $http({
             method: "PUT",
             url: "/Account/Change/" + name,
@@ -79,11 +79,22 @@
                     };
                     break;
             }
-            $scope.settingsHttpRequest(name, inputID, data);
+            $scope.changeDataHttpRequest(name, inputID, data);
         }
     };
 
     $scope.deactivate = () => {
-
+        $http({
+            method: "DELETE",
+            url: "/Account/Deactivate"
+        }).then((response) => {
+            if (response.data.message === 'Success!') {
+                $window.location.href = '/';
+            }
+            else {
+                $scope.deactivateDecision = false;
+                validateService.errorMsg('settingsDeactivate', response.data.message);
+            }
+        });
     };
 }]);

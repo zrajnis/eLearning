@@ -97,9 +97,18 @@
                     <input type="password" aria-labelledby="newPasswordLabel changePasswordLabel" class="form-control settings-input" placeholder="i.e. ******" name="password" ng-model="settingsNewPassword" ng-change="settingsValidateField('settingsNewPassword')" id="settingsNewPassword" /><div class="error" id="settingsNewPasswordError"></div>
                     <label for="settingsRePassword" class="block-label" id="confirmPasswordLabel">Confirm password:</label>
                     <input type="password" aria-labelledby="confirmPasswordLabel changePasswordLabel" class="form-control settings-input" placeholder="i.e. ******" name="rePassword" ng-model="settingsRePassword" ng-change="settingsValidateField('settingsRePassword')" id="settingsRePassword" /><button type="button" class="changeBtn" ng-click="change('settingsNewPassword')" id="passwordChangeBtn">Change</button><div class="error" id="settingsRePasswordError"></div>
+                    <label class="block-label" for="deactivateBtn">Deactivate the account:</label>
+                    <div ng-show="deactivateDecision" id="deactivateDecisionContainer">
+                        <span>Are you sure?</span>
+                        <button class="deactivate-decision-btn" id="positiveDeactivateDecisionBtn" ng-click="deactivate()">Yes</button>
+                        <button class="deactivate-decision-btn" id="negativeDeactivateDecisionBtn"ng-click="deactivateDecision = !deactivateDecision">No</button>
                     </div>
+                    <div ng-hide="deactivateDecision">
+                        <button type="button" id="deactivateBtn" ng-click="deactivateDecision = !deactivateDecision">Deactivate</button>
+                        <div class="error" id="settingsDeactivateError"></div>
+                    </div>
+                </div>
                 <div class="modal-footer">
-                   <button type="button" id="deactivateBtn" ng-click="deactivate()">Deactivate</button>
                    <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
                 </div>
             </div>

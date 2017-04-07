@@ -150,13 +150,17 @@ namespace eLearning.Controllers
         [HttpDelete, Authorize]
         public async Task<IActionResult> Deactivate()
         {
-            User deleteUser = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            User deleteUser = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name); //it will always find a user
             var result = await _userManager.DeleteAsync(deleteUser);
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
+                await _signInManager.SignOutAsync(); //if the user was deleted, sign him out ( if we sign out first, and deactivation fails then user gets signed out for no reason)
                 return Json(new { message = "Success!" });
             }
-            return Json(new { message = "Deactivation failed!" });
+            else
+            {
+                return Json(new { message = "Deactivation failed!" });
+            }
         }
     }
 }
