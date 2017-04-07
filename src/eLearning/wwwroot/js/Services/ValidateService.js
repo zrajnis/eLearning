@@ -49,9 +49,9 @@
         const errorName = inputID.includes('Old') ? 'passwordError' : inputName + 'Error'; //if input is for old password set error name to passwordError, 
         const regexName = inputID.includes('Old') ? 'passwordRegex' : inputName + 'Regex'; //same logic for regex, since it abides passwordRegex
 
-        if ((!inputID.includes('Re') && !constants[regexName].test($scope[inputID])) || //if field doesnt pass regex test or if its password confirmation that doesnt match the password
-            (inputID.includes('settingsRe') && ($scope.settingsNewPassword !== $scope.settingsRePassword || !$scope.settingsRePassword)) ||
-            (inputID.includes('signUpRe') && ($scope.signUpPassword !== $scope.signUpRePassword || !$scope.signUpRePassword))) { 
+        if (!inputID.includes('Re') && !constants[regexName].test($scope[inputID]) || //if field doesnt pass regex test or if its password confirmation that doesnt match the password
+                inputID.includes('settingsRe') && ($scope.settingsNewPassword !== $scope.settingsRePassword || !$scope.settingsRePassword) ||
+                inputID.includes('signUpRe') && ($scope.signUpPassword !== $scope.signUpRePassword || !$scope.signUpRePassword)) { 
             inputID.includes('settings') ? $scope[errorVariable] = this.errorMsg(inputID, constants[errorName]) : this.errorMsg(inputID, constants[errorName]);
         }
         else {

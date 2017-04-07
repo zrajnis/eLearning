@@ -87,9 +87,9 @@
                 </div>
                 <div class="modal-body">
                     <label for="settingsFirstName" class="block-label">Change first name:</label>
-                    <input type="text" class="form-control settings-input" placeholder="i.e. john" name="firstName" ng-model="settingsFirstName" ng-change="settingsValidateField('settingsFirstName')" id="settingsFirstName" /><button type="button" class="changeBtn" ng-click="change('settingsFirstName')" id="firstNameChangeBtn">Change</button><div class="error" id="settingsFirstNameError"></div>
+                    <input type="text" class="form-control settings-input" placeholder="i.e. John" name="firstName" ng-model="settingsFirstName" ng-change="settingsValidateField('settingsFirstName')" id="settingsFirstName" /><button type="button" class="changeBtn" ng-click="change('settingsFirstName')" id="firstNameChangeBtn">Change</button><div class="error" id="settingsFirstNameError"></div>
                     <label for="settingsLastName" class="block-label">Change last name:</label>
-                    <input type="text" class="form-control settings-input" placeholder="i.e. john" name="lastName" ng-model="settingsLastName" ng-change="settingsValidateField('settingsLastName')" id="settingsLastName" /><button type="button" class="changeBtn" ng-click="change('settingsLastName')" id="lastNameChangeBtn">Change</button><div class="error" id="settingsLastNameError"></div>
+                    <input type="text" class="form-control settings-input" placeholder="i.e. Doe" name="lastName" ng-model="settingsLastName" ng-change="settingsValidateField('settingsLastName')" id="settingsLastName" /><button type="button" class="changeBtn" ng-click="change('settingsLastName')" id="lastNameChangeBtn">Change</button><div class="error" id="settingsLastNameError"></div>
                     <label class="block-label" id="changePasswordLabel">Change password:</label>
                     <label for="settingsOldPassword" class="block-label" id="oldPasswordLabel">Old password:</label>
                     <input type="password" aria-labelledby="oldPasswordLabel changePasswordLabel" class="form-control settings-input" placeholder="i.e. ******" name="oldPassword" ng-model="settingsOldPassword" ng-change="settingsValidateField('settingsOldPassword')" id="settingsOldPassword" /><div class="error" id="settingsOldPasswordError"></div>
@@ -99,7 +99,7 @@
                     <input type="password" aria-labelledby="confirmPasswordLabel changePasswordLabel" class="form-control settings-input" placeholder="i.e. ******" name="rePassword" ng-model="settingsRePassword" ng-change="settingsValidateField('settingsRePassword')" id="settingsRePassword" /><button type="button" class="changeBtn" ng-click="change('settingsNewPassword')" id="passwordChangeBtn">Change</button><div class="error" id="settingsRePasswordError"></div>
                     </div>
                 <div class="modal-footer">
-                   <button type="button" id="deactivateBtn">Deactivate</button>
+                   <button type="button" id="deactivateBtn" ng-click="deactivate()">Deactivate</button>
                    <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
                 </div>
             </div>

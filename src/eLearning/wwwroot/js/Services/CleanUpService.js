@@ -54,7 +54,7 @@
         $('#settingsNewPassword').removeClass('hasError');
         $('#settingsRePasswordError').text('');
         $('#settingsRePassword').removeClass('hasError');
-    }
+    };
 
     this.clearSettingsData = ($scope) => {
         this.clearSettingsErrors($scope);
@@ -63,6 +63,6 @@
         $scope.settingsOldPassword = '';
         $scope.settingsNewPassword = '';
         $scope.settingsRePassword = '';
-    }
+    };
 
 }]);
