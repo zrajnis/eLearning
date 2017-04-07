@@ -37,5 +37,34 @@
         $scope.signInEmail = '';
         $scope.signInPassword = '';
     };
+    
+    this.clearSettingsErrors = ($scope) => {
+        $scope.firstNameError = true,
+        $scope.lastNameError = true;
+        $scope.oldPasswordError = true;
+        $scope.passwordError = true;
+        $scope.rePasswordError = true; //in case empty field is submitted without it ever being validated this will make it fail without validating
+        $('#settingsFirstNameError').text('');
+        $('#settingsFirstName').removeClass('hasError');
+        $('#settingsLastNameError').text('');
+        $('#settingsLastName').removeClass('hasError');
+        $('#settingsOldPasswordError').text('');
+        $('#settingsOldPassword').removeClass('hasError');
+        $('#settingsNewPasswordError').text('');
+        $('#settingsNewPassword').removeClass('hasError');
+        $('#settingsRePasswordError').text('');
+        $('#settingsRePassword').removeClass('hasError');
+        $('#settingsDeactivateError').text('');
+    };
+
+    this.clearSettingsData = ($scope) => {
+        this.clearSettingsErrors($scope);
+        $scope.deactivateDecision = false;
+        $scope.settingsFirstName = '';
+        $scope.settingsLastName = '';
+        $scope.settingsOldPassword = '';
+        $scope.settingsNewPassword = '';
+        $scope.settingsRePassword = '';
+    };
 
 }]);

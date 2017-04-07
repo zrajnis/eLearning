@@ -82,21 +82,21 @@
 
             <div class="modal-content">
                 <div class="modal-header navbar navbar-inverse">
-                    <button type="button" class="close" data-dismiss="modal" ng-click="clearSignUpData()">&times;</button>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Sign up</h4>
                 </div>
                 <form ng-submit="signUp()">
                     <div class="modal-body">
                         <label for="signUpFirstName" class="block-label">Enter  first name:</label>
-                        <input type="text" class="form-control signUp-input" placeholder="i.e. John" name="FirstName" ng-model="signUpFirstName" ng-change="signUpValidateField('signUpFirstName')" id="signUpFirstName" /><div class="error" id="signUpFirstNameError"></div>
+                        <input type="text" class="form-control signUp-input" placeholder="i.e. John" name="firstName" ng-model="signUpFirstName" ng-change="signUpValidateField('signUpFirstName')" id="signUpFirstName" /><div class="error" id="signUpFirstNameError"></div>
                         <label for="signUpLastName" class="block-label">Enter last name:</label>
-                        <input type="text" class="form-control signUp-input" placeholder="i.e. Doe" name="Lastname" ng-model="signUpLastName" ng-change="signUpValidateField('signUpLastName')" id="signUpLastName" /><div class="error" id="signUpLastNameError"></div>
+                        <input type="text" class="form-control signUp-input" placeholder="i.e. Doe" name="lastName" ng-model="signUpLastName" ng-change="signUpValidateField('signUpLastName')" id="signUpLastName" /><div class="error" id="signUpLastNameError"></div>
                         <label for="signUpEmail" class="block-label">Enter email:</label>
-                        <input type="text" class="form-control signUp-input" placeholder="i.e. john@gmail.com" name="Email" ng-model="signUpEmail" ng-change="signUpValidateField('signUpEmail')" id="signUpEmail" /><div class="error" id="signUpEmailError"></div>
+                        <input type="text" class="form-control signUp-input" placeholder="i.e. john@gmail.com" name="email" ng-model="signUpEmail" ng-change="signUpValidateField('signUpEmail')" id="signUpEmail" /><div class="error" id="signUpEmailError"></div>
                         <label for="signUpPassword" class="block-label">Enter password:</label>
-                        <input type="password" class="form-control signUp-input" placeholder="i.e. ******" name="Password" ng-model="signUpPassword" ng-change="signUpValidateField('signUpPassword')" id="signUpPassword" /><div class="error" id="signUpPasswordError"></div>
+                        <input type="password" class="form-control signUp-input" placeholder="i.e. ******" name="password" ng-model="signUpPassword" ng-change="signUpValidateField('signUpPassword')" id="signUpPassword" /><div class="error" id="signUpPasswordError"></div>
                         <label for="signUpRePassword" class="block-label">Re-enter password:</label>
-                        <input type="password" class="form-control signUp-input" placeholder="i.e. ******" name="RePassword" ng-model="signUpRePassword" ng-change="signUpValidateField('signUpRePassword')" id="signUpRePassword" /><div class="error" id="signUpRePasswordError"></div>
+                        <input type="password" class="form-control signUp-input" placeholder="i.e. ******" name="rePassword" ng-model="signUpRePassword" ng-change="signUpValidateField('signUpRePassword')" id="signUpRePassword" /><div class="error" id="signUpRePasswordError"></div>
                     </div>
                     <div class="modal-footer">
                         <div class="error" id="signUpError"></div><button type="submit" class="btn btn-primary">Sign up</button>
@@ -112,15 +112,15 @@
 
             <div class="modal-content">
                 <div class="modal-header navbar navbar-inverse">
-                    <button type="button" class="close" data-dismiss="modal" ng-click="clearSignInData()">&times;</button>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Sign in</h4>
                 </div>
                 <form ng-submit="signIn()">
                     <div class="modal-body">
                         <label for="signInEmail" class="block-label">Enter email:</label>
-                        <input type="text" class="form-control signIn-input" placeholder="i.e. john@gmail.com" name="Email" ng-model="signInEmail" id="signInEmail" /><div class="error" id="signInEmailError"></div>
+                        <input type="text" class="form-control signIn-input" placeholder="i.e. john@gmail.com" name="email" ng-model="signInEmail" id="signInEmail" /><div class="error" id="signInEmailError"></div>
                         <label for="signInPassword" class="block-label">Enter password:</label>
-                        <input type="password" class="form-control signIn-input" placeholder="i.e. ******" name="Password" ng-model="signInPassword" id="signInPassword" /><div class="error" id="signInPasswordError"></div>
+                        <input type="password" class="form-control signIn-input" placeholder="i.e. ******" name="password" ng-model="signInPassword" id="signInPassword" /><div class="error" id="signInPasswordError"></div>
                     </div>
                     <div class="modal-footer">
                         <div class="error" id="signInError"></div><button type="submit" class="btn btn-success">Sign in</button>
