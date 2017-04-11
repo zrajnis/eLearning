@@ -1,9 +1,12 @@
-﻿angular.module('eLearning').controller('UserCtrl', ['$scope', '$http', '$window', 'validateService', 'cleanUpService', 'constants', ($scope, $http, $window, validateService, cleanUpService, constants) => {
+﻿angular.module('eLearning').controller('UserCtrl', ['$scope', '$http', '$window', 'validateService', 'cleanUpService', 'courseService', 'constants',
+($scope, $http, $window, validateService, cleanUpService, courseService, constants) => {
     $scope.firstNameError = true,
     $scope.lastNameError = true;
     $scope.oldPasswordError = true;
     $scope.passwordError = true;
     $scope.rePasswordError = true;
+
+    $scope.courseService = courseService;
 
     $('#settingsModal').on('hidden.bs.modal', () => {
         $scope.clearSettingsData();

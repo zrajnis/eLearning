@@ -1,5 +1,55 @@
 ﻿<div class="course-container" id="createCourseContainer">
     <div id="createCourseTitleContainer">
         <h1 id="createCourseTitle">Create a course</h1>
+        <div id="createFormContainer" class="row">
+            <form id="createForm">
+                <fieldset class="col-lg-4">
+                    <legend>Title</legend>
+                    <label class="block-label">Name of the course:</label>
+                    <input type="text" id="courseTitle" name="courseName" ng-model="courseService.course.Name" placeholder="i.e. My course"/>
+                    <label class="block-label">Description:</label>
+                    <textarea id="courseDescription" ng-model="courseService.course.Description"></textarea>
+                </fieldset>
+                <fieldset class="col-lg-4">
+                    <legend>Lessons</legend>
+                    <label for="addLessonBtn">Add a another lesson</label> <button id="addLessonBtn" ng-click="courseService.addLesson()">Add</button>
+                    <div ng-repeat="lesson in courseService.course.Lessons track by $index">
+                        <label class="block-label">Name of the lesson:</label>
+                        <input type="text" class="lesson-name" ng-model="lesson.Name" placeholder="i.e. My lesson" />
+                        <label class="block-label">Description:</label>
+                        <textarea class="lesson-description" ng-model="lesson.Description"></textarea>
+                        <label class="block-label">Upload material in .pdf format:</label>
+                        <input type="file" class="lesson-file" placeholder="Choose a file" />
+                    </div>    
+                </fieldset>
+                <fieldset class="col-lg-4">
+                    <legend>Exercises</legend>
+                    <label for="addExerciseBtn">Add a another exercise</label> <button id="addExerciseBtn" ng-click="courseService.addExercise()">Add</button>
+                    <div ng-repeat="exercise in courseService.course.Exercises track by $index">
+                        <label class="block-label">Name of the exercise:</label>
+                        <input type="text" class="exercise-name" ng-model="exercise.Name" placeholder="i.e. My Exercise" />
+                        <label class="block-label">Description:</label>
+                        <textarea class="exercise-description" ng-model="exercise.Description"></textarea>
+                        <label for="addQuestionBtn">Add a question</label> <button id="addQuestionBtn"  ng-click="courseService.addQuestion($index)">Add</button>
+                        <div ng-repeat="question in exercise.Questions track by $index">
+                            <label class="block-label">Question:</label>
+                            <input type="text" class="question-sentence" ng-model="question.Sentence" placeholder="i.e. My question?"/>
+                            <label class="block-label">Points awarded:</label>
+                            <input type="number" class="question-points" ng-model="question.Points" placeholder="i.e. 15"/>
+                            <label class="block-label">Answers:</label>
+                            <input type="text" class="answer-input" ng-model="question.Answer" placeholder="i.e. My answer"  /><button ng-click="courseService.addAnswer(exercise, $index)">Add</button>
+                            <span>Check correct answers</span>
+                            <ul>
+                                <li ng-repeat="answer in question.Answers">
+                                    {{answer.Sentence}} <input type="checkbox" ng-model="answer.IsCorrect" />
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </fieldset>
+                <button type="button" ng-click="courseService.createCourse()">Create</button>
+            </form>
+        </div>
+        <span id="debug">{{courseService}}</span>
     </div>
 </div>

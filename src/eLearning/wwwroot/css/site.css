@@ -222,3 +222,16 @@ textarea {
     margin-left: 10px;
     margin-top: 0px;
 }
+
+#createFormContainer {
+    color: #222;
+}
+
+textarea {
+    resize: none;
+    display: block;
+}
+
+#debug{
+    color:black;
+}

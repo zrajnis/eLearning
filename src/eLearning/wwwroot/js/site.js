@@ -32,6 +32,3 @@ app.constant('constants', {
     signUpError: 'Sign up failed.',
     signInError: 'Sign in failed.'
 });
-
-
-

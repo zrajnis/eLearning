@@ -2,6 +2,7 @@
 /// <reference path="js/controllers/homecontroller.js" />
 /// <reference path="js/controllers/usercontroller.js" />
 /// <reference path="js/services/cleanupservice.js" />
+/// <reference path="js/services/courseservice.js" />
 /// <reference path="js/services/validateservice.js" />
 /// <reference path="js/site.js" />
 /// <reference path="lib/angular/angular.js" />
