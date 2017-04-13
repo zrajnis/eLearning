@@ -7,7 +7,7 @@
     };
 
     this.addLesson = (formName) => {
-        if (!formName.lessonsLength.$dirty && formName.lessonsLength.$modelValue < 10) {
+        if (formName.lessonsLength.$modelValue < 10) {
             formName.lessonsLength.$setTouched(true);
             this.course.Lessons.push({
                 Name: null,
@@ -56,8 +56,9 @@
         const answer = formName["answer" + questionIndex];
         const answersLength = formName["answersLength" + questionIndex];
         const exerciseIndex = this.course.Exercises.indexOf(exercise);
+        console.log(answer.$modelValue)
 
-        if ((answersLength.$valid || !answersLength.$touched) && answersLength.$modelValue < 5 && answer.$valid && answer.$modelValue) { //answer field isnt required so empty field passes as valid,hence last condition
+        if (answersLength.$modelValue < 5 && answer.$valid && answer.$modelValue) { //answer field isnt required, so empty field passes as valid, hence last condition
             this.course.Exercises[exerciseIndex].Questions[questionIndex].Answers.push({
                 Sentence: this.course.Exercises[exerciseIndex].Questions[questionIndex].Answer,
                 IsCorrect: false
@@ -67,7 +68,7 @@
             answer.$setValidity("pattern", false);
             setTimeout(() => answer.$setValidity("pattern", true), 200);
             if (answer.$pristine) {
-                answer.$setTouched(true); //in case user didn't even click on the input,this makes sure it shows error as well
+                answer.$setTouched(true); //in case user didn't even click on the input, this makes sure it shows error as well
             }
         }
         else {
@@ -101,7 +102,7 @@
                 if (!errorField.$name.includes('Form')) {
                     errorField.$setTouched();
                 }
-                else { //if error field has name form then it's ng-form and call the same function for it to touch its fields
+                else { //if error field has "Form" in its name, then it's ng-form, so we call the same function in order to touch its fields
                     touchOnSubmit(errorField);
                 }
             });
