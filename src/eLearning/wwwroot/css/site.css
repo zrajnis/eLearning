@@ -235,3 +235,7 @@ textarea {
 #debug{
     color:black;
 }
+
+input:required {
+    box-shadow:none;
+}

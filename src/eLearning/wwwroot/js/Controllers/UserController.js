@@ -7,6 +7,7 @@
     $scope.rePasswordError = true;
 
     $scope.courseService = courseService;
+    $scope.constants = constants;
 
     $('#settingsModal').on('hidden.bs.modal', () => {
         $scope.clearSettingsData();
@@ -100,4 +101,6 @@
             }
         });
     };
+
+    $scope.handleFile = () => { alert('aa');}
 }]);
