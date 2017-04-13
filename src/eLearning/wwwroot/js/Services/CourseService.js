@@ -7,57 +7,73 @@
     };
 
     this.addLesson = (formName) => {
-        if ((formName.lessons.$valid || !formName.lessons.$touched) && formName.lessons.$modelValue < 10) {
-            formName.lessons.$setTouched(true);
+        if (!formName.lessonsLength.$dirty && formName.lessonsLength.$modelValue < 10) {
+            formName.lessonsLength.$setTouched(true);
             this.course.Lessons.push({
                 Name: null,
                 Description: null
             });
         }
-        else if (formName.lessons.$modelValue === 10) { //if user already created 10 lessons and tried to add another one,show error
-            formName.lessons.$setDirty(true);
-            console.log(formName.lessons.$dirty)
-            $timeout(formName.lessons.$setDirty(false), 2000); //after 2 seconds remove the error, doesnt work
+        else { //if user already created 10 lessons and tried to add another one,show error
+            formName.lessonsLength.$setDirty(true);
+            $timeout(formName.lessonsLength.$setDirty(false), 2000); //after 2 seconds remove the error, doesnt work
         }
     };
 
     this.addExercise = (formName) => {
-        if (formName.exercises.$valid && formName.exercises.$modelValue < 10) {
+        if (formName.exercisesLength.$valid && formName.exercisesLength.$modelValue < 10) {
             this.course.Exercises.push({
                 Name: null,
                 Description: null,
                 Questions: []
             });
         }
-        else if (formName.exercises.$modelValue === 10) {
-            formName.exercises.$setDirty(true);
-            setTimeout(() => formName.exercises.$setDirty(false), 2000);
+        else {
+            formName.exercisesLength.$setDirty(true);
+            setTimeout(() => formName.exercisesLength.$setDirty(false), 2000);
         }
 
     };
 
-    this.addQuestion = (exerciseIndex, formName) => {
-        if ((formName["questions" + exerciseIndex].$valid || !formName["questions" + exerciseIndex].$touched) && formName["questions" + exerciseIndex].$modelValue < 100) {
+    this.addQuestion = (formName, exerciseIndex) => {
+        const questionsLength = formName["questionsLength" + exerciseIndex];
+
+        if (questionsLength.$modelValue < 100) {
             this.course.Exercises[exerciseIndex].Questions.push({
                 Sentence: null,
                 Points: null,
                 Answers: []
             });
         }
-        else if (formName["questions" + exerciseIndex].$modelValue === 100) {
-            formName["questions" + exerciseIndex].$setDirty(true);
-            setTimeout(() => formName["questions" + exerciseIndex].$setDirty(true), 2000);
+        else { //for consistency 
+            questionsLength.$setDirty(true);
+            setTimeout(() => questionsLength.$setDirty(false), 2000);
         }
         
     };
 
-    this.addAnswer = (exercise, questionIndex) => {
+    this.addAnswer = (formName, exercise, questionIndex) => {
+        const answer = formName["answer" + questionIndex];
+        const answersLength = formName["answersLength" + questionIndex];
         const exerciseIndex = this.course.Exercises.indexOf(exercise);
 
-        this.course.Exercises[exerciseIndex].Questions[questionIndex].Answers.push({
-            Sentence: this.course.Exercises[exerciseIndex].Questions[questionIndex].Answer,
-            IsCorrect: false
-        });
+        if ((answersLength.$valid || !answersLength.$touched) && answersLength.$modelValue < 5 && answer.$valid && answer.$modelValue) { //answer field isnt required so empty field passes as valid,hence last condition
+            this.course.Exercises[exerciseIndex].Questions[questionIndex].Answers.push({
+                Sentence: this.course.Exercises[exerciseIndex].Questions[questionIndex].Answer,
+                IsCorrect: false
+            });
+        }
+        else if (!answer.$valid || !answer.$modelValue) {
+            answer.$setValidity("pattern", false);
+            setTimeout(() => answer.$setValidity("pattern", true), 200);
+            if (answer.$pristine) {
+                answer.$setTouched(true); //in case user didn't even click on the input,this makes sure it shows error as well
+            }
+        }
+        else {
+            answersLength.$setDirty(true);
+            setTimeout(() => answersLength.$setDirty(false), 2000);
+        }
     };
 
     this.createCourse = (formName) => {
@@ -75,17 +91,20 @@
             });
         }
         else {
-            angular.forEach(formName.$error, (field) => { //TODO: make this work for all elements
-                angular.forEach(field, (errorField) => {
-                    errorField.$setTouched();
-                });
-            });
+            touchOnSubmit(formName);
         }
     };
-}]);
 
-/*angular.forEach(formName.$error, function (field) {
-                angular.forEach(field, function (errorField) {
+    const touchOnSubmit = (formName) => {
+        angular.forEach(formName.$error, (field) => {
+            angular.forEach(field, (errorField) => {
+                if (!errorField.$name.includes('Form')) {
                     errorField.$setTouched();
-                })
-            });*/
+                }
+                else { //if error field has name form then it's ng-form and call the same function for it to touch its fields
+                    touchOnSubmit(errorField);
+                }
+            });
+        });
+    };
+}]);

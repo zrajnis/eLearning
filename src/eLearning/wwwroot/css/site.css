@@ -240,6 +240,10 @@ input:required {
     box-shadow:none;
 }
 
-/*.ng-invalid{
+.ng-invalid.ng-touched {
     border: 1px solid red;
-}*/
+}
+
+input[type=file].ng-invalid.ng-touched {
+    border: inherit;
+}
