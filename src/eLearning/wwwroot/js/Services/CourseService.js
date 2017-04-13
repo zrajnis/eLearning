@@ -1,4 +1,4 @@
-﻿angular.module('eLearning').service('courseService', ['constants', '$http', function (constants, $http) { 
+﻿angular.module('eLearning').service('courseService', ['constants', '$http', '$timeout', function (constants, $http ,$timeout) { 
     this.course = { //properties are uppercased so they match models on server
         Name: null,
         Description: null,
@@ -6,27 +6,49 @@
         Exercises: []
     };
 
-    this.addLesson = () => {
-        this.course.Lessons.push({
-            Name: null,
-            Description: null
-        });
+    this.addLesson = (formName) => {
+        if ((formName.lessons.$valid || !formName.lessons.$touched) && formName.lessons.$modelValue < 10) {
+            formName.lessons.$setTouched(true);
+            this.course.Lessons.push({
+                Name: null,
+                Description: null
+            });
+        }
+        else if (formName.lessons.$modelValue === 10) { //if user already created 10 lessons and tried to add another one,show error
+            formName.lessons.$setDirty(true);
+            console.log(formName.lessons.$dirty)
+            $timeout(formName.lessons.$setDirty(false), 2000); //after 2 seconds remove the error, doesnt work
+        }
     };
 
-    this.addExercise = () => {
-        this.course.Exercises.push({
-            Name: null,
-            Description: null,
-            Questions: []
-        });
+    this.addExercise = (formName) => {
+        if (formName.exercises.$valid && formName.exercises.$modelValue < 10) {
+            this.course.Exercises.push({
+                Name: null,
+                Description: null,
+                Questions: []
+            });
+        }
+        else if (formName.exercises.$modelValue === 10) {
+            formName.exercises.$setDirty(true);
+            setTimeout(() => formName.exercises.$setDirty(false), 2000);
+        }
+
     };
 
-    this.addQuestion = (exerciseIndex) => {
-        this.course.Exercises[exerciseIndex].Questions.push({
-            Sentence: null,
-            Points: null,
-            Answers: []
-        });
+    this.addQuestion = (exerciseIndex, formName) => {
+        if ((formName["questions" + exerciseIndex].$valid || !formName["questions" + exerciseIndex].$touched) && formName["questions" + exerciseIndex].$modelValue < 100) {
+            this.course.Exercises[exerciseIndex].Questions.push({
+                Sentence: null,
+                Points: null,
+                Answers: []
+            });
+        }
+        else if (formName["questions" + exerciseIndex].$modelValue === 100) {
+            formName["questions" + exerciseIndex].$setDirty(true);
+            setTimeout(() => formName["questions" + exerciseIndex].$setDirty(true), 2000);
+        }
+        
     };
 
     this.addAnswer = (exercise, questionIndex) => {

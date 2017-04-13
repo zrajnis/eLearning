@@ -14,9 +14,9 @@
                 </fieldset>
                 <fieldset class="col-lg-4">
                     <legend>Lessons</legend>
-                    <label for="addLessonBtn">Add a another lesson</label> <button type="button" id="addLessonBtn" ng-click="courseService.addLesson()" ng-disabled="courseService.course.Lessons.length > 9">Add</button>
-                    <input type="hidden" ng-model="courseService.course.Lessons.length" name="lessons" ng-pattern="/^[1-9]$/" ng-required="this" />
-                    <div class="error" ng-show="!createForm.lessons.$valid && createForm.lessons.$touched">{{constants.lessonsLengthError}}</div>
+                    <label for="addLessonBtn">Add a another lesson</label> <button type="button" id="addLessonBtn" ng-click="courseService.addLesson(createForm)">Add</button>
+                    <input type="hidden" ng-model="courseService.course.Lessons.length" name="lessons" ng-pattern="/^([1-9]|10)$/" ng-required="this" />
+                    <div class="error" ng-show="(!createForm.lessons.$valid && createForm.lessons.$touched) || createForm.lessons.$dirty">{{constants.lessonsLengthError}}</div>
                     <div ng-repeat="lesson in courseService.course.Lessons track by $index" ng-form="lessonForm">
                         <label class="block-label">Name of the lesson:</label>
                         <input type="text" class="lesson-name" ng-model="lesson.Name" name="lessonName{{$index}}"placeholder="i.e. My lesson"  ng-minlength="2"  ng-maxlength="64" ng-required="this"/>
@@ -32,7 +32,9 @@
                 </fieldset>
                 <fieldset class="col-lg-4">
                     <legend>Exercises</legend>
-                    <label for="addExerciseBtn">Add a another exercise</label> <button type="button" id="addExerciseBtn" ng-click="courseService.addExercise()" ng-disabled="courseService.course.Exercises.length > 9">Add</button>
+                    <label for="addExerciseBtn">Add a another exercise</label> <button type="button" id="addExerciseBtn" ng-click="courseService.addExercise(createForm)">Add</button>
+                    <input type="hidden" ng-model="courseService.course.Exercises.length" name="exercises" ng-pattern="/^([0-9]|10)$/" ng-required="this"/>
+                    <div class="error" ng-show="!createForm.exercises.$valid || createForm.exercises.$dirty">{{constants.exercisesLengthError}}</div>
                     <div ng-repeat="exercise in courseService.course.Exercises track by $index" ng-form="exerciseForm">
                         <label class="block-label">Name of the exercise:</label>
                         <input type="text" class="exercise-name" ng-model="exercise.Name" name="exerciseName{{$index}}" placeholder="i.e. My Exercise" ng-minlength="2"  ng-maxlength="64"  ng-required="this"/>
@@ -40,7 +42,9 @@
                         <label class="block-label">Description:</label>
                         <textarea class="exercise-description" ng-model="exercise.Description" name="exerciseDescription{{$index}}" ng-minlength="2"  ng-maxlength="120" ng-required="this"></textarea>
                         <div class="error" ng-show="!exerciseForm.exerciseDescription{{$index}}.$valid && exerciseForm.exerciseDescription{{$index}}.$touched">{{constants.nameError}}</div>
-                        <label for="addQuestionBtn">Add a question</label> <button type="button" id="addQuestionBtn" ng-click="courseService.addQuestion($index)" ng-disabled="exercise.Questions.length > 99">Add</button>
+                        <label for="addQuestionBtn">Add a question</label> <button type="button" id="addQuestionBtn" ng-click="courseService.addQuestion($index, exerciseForm)">Add</button>
+                        <input type="hidden" ng-model="exercise.Questions.length" name="questions{{$index}}" ng-pattern="/^[1-9][0-9]?$|^100$/" ng-required="this" />
+                        <div class="error" ng-show="(!exerciseForm.questions{{$index}}.$valid && exerciseForm.questions{{$index}}.$touched)|| exerciseForm.questions{{$index}}.$dirty">{{constants.questionsLengthError}}</div>
                         <div ng-repeat="question in exercise.Questions track by $index" ng-form="questionForm">
                             <label class="block-label">Question:</label>
                             <input type="text" class="question-sentence" ng-model="question.Sentence" name="questionSentence{{$index}}" placeholder="i.e. My question?" ng-minlength="2" ng-maxlength="120" ng-required="this"/>
