@@ -26,7 +26,7 @@
                         <textarea class="lesson-description" ng-model="lesson.Description" name="lessonDescription{{$index}}" ng-minlength="2"  ng-maxlength="120" ng-required="this"></textarea>
                         <div class="error" ng-show="!lessonForm.lessonDescription{{$index}}.$valid && lessonForm.lessonDescription{{$index}}.$touched">{{constants.descriptionError}}</div>
                         <label class="block-label">Upload material in .pdf format:</label>
-                        <input type="file" ngf-select ng-model="lesson.Resource" accept="application/pdf" ngf-max-size="10MB" class="lesson-file" name="resource{{$index}}" placeholder="Choose a file"  ngf-pattern="'.pdf'" ng-required="true"/>
+                        <input type="file" ngf-select ng-model="courseService.Resource[$index]" accept="application/pdf" ngf-max-size="10MB" class="lesson-file" name="resource{{$index}}" placeholder="Choose a file"  ngf-pattern="'.pdf'" ng-required="true"/>
                         <div class="error" ng-show="!lessonForm.resource{{$index}}.$valid && !lessonForm.resource{{$index}}.$error.maxSize && lessonForm.resource{{$index}}.$touched">{{constants.fileError}}</div>
                         <div class="error" ng-show="lessonForm.resource{{$index}}.$error.maxSize && lessonForm.resource{{$index}}.$touched">{{constants.sizeError}}</div>
                     </div>    

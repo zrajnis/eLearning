@@ -56,7 +56,6 @@
         const answer = formName["answer" + questionIndex];
         const answersLength = formName["answersLength" + questionIndex];
         const exerciseIndex = this.course.Exercises.indexOf(exercise);
-        console.log(answer.$modelValue)
 
         if (answersLength.$modelValue < 5 && answer.$valid && answer.$modelValue) { //answer field isnt required, so empty field passes as valid, hence last condition
             this.course.Exercises[exerciseIndex].Questions[questionIndex].Answers.push({
@@ -77,15 +76,41 @@
         }
     };
 
+
     this.createCourse = (formName) => {
         if (formName.$valid) {
-            const fd = new FormData();
+            let fd = new FormData();
+
+            /*fd.append(JSON.stringify({
+                Name: this.course.Name,
+                Description: this.course.Description,
+                Lessons: this.course.Lessons,
+                Exercises: this.course.Exercises
+            }));*/
 
             $.each($("input[type='file']"), (i, input) => { //append each uploaded file to the form data
-                fd.append('file' + i, input.files[0]);
+                fd.append('Files', input.files[0]);
             });
 
-            fd.append('course', JSON.stringify(this.course));
+           /* for (var key in this.course) {
+                fd.append(key, this.course[key]);
+            }*/
+
+            //fd = JSON.stringify($("#createForm").serializeArray());
+            fd.append('Name', this.course.Name);
+            fd.append('Description', this.course.Description);
+            /*this.course.Lessons.forEach(lesson => {
+                fd.append('Lessons.Name', lesson.Name);
+                fd.append('Lessons.Description', lesson.Description);
+            })*/
+            for (let i = 0; i < this.course.Lessons.length; i++) {
+                fd.append('Lessons[]', JSON.stringify(this.course.Lessons[i]));
+            }
+
+            for (let i = 0; i < this.course.Exercises.length; i++) {
+                fd.append('Exercises[]', JSON.stringify(this.course.Exercises[i]));
+            }
+
             $http.post('/Course/Create', fd, {
                 //transformRequest: angular.identity,
                 headers: { 'Content-Type': undefined }
