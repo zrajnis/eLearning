@@ -8,7 +8,7 @@ namespace eLearning.Models
     [NotMapped]
     public class CreateCourseModel
     {
-        public IEnumerable<IFormFile> Files { get; set; }
+        public IList<IFormFile> Files { get; set; }
         [Required, MinLength(2), MaxLength(64)]
         public string Name { get; set; }
         [MinLength(2), MaxLength(240)]

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace eLearning.Models
@@ -12,7 +13,6 @@ namespace eLearning.Models
         [Required]
         public string Path { get; set; }
 
-        [ForeignKey("Lesson")]
-        public int LessonId { get; set; }
+        public IList<Lesson> Lessons { get; set; } //1:N relationship so in the future its possible to implement recognizing if resource already exists which should save hard disk space
     }
 }

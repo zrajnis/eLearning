@@ -6,6 +6,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 using System;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
+using System.IO;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,7 +16,15 @@ namespace eLearning.Controllers
 {
     public class CourseController : Controller
     {
-        // GET: /<controller>/
+        private eLearningContext db;
+        private UserManager<User> _userManager;
+
+        public CourseController(UserManager<User> userManager, eLearningContext context)
+        {
+            _userManager = userManager;
+            db = context;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -26,58 +37,89 @@ namespace eLearning.Controllers
         }
 
         [HttpPost, Authorize, Route("/Course/Create")]
-        public IActionResult Create([FromForm]CreateCourseModel cm)
+        public async Task<IActionResult> Create([FromForm]CreateCourseModel cm)
         {
-            //dont use array of strings but one and split it
-            List<Lesson> lessons = new List<Lesson>();
-            List<Exercise> exercises = new List<Exercise>();
-            List<Question> questions = new List<Question>();
-            List<Answer> answers = new List<Answer>();
 
-            //JToken c = JToken.Parse(cm.Lessons);
+            var owner = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            var newCourse = new Course { Name = cm.Name, Description = cm.Description, Owner = owner.UserName };
+
+            db.Courses.Add(newCourse);
+            db.SaveChanges();
+
+            var courseId = newCourse.CourseId;
+            int index = 0; //used for iterating through files
 
             foreach (string lesson in cm.Lessons)
             {
+                var resourceId = 0;
+
+                using (var stream = new FileStream("./Resources/" + cm.Files[index].FileName, FileMode.Create))
+                {
+                    await cm.Files[index].CopyToAsync(stream);
+                    var newResource = new Resource();
+                    {
+                        newResource.Path = "/Resources/" + cm.Files[index].FileName;
+                        newResource.Name = cm.Files[index].FileName;
+                    }
+                    db.Resources.Add(newResource);
+                    db.SaveChanges();
+                    index++;
+                    resourceId = newResource.ResourceId;
+                }
+
                 JObject parsedObject = JObject.Parse(lesson);
-                Lesson newLesson = new Lesson
+                var newLesson = new Lesson
                 {
                     Name = parsedObject.GetValue("Name").ToString(),
-                    Description = parsedObject.GetValue("Description").ToString()
+                    Description = parsedObject.GetValue("Description").ToString(),
+                    CourseId = courseId,
+                    ResourceId = resourceId
                 };
 
-                lessons.Add(newLesson);
+                db.Lessons.Add(newLesson);
+                db.SaveChanges();
             }
 
             foreach(string exercise in cm.Exercises)
             {
                 JObject parsedObject = JObject.Parse(exercise);
-                Exercise newExercise = new Exercise
+                var newExercise = new Exercise
                 {
                     Name = parsedObject.GetValue("Name").ToString(),
-                    Description = parsedObject.GetValue("Description").ToString()
+                    Description = parsedObject.GetValue("Description").ToString(),
+                    CourseId = courseId
                 };
 
-                exercises.Add(newExercise);
+                db.Exercises.Add(newExercise);
+                db.SaveChanges();
 
-                foreach(JObject question in parsedObject.GetValue("Questions"))
+                var exerciseId = newExercise.ExerciseId;
+
+                foreach (JObject question in parsedObject.GetValue("Questions"))
                 {
-                    Question newQuestion = new Question
+                    var newQuestion = new Question
                     {
                         Sentence = question.GetValue("Sentence").ToString(),
-                        Points = float.Parse(question.GetValue("Points").ToString())
+                        Points = float.Parse(question.GetValue("Points").ToString()),
+                        ExerciseId = exerciseId
                     };
 
-                    questions.Add(newQuestion);
+                    db.Questions.Add(newQuestion);
+                    db.SaveChanges();
 
-                    foreach(JObject answer in question.GetValue("Answers"))
+                    var questionId = newQuestion.QuestionId;
+
+                    foreach (JObject answer in question.GetValue("Answers"))
                     {
-                        Answer newAnswer = new Answer
+                        var newAnswer = new Answer
                         {
                             Sentence = answer.GetValue("Sentence").ToString(),
-                            IsCorrect = Convert.ToBoolean(answer.GetValue("IsCorrect").ToString())
+                            IsCorrect = Convert.ToBoolean(answer.GetValue("IsCorrect").ToString()),
+                            QuestionId = questionId
                         };
 
-                        answers.Add(newAnswer);
+                        db.Answers.Add(newAnswer);
+                        db.SaveChanges();
                     }
                 }
             }

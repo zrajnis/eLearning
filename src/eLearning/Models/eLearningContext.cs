@@ -27,7 +27,7 @@ namespace eLearning.Models
             modelBuilder.Entity<Resource>()
                 .HasAlternateKey(c => c.Path);
 
-            modelBuilder.Entity<Subscription>()
+            modelBuilder.Entity<Subscription>() //subscription and exercise are M:N tables so theres some overriding to do
                 .HasKey(s => new { s.UserId, s.CourseId});
 
             modelBuilder.Entity<Subscription>()
