@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using eLearning.Models;
+using eLearning.ModelState;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
@@ -39,9 +39,15 @@ namespace eLearning.Controllers
         [HttpPost, Authorize, Route("/Course/Create")]
         public async Task<IActionResult> Create([FromForm]CreateCourseModel cm)
         {
-
             var owner = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
             var newCourse = new Course { Name = cm.Name, Description = cm.Description, Owner = owner.UserName };
+
+            bool isValid = validateCreateCourseModel(cm, owner);
+
+            if (!isValid)
+            {
+                return View("Error");
+            }
 
             db.Courses.Add(newCourse);
             db.SaveChanges();
@@ -53,14 +59,15 @@ namespace eLearning.Controllers
             {
                 var resourceId = 0;
 
-                using (var stream = new FileStream("./Resources/" + cm.Files[index].FileName, FileMode.Create))
+                using (var stream = new FileStream("./App_Data/Resources/" + newCourse.CourseId + "-" + index + ".pdf", FileMode.Create))
                 {
                     await cm.Files[index].CopyToAsync(stream);
                     var newResource = new Resource();
                     {
-                        newResource.Path = "/Resources/" + cm.Files[index].FileName;
+                        newResource.Path = "./ App_Data / Resources / " + newCourse.CourseId + " - " + index + ".pdf";
                         newResource.Name = cm.Files[index].FileName;
                     }
+
                     db.Resources.Add(newResource);
                     db.SaveChanges();
                     index++;
@@ -80,50 +87,176 @@ namespace eLearning.Controllers
                 db.SaveChanges();
             }
 
-            foreach(string exercise in cm.Exercises)
+            if(cm.Exercises != null)
             {
-                JObject parsedObject = JObject.Parse(exercise);
-                var newExercise = new Exercise
+                foreach (string exercise in cm.Exercises)
                 {
-                    Name = parsedObject.GetValue("Name").ToString(),
-                    Description = parsedObject.GetValue("Description").ToString(),
-                    CourseId = courseId
-                };
-
-                db.Exercises.Add(newExercise);
-                db.SaveChanges();
-
-                var exerciseId = newExercise.ExerciseId;
-
-                foreach (JObject question in parsedObject.GetValue("Questions"))
-                {
-                    var newQuestion = new Question
+                    JObject parsedObject = JObject.Parse(exercise);
+                    var newExercise = new Exercise
                     {
-                        Sentence = question.GetValue("Sentence").ToString(),
-                        Points = float.Parse(question.GetValue("Points").ToString()),
-                        ExerciseId = exerciseId
+                        Name = parsedObject.GetValue("Name").ToString(),
+                        Description = parsedObject.GetValue("Description").ToString(),
+                        CourseId = courseId
                     };
 
-                    db.Questions.Add(newQuestion);
+                    db.Exercises.Add(newExercise);
                     db.SaveChanges();
 
-                    var questionId = newQuestion.QuestionId;
+                    var exerciseId = newExercise.ExerciseId;
 
-                    foreach (JObject answer in question.GetValue("Answers"))
+                    foreach (JObject question in parsedObject.GetValue("Questions"))
                     {
-                        var newAnswer = new Answer
+                        var newQuestion = new Question
                         {
-                            Sentence = answer.GetValue("Sentence").ToString(),
-                            IsCorrect = Convert.ToBoolean(answer.GetValue("IsCorrect").ToString()),
-                            QuestionId = questionId
+                            Sentence = question.GetValue("Sentence").ToString(),
+                            Points = float.Parse(question.GetValue("Points").ToString()),
+                            ExerciseId = exerciseId
                         };
 
-                        db.Answers.Add(newAnswer);
+                        db.Questions.Add(newQuestion);
                         db.SaveChanges();
+
+                        var questionId = newQuestion.QuestionId;
+
+                        foreach (JObject answer in question.GetValue("Answers"))
+                        {
+                            var newAnswer = new Answer
+                            {
+                                Sentence = answer.GetValue("Sentence").ToString(),
+                                IsCorrect = Convert.ToBoolean(answer.GetValue("IsCorrect").ToString()),
+                                QuestionId = questionId
+                            };
+
+                            db.Answers.Add(newAnswer);
+                            db.SaveChanges();
+                        }
                     }
                 }
             }
             return View();
+        }
+
+        private bool validateCreateCourseModel(CreateCourseModel cm, User owner)
+        {
+            var newCourse = new Course { Name = cm.Name, Description = cm.Description, Owner = owner.UserName };
+
+            if (!TryValidateModel(newCourse))
+            {
+                return false;
+            }
+
+            int fakeId = 0;
+            int index = 0; //used for iterating through files
+
+            try
+            {
+                var a = cm.Lessons.Count();
+                if(cm.Lessons.Count() > 10)
+                {
+                    return false;
+                }
+
+                foreach (string lesson in cm.Lessons)
+                {
+                    var newResource = new Resource();
+                    {
+                        newResource.Path = "./ App_Data / Resources / " + newCourse.CourseId + " - " + index + ".pdf";
+                        newResource.Name = cm.Files[index].FileName;
+                    }
+
+                    if (!TryValidateModel(newResource))
+                    {
+                        return false;
+                    }
+
+                    index++;
+
+                    JObject parsedObject = JObject.Parse(lesson);
+                    var newLesson = new Lesson
+                    {
+                        Name = parsedObject.GetValue("Name").ToString(),
+                        Description = parsedObject.GetValue("Description").ToString(),
+                        CourseId = fakeId,
+                        ResourceId = fakeId
+                    };
+
+                    if (!TryValidateModel(newLesson))
+                    {
+                        return false;
+                    }
+                }
+
+                if (cm.Exercises != null) // excercises can be null and valid since they're optional
+                {
+                    if(cm.Exercises.Count() > 10)
+                    {
+                        return false;
+                    }
+
+                    foreach (string exercise in cm.Exercises)
+                    {
+                        JObject parsedObject = JObject.Parse(exercise);
+                        var newExercise = new Exercise
+                        {
+                            Name = parsedObject.GetValue("Name").ToString(),
+                            Description = parsedObject.GetValue("Description").ToString(),
+                            CourseId = fakeId
+                        };
+
+                        if (!TryValidateModel(newExercise))
+                        {
+                            return false;
+                        }
+
+                        if(parsedObject.GetValue("Questions").Count() == 0 || parsedObject.GetValue("Questions").Count() > 100)
+                        {
+                            return false;
+                        }
+
+                        foreach (JObject question in parsedObject.GetValue("Questions"))
+                        {
+                            var newQuestion = new Question
+                            {
+                                Sentence = question.GetValue("Sentence").ToString(),
+                                Points = float.Parse(question.GetValue("Points").ToString()),
+                                ExerciseId = fakeId
+                            };
+
+                            if (!TryValidateModel(newQuestion))
+                            {
+                                return false;
+                            }
+
+                            if (question.GetValue("Answers").Count() < 2 || question.GetValue("Answers").Count() > 5)
+                            {
+                                return false;
+                            }
+
+                            foreach (JObject answer in question.GetValue("Answers"))
+                            {
+                                var newAnswer = new Answer
+                                {
+                                    Sentence = answer.GetValue("Sentence").ToString(),
+                                    IsCorrect = Convert.ToBoolean(answer.GetValue("IsCorrect").ToString()),
+                                    QuestionId = fakeId
+                                };
+
+                                if (!TryValidateModel(newAnswer))
+                                {
+                                    return false;
+                                };
+                            }
+                        }
+                    }
+                }
+                
+            }
+            catch(Exception)
+            {
+                return false;
+            }
+            
+            return true;
         }
     }
 }

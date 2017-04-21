@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace eLearning.Models
+namespace eLearning.ModelState
 {
     public class Answer
     {

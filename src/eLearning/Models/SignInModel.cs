@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace eLearning.Models
+namespace eLearning.ModelState
 {
     [NotMapped]
     public class SignInModel

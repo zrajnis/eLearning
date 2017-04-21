@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace eLearning.Models
+namespace eLearning.ModelState
 {
     public class Subscription //determines which user is subscribed to which course (N:M relationship)
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace eLearning.Models
+namespace eLearning.ModelState
 {
     [NotMapped]
     public class SettingsModel

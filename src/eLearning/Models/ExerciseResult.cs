@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace eLearning.Models
+namespace eLearning.ModelState
 {
     public class ExerciseResult //exercise result for specific test written by specific user (N:M relationship)
     {

@@ -81,28 +81,13 @@
         if (formName.$valid) {
             let fd = new FormData();
 
-            /*fd.append(JSON.stringify({
-                Name: this.course.Name,
-                Description: this.course.Description,
-                Lessons: this.course.Lessons,
-                Exercises: this.course.Exercises
-            }));*/
-
             $.each($("input[type='file']"), (i, input) => { //append each uploaded file to the form data
                 fd.append('Files', input.files[0]);
             });
 
-           /* for (var key in this.course) {
-                fd.append(key, this.course[key]);
-            }*/
-
-            //fd = JSON.stringify($("#createForm").serializeArray());
             fd.append('Name', this.course.Name);
             fd.append('Description', this.course.Description);
-            /*this.course.Lessons.forEach(lesson => {
-                fd.append('Lessons.Name', lesson.Name);
-                fd.append('Lessons.Description', lesson.Description);
-            })*/
+
             for (let i = 0; i < this.course.Lessons.length; i++) {
                 fd.append('Lessons[]', JSON.stringify(this.course.Lessons[i]));
             }
