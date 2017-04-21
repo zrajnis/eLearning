@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    min-width: 400px;
 }
 
 /* Wrapping element */
@@ -15,6 +16,9 @@ input,
 select,
 textarea {
     max-width: 280px;
+    /*-webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;*/
 }
 
 /* Carousel */
@@ -246,4 +250,60 @@ input:required {
 
 input[type=file].ng-invalid.ng-touched {
     border: inherit;
+}
+
+legend {
+    text-align: center;
+}
+
+fieldset input, fieldset textarea, fieldset label, .create-error, fieldset button, fieldset ul, fieldset span{
+    margin-left: 50px;
+}
+
+fieldset ul {
+    list-style: none;
+}
+
+.repeated-container {
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
+
+.repeated-small-container {
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    
+}
+
+.create-error {
+    color: red;
+}
+
+#addAnswerBtn {
+    float: right;
+    margin-right: 50px;
+}
+
+#addAnswerBtn, #addExerciseBtn {
+    margin-top: 10px;
+}
+
+#createSubmitBtnWrapper {
+    display: block;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 50px;
+}
+
+#createCourseContainer {
+    overflow: auto;
+    overflow-x: hidden;
+    word-wrap: break-word;
+}
+
+.is-correct-checkbox {
+    float: right;
+    margin-right: 50px;
 }
