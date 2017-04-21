@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using eLearning.ModelState;
+using eLearning.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
@@ -46,7 +46,7 @@ namespace eLearning.Controllers
 
             if (!isValid)
             {
-                return View("Error");
+                return Json(new { message = "Course creation failed!" });
             }
 
             db.Courses.Add(newCourse);
@@ -64,7 +64,7 @@ namespace eLearning.Controllers
                     await cm.Files[index].CopyToAsync(stream);
                     var newResource = new Resource();
                     {
-                        newResource.Path = "./ App_Data / Resources / " + newCourse.CourseId + " - " + index + ".pdf";
+                        newResource.Path = "./App_Data/Resources/" + newCourse.CourseId + "-" + index + ".pdf";
                         newResource.Name = cm.Files[index].FileName;
                     }
 
@@ -133,7 +133,7 @@ namespace eLearning.Controllers
                     }
                 }
             }
-            return View();
+            return Json(new { message = "Success!" });
         }
 
         private bool validateCreateCourseModel(CreateCourseModel cm, User owner)

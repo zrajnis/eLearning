@@ -1,4 +1,4 @@
-﻿angular.module('eLearning').service('courseService', ['constants', '$http', '$timeout', function (constants, $http ,$timeout) { 
+﻿angular.module('eLearning').service('courseService', ['constants', '$http', '$timeout', '$window', function (constants, $http ,$timeout, $window) { 
     this.course = { //properties are uppercased so they match models on server
         Name: null,
         Description: null,
@@ -6,7 +6,7 @@
         Exercises: []
     };
 
-    this.addLesson = (formName) => {
+    this.addLesson = formName => {
         if (formName.lessonsLength.$modelValue < 10) {
             formName.lessonsLength.$setTouched(true);
             this.course.Lessons.push({
@@ -20,7 +20,7 @@
         }
     };
 
-    this.addExercise = (formName) => {
+    this.addExercise = formName => {
         if (formName.exercisesLength.$valid && formName.exercisesLength.$modelValue < 10) {
             this.course.Exercises.push({
                 Name: null,
@@ -77,7 +77,7 @@
     };
 
 
-    this.createCourse = (formName) => {
+    this.createCourse = formName => {
         if (formName.$valid) {
             let fd = new FormData();
 
@@ -99,6 +99,16 @@
             $http.post('/Course/Create', fd, {
                 //transformRequest: angular.identity,
                 headers: { 'Content-Type': undefined }
+            }).then(response => {
+                if (response.data.message === 'Success!') {
+                    $window.location.href = '/Course/Create';
+                }
+                else {
+                    $('#createError').text(response.data.message);
+                    setTimeout(() => {
+                        $('#createError').text('');
+                    }, 2000);
+                }
             });
         }
         else {
@@ -106,7 +116,7 @@
         }
     };
 
-    const touchOnSubmit = (formName) => {
+    const touchOnSubmit = formName => {
         angular.forEach(formName.$error, (field) => {
             angular.forEach(field, (errorField) => {
                 if (!errorField.$name.includes('Form')) {

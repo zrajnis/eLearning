@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace eLearning.ModelState
+namespace eLearning.Models
 {
     public class eLearningContext : IdentityDbContext<User>
     {

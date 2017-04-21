@@ -28,7 +28,7 @@
         });
     };
 
-    $scope.settingsValidateField = (fieldID) => validateService.validateField(fieldID, $scope);
+    $scope.settingsValidateField = fieldID => validateService.validateField(fieldID, $scope);
     $scope.clearSettingsData = () => cleanUpService.clearSettingsData($scope);
 
     $scope.changeDataHttpRequest = (name, inputID, data) => {
@@ -36,7 +36,7 @@
             method: "PUT",
             url: "/Account/Change/" + name,
             data: data
-        }).then((response) => {
+        }).then(response => {
             if (response.data.message === 'Success!') {
                 $('#' + name + 'ChangeBtn').addClass('successBtn').text('Success');
 
@@ -63,7 +63,7 @@
         });
     };
 
-    $scope.change = (inputID) => {
+    $scope.change = inputID => {
         const name = $('#' + inputID).attr('name');
         //if we're changing password check if any of password fields have an error, for other types of changes check if their field has an error
         if (name !== 'password' && !$scope[name + 'Error'] || name === 'password' && !$scope.oldPasswordError && !$scope.passwordError && !$scope.rePasswordError) {

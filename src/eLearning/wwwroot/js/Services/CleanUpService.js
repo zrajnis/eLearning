@@ -1,5 +1,5 @@
 ﻿angular.module('eLearning').service('cleanUpService', ['constants', function (constants) {
-    this.clearSignUpErrors = ($scope) => {
+    this.clearSignUpErrors = $scope => {
         $scope.errorExists = false;
         $('#signUpFirstNameError').text('');
         $('#signUpFirstName').removeClass('hasError');
@@ -14,7 +14,7 @@
         $('#signUpError').text('');
     };
 
-    this.clearSignUpData = ($scope) => { //resets all values ( input values ,input borders and errors
+    this.clearSignUpData = $scope => { //resets all values ( input values ,input borders and errors
         this.clearSignUpErrors($scope);
         $scope.signUpFirstName = '';
         $scope.signUpLastName = '';
@@ -23,7 +23,7 @@
         $scope.signUpRePassword = '';
     };
 
-    this.clearSignInErrors = ($scope) => {
+    this.clearSignInErrors = $scope => {
         $scope.errorExists = false;
         $('#signInEmailError').text('');
         $('#signInEmail').removeClass('hasError');
@@ -32,13 +32,13 @@
         $('#signInError').text('');
     };
 
-    this.clearSignInData = ($scope) => {
+    this.clearSignInData = $scope => {
         this.clearSignInErrors($scope);
         $scope.signInEmail = '';
         $scope.signInPassword = '';
     };
     
-    this.clearSettingsErrors = ($scope) => {
+    this.clearSettingsErrors = $scope => {
         $scope.firstNameError = true,
         $scope.lastNameError = true;
         $scope.oldPasswordError = true;
@@ -57,7 +57,7 @@
         $('#settingsDeactivateError').text('');
     };
 
-    this.clearSettingsData = ($scope) => {
+    this.clearSettingsData = $scope => {
         this.clearSettingsErrors($scope);
         $scope.deactivateDecision = false;
         $scope.settingsFirstName = '';

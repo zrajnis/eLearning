@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace eLearning.ModelState
+namespace eLearning.Models
 {
     public class User : IdentityUser
     {
