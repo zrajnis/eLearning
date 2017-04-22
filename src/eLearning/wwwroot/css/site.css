@@ -256,8 +256,13 @@ legend {
     text-align: center;
 }
 
-fieldset input, fieldset textarea, fieldset label, .create-error, fieldset button, fieldset ul, fieldset span{
-    margin-left: 50px;
+fieldset {
+    padding-left: 0!important;
+    padding-right: 0!important;
+    max-height: calc(100vh - 400px);
+    min-height: 340px !important;
+    overflow-y: auto;
+    margin-left: 0!important;
 }
 
 fieldset ul {
@@ -270,11 +275,10 @@ fieldset ul {
     padding-bottom: 10px;
 }
 
-.repeated-small-container {
+.repeated-small-container, .repeated-smallest-container {
     border-bottom: 1px solid #e5e5e5;
     margin-bottom: 10px;
-    padding-bottom: 10px;
-    
+    padding-bottom: 10px;  
 }
 
 .create-error {
@@ -283,17 +287,12 @@ fieldset ul {
 
 #addAnswerBtn {
     float: right;
-    margin-right: 50px;
-}
-
-#addAnswerBtn, #addExerciseBtn {
-    margin-top: 10px;
 }
 
 #createSubmitBtnWrapper {
     display: block;
     margin: auto;
-    margin-top: 10px;
+    margin-top: 50px;
     margin-bottom: 50px;
 }
 
@@ -304,6 +303,9 @@ fieldset ul {
 }
 
 .is-correct-checkbox {
-    float: right;
-    margin-right: 50px;
+    margin-left: 10px!important;
+}
+
+.repeated-container .close, .repeated-small-container .close, .repeated-smallest-container .close {
+    color: #222;
 }

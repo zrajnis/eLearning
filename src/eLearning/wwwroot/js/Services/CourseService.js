@@ -116,6 +116,13 @@
         }
     };
 
+    this.remove = (array, index) => {
+        console.log('entered remove');
+        console.log('array ' + JSON.stringify(array));
+        console.log('index' + index);
+        array.splice(index, 1);
+    };
+
     const touchOnSubmit = formName => {
         angular.forEach(formName.$error, (field) => {
             angular.forEach(field, (errorField) => {
