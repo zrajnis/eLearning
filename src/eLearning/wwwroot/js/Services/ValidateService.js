@@ -5,13 +5,13 @@
         return true;
     };
 
-    this.removeErrorMsg = (inputID) => {
+    this.removeErrorMsg = inputID => {
         $('#' + inputID + 'Error').text('');
         $('#' + inputID).removeClass('hasError');
         return false;
     };
 
-    this.signUpValidate = ($scope) => {
+    this.signUpValidate = $scope => {
         if (!constants.firstNameRegex.test($scope.signUpFirstName) || !$scope.signUpFirstName) { //alternative is pre writing all errors, hiding them and then showing ones that do come up
             $scope.errorExists = this.errorMsg('signUpFirstName', constants.firstNameError);
         }
@@ -33,7 +33,7 @@
         }
     };
 
-    this.signInValidate = ($scope) => {
+    this.signInValidate = $scope => {
         if (!constants.emailRegex.test($scope.signInEmail) || !$scope.signInEmail) {
             $scope.errorExists = this.errorMsg('signIn', constants.signInError);
         }

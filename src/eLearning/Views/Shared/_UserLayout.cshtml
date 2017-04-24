@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>eLearning</title>
+
+    <environment names="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+    @Html.ApplicationInsightsJavaScript(TelemetryConfiguration)
+</head>
+<body ng-app="eLearning" ng-controller="UserCtrl">
+    <div class="navbar navbar-inverse navbar-fixed-top" id="navbar">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">eLearning</a>
+            </div>
+            <div id="searchContainer">
+                <input class="form-control" type="text" name="search" id="searchBar" placeholder="Search for a course" /><button id="searchBtn"></button>
+                <label id="searchLabel" for="searchBar">Search for a course:</label>
+            </div>
+            <div class="navbar-collapse collapse pull-right">
+                <ul class="nav navbar-nav">
+                    <li><a href="" data-toggle="modal" data-target="#settingsModal">Settings</a></li>
+                    <li><a href="" ng-click="signOut()">Sign out</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; 2017 - eLearning</p>
+        </footer>
+    </div>
+
+
+    <environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/angular/angular.js"></script>
+        <script src="~/lib/angular-route/angular-route.js"></script>
+        <script src="~/lib/ng-file-upload\ng-file-upload-shim.js"></script>
+        <script src="~/lib/ng-file-upload\ng-file-upload.js"></script> 
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/js/Controllers/UserController.js" asp-append-version="true"></script>
+        <script src="~/js/Services/ValidateService.js" asp-append-version="true"></script>
+        <script src="~/js/Services/CleanUpService.js" asp-append-version="true"></script>
+        <script src="~/js/Services/CourseService.js" asp-append-version="true"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
+        </script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"
+                asp-fallback-src="~/lib/angular/angular.min.js"
+                asp-fallback-test="window.angular">
+        </script>
+    </environment>
+
+    @RenderSection("scripts", required: false)
+
+    <div class="modal fade" id="settingsModal" role="dialog">
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+                <div class="modal-header navbar navbar-inverse">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Settings</h4>
+                </div>
+                <div class="modal-body">
+                    <label for="settingsFirstName" class="block-label">Change first name:</label>
+                    <input type="text" class="form-control settings-input" placeholder="i.e. John" name="firstName" ng-model="settingsFirstName" ng-change="settingsValidateField('settingsFirstName')" id="settingsFirstName" /><button type="button" class="changeBtn" ng-click="change('settingsFirstName')" id="firstNameChangeBtn">Change</button><div class="error" id="settingsFirstNameError"></div>
+                    <label for="settingsLastName" class="block-label">Change last name:</label>
+                    <input type="text" class="form-control settings-input" placeholder="i.e. Doe" name="lastName" ng-model="settingsLastName" ng-change="settingsValidateField('settingsLastName')" id="settingsLastName" /><button type="button" class="changeBtn" ng-click="change('settingsLastName')" id="lastNameChangeBtn">Change</button><div class="error" id="settingsLastNameError"></div>
+                    <label class="block-label" id="changePasswordLabel">Change password:</label>
+                    <label for="settingsOldPassword" class="block-label" id="oldPasswordLabel">Old password:</label>
+                    <input type="password" aria-labelledby="oldPasswordLabel changePasswordLabel" class="form-control settings-input" placeholder="i.e. ******" name="oldPassword" ng-model="settingsOldPassword" ng-change="settingsValidateField('settingsOldPassword')" id="settingsOldPassword" /><div class="error" id="settingsOldPasswordError"></div>
+                    <label for="settingsNewPassword" class="block-label" id="newPasswordLabel">New password:</label>
+                    <input type="password" aria-labelledby="newPasswordLabel changePasswordLabel" class="form-control settings-input" placeholder="i.e. ******" name="password" ng-model="settingsNewPassword" ng-change="settingsValidateField('settingsNewPassword')" id="settingsNewPassword" /><div class="error" id="settingsNewPasswordError"></div>
+                    <label for="settingsRePassword" class="block-label" id="confirmPasswordLabel">Confirm password:</label>
+                    <input type="password" aria-labelledby="confirmPasswordLabel changePasswordLabel" class="form-control settings-input" placeholder="i.e. ******" name="rePassword" ng-model="settingsRePassword" ng-change="settingsValidateField('settingsRePassword')" id="settingsRePassword" /><button type="button" class="changeBtn" ng-click="change('settingsNewPassword')" id="passwordChangeBtn">Change</button><div class="error" id="settingsRePasswordError"></div>
+                    <label class="block-label" for="deactivateBtn">Deactivate the account:</label>
+                    <div ng-show="deactivateDecision" id="deactivateDecisionContainer">
+                        <span>Are you sure?</span>
+                        <button class="deactivate-decision-btn" id="positiveDeactivateDecisionBtn" ng-click="deactivate()">Yes</button>
+                        <button class="deactivate-decision-btn" id="negativeDeactivateDecisionBtn"ng-click="deactivateDecision = !deactivateDecision">No</button>
+                    </div>
+                    <div ng-hide="deactivateDecision">
+                        <button type="button" id="deactivateBtn" ng-click="deactivateDecision = !deactivateDecision">Deactivate</button>
+                        <div class="error" id="settingsDeactivateError"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                   <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

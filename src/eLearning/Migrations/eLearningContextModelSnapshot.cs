@@ -18,8 +18,10 @@ namespace eLearning.Migrations
 
             modelBuilder.Entity("eLearning.Models.Answer", b =>
                 {
-                    b.Property<int>("AnswerId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("IsCorrect");
 
                     b.Property<int>("QuestionId");
 
@@ -27,7 +29,7 @@ namespace eLearning.Migrations
                         .IsRequired()
                         .HasAnnotation("MaxLength", 120);
 
-                    b.HasKey("AnswerId");
+                    b.HasKey("Id");
 
                     b.HasIndex("QuestionId");
 
@@ -36,7 +38,7 @@ namespace eLearning.Migrations
 
             modelBuilder.Entity("eLearning.Models.Course", b =>
                 {
-                    b.Property<int>("CourseId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Description")
@@ -49,14 +51,14 @@ namespace eLearning.Migrations
                     b.Property<string>("Owner")
                         .IsRequired();
 
-                    b.HasKey("CourseId");
+                    b.HasKey("Id");
 
                     b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("eLearning.Models.Exercise", b =>
                 {
-                    b.Property<int>("ExerciseId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("CourseId");
@@ -68,7 +70,7 @@ namespace eLearning.Migrations
                         .IsRequired()
                         .HasAnnotation("MaxLength", 64);
 
-                    b.HasKey("ExerciseId");
+                    b.HasKey("Id");
 
                     b.HasIndex("CourseId");
 
@@ -92,7 +94,7 @@ namespace eLearning.Migrations
 
             modelBuilder.Entity("eLearning.Models.Lesson", b =>
                 {
-                    b.Property<int>("LessonId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("CourseId");
@@ -104,27 +106,31 @@ namespace eLearning.Migrations
                         .IsRequired()
                         .HasAnnotation("MaxLength", 64);
 
-                    b.HasKey("LessonId");
+                    b.Property<int>("ResourceId");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("CourseId");
+
+                    b.HasIndex("ResourceId");
 
                     b.ToTable("Lessons");
                 });
 
             modelBuilder.Entity("eLearning.Models.Question", b =>
                 {
-                    b.Property<int>("QuestionId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("ExerciseId");
 
-                    b.Property<int>("Points");
+                    b.Property<float>("Points");
 
                     b.Property<string>("Sentence")
                         .IsRequired()
                         .HasAnnotation("MaxLength", 120);
 
-                    b.HasKey("QuestionId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ExerciseId");
 
@@ -133,10 +139,8 @@ namespace eLearning.Migrations
 
             modelBuilder.Entity("eLearning.Models.Resource", b =>
                 {
-                    b.Property<int>("ResourceId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<int>("LessonId");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -145,12 +149,9 @@ namespace eLearning.Migrations
                     b.Property<string>("Path")
                         .IsRequired();
 
-                    b.HasKey("ResourceId");
+                    b.HasKey("Id");
 
                     b.HasAlternateKey("Path");
-
-                    b.HasIndex("LessonId")
-                        .IsUnique();
 
                     b.ToTable("Resources");
                 });
@@ -371,6 +372,11 @@ namespace eLearning.Migrations
                         .WithMany("Lessons")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("eLearning.Models.Resource", "Resource")
+                        .WithMany("Lessons")
+                        .HasForeignKey("ResourceId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("eLearning.Models.Question", b =>
@@ -378,14 +384,6 @@ namespace eLearning.Migrations
                     b.HasOne("eLearning.Models.Exercise", "Exercise")
                         .WithMany("Questions")
                         .HasForeignKey("ExerciseId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("eLearning.Models.Resource", b =>
-                {
-                    b.HasOne("eLearning.Models.Lesson")
-                        .WithOne("Resoruce")
-                        .HasForeignKey("eLearning.Models.Resource", "LessonId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

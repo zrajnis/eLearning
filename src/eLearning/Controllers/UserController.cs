@@ -11,5 +11,11 @@ namespace eLearning.Controllers
         {
             return View();
         }
+
+        [Authorize]
+        public IActionResult CreateCourse()
+        {
+            return View();
+        }
     }
 }

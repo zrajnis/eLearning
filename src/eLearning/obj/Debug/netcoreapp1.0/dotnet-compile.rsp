@@ -217,13 +217,15 @@
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Program.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Startup.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Controllers\AccountController.cs
+C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Controllers\CourseController.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Controllers\HomeController.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Controllers\UserController.cs
-C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Migrations\20170329184136_InitialMigration.cs
-C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Migrations\20170329184136_InitialMigration.Designer.cs
+C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Migrations\20170422175507_InitialMigration.cs
+C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Migrations\20170422175507_InitialMigration.Designer.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Migrations\eLearningContextModelSnapshot.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Models\Answer.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Models\Course.cs
+C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Models\CreateCourseModel.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Models\eLearningContext.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Models\Exercise.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Models\ExerciseResult.cs

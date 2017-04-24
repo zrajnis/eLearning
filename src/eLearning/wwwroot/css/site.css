@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    min-width: 400px;
 }
 
 /* Wrapping element */
@@ -15,6 +16,9 @@ input,
 select,
 textarea {
     max-width: 280px;
+    /*-webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;*/
 }
 
 /* Carousel */
@@ -202,4 +206,122 @@ textarea {
     border: 1px solid rgb(102, 175, 233);
     border-radius: 4px;
     background: rgb(102, 175, 233);
+}
+
+#createCourseContainer {
+    border: 1px solid #222;
+    margin-top: 50px;
+    min-height: 750px;
+}
+
+#createCourseTitleContainer {
+    background: rgba(107,186,112,1);
+    height: 50px;
+    color: whitesmoke; 
+}
+
+#createCourseTitle {
+    font-size: 24px;
+    line-height: 2;
+    margin-left: 10px;
+    margin-top: 0px;
+}
+
+#createFormContainer {
+    color: #222;
+}
+
+textarea {
+    resize: none;
+    display: block;
+}
+
+#debug{
+    color:black;
+}
+
+input:required {
+    box-shadow:none;
+}
+
+.ng-invalid.ng-touched {
+    border: 1px solid red;
+}
+
+input[type=file].ng-invalid.ng-touched {
+    border: inherit;
+}
+
+legend {
+    text-align: center;
+}
+
+fieldset {
+    padding-left: 0!important;
+    padding-right: 0!important;
+    
+    margin-left: 0!important;
+}
+
+.fieldset-elements {
+    max-height: calc(100vh - 455px);
+    min-height: 340px !important;
+    overflow-y: auto;
+}
+
+fieldset ul {
+    list-style: none;
+}
+
+.repeated-container {
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
+
+.repeated-small-container, .repeated-smallest-container {
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 10px;
+    padding-bottom: 10px;  
+}
+
+.repeated-smallest-container {
+   word-break: break-all;
+}
+
+.create-error {
+    color: red;
+}
+
+#createError {
+    text-align: center;
+}
+
+#addAnswerBtn {
+    float: right;
+}
+
+#createSubmitBtnWrapper {
+    display: block;
+    margin: auto;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+#createCourseContainer {
+    overflow: auto;
+    overflow-x: hidden;
+    word-wrap: break-word;
+}
+
+.is-correct-checkbox {
+    margin-left: 10px!important;
+}
+
+.repeated-container .close, .repeated-small-container .close, .repeated-smallest-container .close {
+    color: #222;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
 }
