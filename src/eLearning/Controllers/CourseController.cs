@@ -30,6 +30,43 @@ namespace eLearning.Controllers
             return View();
         }
 
+        [HttpGet("{id}"), Route("/Course/Read")]
+        public IActionResult Read(int id)
+        {
+            var courseExists = db.Courses.Any(c => c.Id == id);
+
+            if (!courseExists)
+            {
+                return View("Error");
+            }
+
+            var readCourse = db.Courses.FirstOrDefault(c => c.Id == id);
+            var user = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            var readLessons = db.Lessons.Where(l => l.CourseId == readCourse.Id).Select(l=> new { l.Id, l.Name, l.Description });
+
+            if (user == null)
+            {
+                return Json(new
+                {
+                    id = readCourse.Id,
+                    name = readCourse.Name,
+                    description = readCourse.Description,
+                    lessons = readLessons
+                });
+            }
+
+            var readExercises = db.Exercises.Where(e => e.CourseId == readCourse.Id).Select(e => new { e.Id, e.Name, e.Description });
+            var isSubscribed = db.Subscriptions.Any(s => s.CourseId == readCourse.Id && s.UserId == user.Id);
+
+            return Json(new {
+                id = readCourse.Id,
+                name = readCourse.Name,
+                description = readCourse.Description,
+                lessons = readLessons,
+                exercises = readExercises,
+                isSubscribed = isSubscribed });
+        }
+
         [HttpGet, Authorize, Route("/Course/Create")]
         public IActionResult Create()
         {

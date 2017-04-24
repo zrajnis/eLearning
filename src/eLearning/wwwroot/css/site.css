@@ -208,19 +208,19 @@ textarea {
     background: rgb(102, 175, 233);
 }
 
-#createCourseContainer {
+#createCourseContainer, #readCourseContainer {
     border: 1px solid #222;
     margin-top: 50px;
     min-height: 750px;
 }
 
-#createCourseTitleContainer {
+#createCourseTitleContainer, #readCourseTitleContainer {
     background: rgba(107,186,112,1);
     height: 50px;
     color: whitesmoke; 
 }
 
-#createCourseTitle {
+#createCourseTitle, #readCourseTitle {
     font-size: 24px;
     line-height: 2;
     margin-left: 10px;
