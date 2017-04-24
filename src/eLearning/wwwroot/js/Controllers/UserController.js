@@ -28,10 +28,10 @@
         });
     };
 
-    $scope.settingsValidateField = fieldID => validateService.validateField(fieldID, $scope);
+    $scope.settingsValidateField = fieldId => validateService.validateField(fieldId, $scope);
     $scope.clearSettingsData = () => cleanUpService.clearSettingsData($scope);
 
-    $scope.changeDataHttpRequest = (name, inputID, data) => {
+    $scope.changeDataHttpRequest = (name, inputId, data) => {
         $http({
             method: "PUT",
             url: "/Account/Change/" + name,
@@ -53,27 +53,27 @@
                     validateService.removeErrorMsg('settingsRePassword');
 
                     response.data.errorList.forEach((item) => {
-                        validateService.errorMsg(item.inputID, item.message);
+                        validateService.errorMsg(item.inputId, item.message);
                     });
                 }
                 else { //otherwise its a single error from first or last name change
-                    validateService.errorMsg(inputID, response.data.message);
+                    validateService.errorMsg(inputId, response.data.message);
                 }
             }
         });
     };
 
-    $scope.change = inputID => {
-        const name = $('#' + inputID).attr('name');
+    $scope.change = inputId => {
+        const name = $('#' + inputId).attr('name');
         //if we're changing password check if any of password fields have an error, for other types of changes check if their field has an error
         if (name !== 'password' && !$scope[name + 'Error'] || name === 'password' && !$scope.oldPasswordError && !$scope.passwordError && !$scope.rePasswordError) {
             let data = null;
             switch (name) {
                 case 'firstName':
-                    data = { FirstName: $scope[inputID] };
+                    data = { FirstName: $scope[inputId] };
                     break;
                 case 'lastName':
-                    data = { LastName: $scope[inputID] };
+                    data = { LastName: $scope[inputId] };
                     break;
                 case 'password':
                     data = {
@@ -83,7 +83,7 @@
                     };
                     break;
             }
-            $scope.changeDataHttpRequest(name, inputID, data);
+            $scope.changeDataHttpRequest(name, inputId, data);
         }
     };
 

@@ -259,10 +259,14 @@ legend {
 fieldset {
     padding-left: 0!important;
     padding-right: 0!important;
-    max-height: calc(100vh - 400px);
+    
+    margin-left: 0!important;
+}
+
+.fieldset-elements {
+    max-height: calc(100vh - 455px);
     min-height: 340px !important;
     overflow-y: auto;
-    margin-left: 0!important;
 }
 
 fieldset ul {
@@ -281,8 +285,16 @@ fieldset ul {
     padding-bottom: 10px;  
 }
 
+.repeated-smallest-container {
+   word-break: break-all;
+}
+
 .create-error {
     color: red;
+}
+
+#createError {
+    text-align: center;
 }
 
 #addAnswerBtn {
@@ -308,4 +320,8 @@ fieldset ul {
 
 .repeated-container .close, .repeated-small-container .close, .repeated-smallest-container .close {
     color: #222;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
 }

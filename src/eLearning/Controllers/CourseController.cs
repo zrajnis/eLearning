@@ -52,33 +52,33 @@ namespace eLearning.Controllers
             db.Courses.Add(newCourse);
             db.SaveChanges();
 
-            var courseId = newCourse.CourseId;
+            var courseId = newCourse.Id;
             int index = 0; //used for iterating through files
 
             foreach (string lesson in cm.Lessons)
             {
                 var resourceId = 0;
 
-                using (var stream = new FileStream("./App_Data/Resources/" + newCourse.CourseId + "-" + index + ".pdf", FileMode.Create))
+                using (var stream = new FileStream("./App_Data/Resources/" + newCourse.Id + "-" + index + ".pdf", FileMode.Create))
                 {
                     await cm.Files[index].CopyToAsync(stream);
                     var newResource = new Resource();
                     {
-                        newResource.Path = "./App_Data/Resources/" + newCourse.CourseId + "-" + index + ".pdf";
+                        newResource.Path = "./App_Data/Resources/" + newCourse.Id + "-" + index + ".pdf";
                         newResource.Name = cm.Files[index].FileName;
                     }
 
                     db.Resources.Add(newResource);
                     db.SaveChanges();
                     index++;
-                    resourceId = newResource.ResourceId;
+                    resourceId = newResource.Id;
                 }
 
                 JObject parsedObject = JObject.Parse(lesson);
                 var newLesson = new Lesson
                 {
-                    Name = parsedObject.GetValue("Name").ToString(),
-                    Description = parsedObject.GetValue("Description").ToString(),
+                    Name = parsedObject.GetValue("name").ToString(),
+                    Description = parsedObject.GetValue("description").ToString(),
                     CourseId = courseId,
                     ResourceId = resourceId
                 };
@@ -94,36 +94,36 @@ namespace eLearning.Controllers
                     JObject parsedObject = JObject.Parse(exercise);
                     var newExercise = new Exercise
                     {
-                        Name = parsedObject.GetValue("Name").ToString(),
-                        Description = parsedObject.GetValue("Description").ToString(),
+                        Name = parsedObject.GetValue("name").ToString(),
+                        Description = parsedObject.GetValue("description").ToString(),
                         CourseId = courseId
                     };
 
                     db.Exercises.Add(newExercise);
                     db.SaveChanges();
 
-                    var exerciseId = newExercise.ExerciseId;
+                    var exerciseId = newExercise.Id;
 
-                    foreach (JObject question in parsedObject.GetValue("Questions"))
+                    foreach (JObject question in parsedObject.GetValue("questions"))
                     {
                         var newQuestion = new Question
                         {
-                            Sentence = question.GetValue("Sentence").ToString(),
-                            Points = float.Parse(question.GetValue("Points").ToString()),
+                            Sentence = question.GetValue("sentence").ToString(),
+                            Points = float.Parse(question.GetValue("points").ToString()),
                             ExerciseId = exerciseId
                         };
 
                         db.Questions.Add(newQuestion);
                         db.SaveChanges();
 
-                        var questionId = newQuestion.QuestionId;
+                        var questionId = newQuestion.Id;
 
-                        foreach (JObject answer in question.GetValue("Answers"))
+                        foreach (JObject answer in question.GetValue("answers"))
                         {
                             var newAnswer = new Answer
                             {
-                                Sentence = answer.GetValue("Sentence").ToString(),
-                                IsCorrect = Convert.ToBoolean(answer.GetValue("IsCorrect").ToString()),
+                                Sentence = answer.GetValue("sentence").ToString(),
+                                IsCorrect = Convert.ToBoolean(answer.GetValue("isCorrect").ToString()),
                                 QuestionId = questionId
                             };
 
@@ -160,7 +160,7 @@ namespace eLearning.Controllers
                 {
                     var newResource = new Resource();
                     {
-                        newResource.Path = "./ App_Data / Resources / " + newCourse.CourseId + " - " + index + ".pdf";
+                        newResource.Path = "./ App_Data / Resources / " + fakeId + " - " + index + ".pdf";
                         newResource.Name = cm.Files[index].FileName;
                     }
 
@@ -174,8 +174,8 @@ namespace eLearning.Controllers
                     JObject parsedObject = JObject.Parse(lesson);
                     var newLesson = new Lesson
                     {
-                        Name = parsedObject.GetValue("Name").ToString(),
-                        Description = parsedObject.GetValue("Description").ToString(),
+                        Name = parsedObject.GetValue("name").ToString(),
+                        Description = parsedObject.GetValue("description").ToString(),
                         CourseId = fakeId,
                         ResourceId = fakeId
                     };
@@ -198,8 +198,8 @@ namespace eLearning.Controllers
                         JObject parsedObject = JObject.Parse(exercise);
                         var newExercise = new Exercise
                         {
-                            Name = parsedObject.GetValue("Name").ToString(),
-                            Description = parsedObject.GetValue("Description").ToString(),
+                            Name = parsedObject.GetValue("name").ToString(),
+                            Description = parsedObject.GetValue("description").ToString(),
                             CourseId = fakeId
                         };
 
@@ -208,17 +208,17 @@ namespace eLearning.Controllers
                             return false;
                         }
 
-                        if(parsedObject.GetValue("Questions").Count() == 0 || parsedObject.GetValue("Questions").Count() > 100)
+                        if(parsedObject.GetValue("questions").Count() == 0 || parsedObject.GetValue("questions").Count() > 100)
                         {
                             return false;
                         }
 
-                        foreach (JObject question in parsedObject.GetValue("Questions"))
+                        foreach (JObject question in parsedObject.GetValue("questions"))
                         {
                             var newQuestion = new Question
                             {
-                                Sentence = question.GetValue("Sentence").ToString(),
-                                Points = float.Parse(question.GetValue("Points").ToString()),
+                                Sentence = question.GetValue("sentence").ToString(),
+                                Points = float.Parse(question.GetValue("points").ToString()),
                                 ExerciseId = fakeId
                             };
 
@@ -227,17 +227,17 @@ namespace eLearning.Controllers
                                 return false;
                             }
 
-                            if (question.GetValue("Answers").Count() < 2 || question.GetValue("Answers").Count() > 5)
+                            if (question.GetValue("answers").Count() < 2 || question.GetValue("answers").Count() > 5)
                             {
                                 return false;
                             }
 
-                            foreach (JObject answer in question.GetValue("Answers"))
+                            foreach (JObject answer in question.GetValue("answers"))
                             {
                                 var newAnswer = new Answer
                                 {
-                                    Sentence = answer.GetValue("Sentence").ToString(),
-                                    IsCorrect = Convert.ToBoolean(answer.GetValue("IsCorrect").ToString()),
+                                    Sentence = answer.GetValue("sentence").ToString(),
+                                    IsCorrect = Convert.ToBoolean(answer.GetValue("isCorrect").ToString()),
                                     QuestionId = fakeId
                                 };
 

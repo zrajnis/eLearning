@@ -31,7 +31,7 @@ app.constant('constants', {
     answersLengthError: 'Must provide between 2 and 5 answers.',
     lessonsLengthError: 'Must provide between 1 and 10 lessons.',
     exercisesLengthError: 'Maximum of 10 exercises reached.',
-    questionsLengthError: 'Must provide between 1 and 100 questions',
+    questionsLengthError: 'Must provide between 1 and 100 questions.',
     nameError: 'Please enter a valid name.',
     courseDescriptionError: 'Please enter a valid description.',
     descriptionError: 'Please enter a valid description.',
