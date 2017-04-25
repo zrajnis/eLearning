@@ -51,10 +51,10 @@
     </div>
 </div>
 
-<div class="modal fade" id="resourceDisplayModal" role="dialog">
-    <div class="modal-dialog">
-        <div id="resourceDisplayContainer"class="modal-content">
-            <iframe src={{courseService.resourceAddress}} style="width:600px; height:800px;" frameborder="0"></iframe>
+<div class="modal fade" id="resourceDisplayModal" role="dialog" ng-cloak>
+    <div class="modal-dialog ">
+        <div class="modal-content resizable">
+            <iframe src={{courseService.resourceAddress}} id="resourceDisplayContainer" class="resizable"></iframe>
         </div>
     </div>
 </div>

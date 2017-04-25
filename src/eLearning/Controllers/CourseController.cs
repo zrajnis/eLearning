@@ -90,13 +90,13 @@ namespace eLearning.Controllers
             var appPath = PlatformServices.Default.Application.ApplicationBasePath;
             var resourceExists = db.Resources.Any(r => r.Id == id);
 
-            appPath = appPath.Remove(appPath.Length - 24); //base path shows path to debug, we cut off unnecessary part so it shows to project
+            appPath = appPath.Remove(appPath.Length - 24); //base path shows path to debug, we cut off unnecessary pa
             if (resourceExists)
             {
                 var loadResource = db.Resources.FirstOrDefault(r => r.Id == id);
                 return PhysicalFile(appPath + loadResource.Path, "application/pdf");
             }
-            return Json(new { message = "Resource not found." });
+            return Json(new { error = "Resource not found." });
         }
 
         [HttpGet, Authorize, Route("/Course/Create")]

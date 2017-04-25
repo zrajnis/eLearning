@@ -1,23 +1,5 @@
 ﻿const app = angular.module('eLearning', ['ngRoute', 'ngFileUpload']);
 
-app.config(function ($routeProvider) {
-    $routeProvider
-    .when("/", {
-        templateUrl: "Home",
-        controller: "HomeCtrl"
-    })
-    .when("/User", {
-        templateUrl: "User",
-        controller: "UserCtrl"
-    })
-    .when("/Search", {
-        templateUrl: "Home/Search"
-    })
-    .when("/User/Search", {
-        templateUrl: "/User/Search"
-    });
-});
-
 app.constant('constants', {
     firstNameRegex: /^[a-zA-Z0-9.'\s]{2,32}$/,
     lastNameRegex: /^[a-zA-Z0-9.'\s]{2,32}$/,
