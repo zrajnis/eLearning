@@ -1,4 +1,4 @@
-﻿angular.module('eLearning').controller('HomeCtrl', ['$scope', '$http', '$window', 'validateService', 'cleanUpService', 'constants', ($scope, $http, $window, validateService, cleanUpService, constants) => {
+﻿angular.module('eLearning').controller('HomeCtrl', ['$scope', '$http', '$window', 'validateService', 'cleanUpService', 'courseService', 'constants', ($scope, $http, $window, validateService, cleanUpService, courseService, constants) => {
     $('#signUpModal').on('hidden.bs.modal', () => {
         $scope.clearSignUpData();
         $scope.$apply();
@@ -10,6 +10,7 @@
     });
 
     $scope.errorExists = false;
+    $scope.courseService = courseService;
     $scope.clearSignUpData = () => cleanUpService.clearSignUpData($scope);
     $scope.clearSignInData = () => cleanUpService.clearSignInData($scope);
     $scope.signUpValidateField = fieldId => validateService.validateField(fieldId, $scope);

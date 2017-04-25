@@ -56,6 +56,7 @@ namespace eLearning.Controllers
 
             var readCourse = db.Courses.FirstOrDefault(c => c.Id == id);
             var readLessons = db.Lessons.Where(l => l.CourseId == readCourse.Id).Select(l=> new { l.Id, l.Name, l.Description, l.ResourceId});
+            var subscriberCount = db.Subscriptions.Count(s => s.CourseId == readCourse.Id);
 
             if (!User.Identity.IsAuthenticated)
             {
@@ -64,14 +65,15 @@ namespace eLearning.Controllers
                     id = readCourse.Id,
                     name = readCourse.Name,
                     description = readCourse.Description,
-                    lessons = readLessons
+                    lessons = readLessons,
+                    canSubscribe = false,
+                    subscriberCount = subscriberCount
                 });
             }
 
             var user = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
             var readExercises = db.Exercises.Where(e => e.CourseId == readCourse.Id).Select(e => new { e.Id, e.Name, e.Description });
             var isSubscribed = db.Subscriptions.Any(s => s.CourseId == readCourse.Id && s.UserId == user.Id);
-            var subscriberCount = db.Subscriptions.Count(s => s.CourseId == readCourse.Id);
 
             return Json(new {
                 id = readCourse.Id,
@@ -90,7 +92,7 @@ namespace eLearning.Controllers
             var appPath = PlatformServices.Default.Application.ApplicationBasePath;
             var resourceExists = db.Resources.Any(r => r.Id == id);
 
-            appPath = appPath.Remove(appPath.Length - 24); //base path shows path to debug, we cut off unnecessary pa
+            appPath = appPath.Remove(appPath.Length - 24); //base path shows path to debug, we cut off unnecessary part so it points to project
             if (resourceExists)
             {
                 var loadResource = db.Resources.FirstOrDefault(r => r.Id == id);
