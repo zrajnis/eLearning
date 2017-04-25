@@ -36,7 +36,7 @@ namespace eLearning.Controllers
             return View();
         }
 
-        [HttpGet("Course/Load/{id}"), Route("/Course/Read")]
+        [HttpGet("Course/View/{id}"), Route("/Course/View")]
         public IActionResult Read(int id)
         {
             return View();
@@ -54,10 +54,9 @@ namespace eLearning.Controllers
             }
 
             var readCourse = db.Courses.FirstOrDefault(c => c.Id == id);
-            var user = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
             var readLessons = db.Lessons.Where(l => l.CourseId == readCourse.Id).Select(l=> new { l.Id, l.Name, l.Description, l.ResourceId});
 
-            if (user == null)
+            if (!User.Identity.IsAuthenticated)
             {
                 return Json(new
                 {
@@ -68,6 +67,7 @@ namespace eLearning.Controllers
                 });
             }
 
+            var user = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
             var readExercises = db.Exercises.Where(e => e.CourseId == readCourse.Id).Select(e => new { e.Id, e.Name, e.Description });
             var isSubscribed = db.Subscriptions.Any(s => s.CourseId == readCourse.Id && s.UserId == user.Id);
             var subscriberCount = db.Subscriptions.Count(s => s.CourseId == readCourse.Id);

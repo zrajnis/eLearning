@@ -2,7 +2,7 @@
     const pageNameArray = window.location.href.split('/'); //check if page url is course/read
     const action = pageNameArray[pageNameArray.length - 1];
 
-    if (action.includes('read') || action.includes('Read')) {
+    if (action.includes('view') || action.includes('View')) {
         const id = action.split('=')[1]; //action will be action name + query string i.e. read?id=2
         
         $http({
@@ -14,6 +14,7 @@
             }
             else {
                 this.course = response.data;
+                approximateSubs();
             }
         });
     }
@@ -189,5 +190,21 @@
         const fieldsetContainer = $('#exercisesFieldsetElements');
 
         fieldsetContainer.scrollTop(questionContainer.position().top + 75);
+    };
+
+    const approximateSubs = () => {
+        const numOfDigits = this.course.subscriberCount.toString().length;
+        if (numOfDigits >= 4 && numOfDigits < 7) {
+            this.course.approxSubCount = parseInt(this.course.subscriberCount / 1000) + 'K';
+        }
+        else if (numOfDigits >= 7 && numOfDigits < 10) {
+            this.course.approxSubCount = parseInt(this.course.subscriberCount / 1000000) + 'M';
+        }
+        else if(numOfDigits >= 10) {
+            this.course.approxSubCount = parseInt(this.course.subscriberCount / 1000000000) + 'B';
+        }
+        else {
+            this.course.approxSubCount = this.course.subscriberCount;
+        }
     };
 }]);
