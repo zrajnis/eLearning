@@ -25,9 +25,62 @@ namespace eLearning.Controllers
             db = context;
         }
 
+        [Route("/Course")]
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult Error()
+        {
+            return View();
+        }
+
+        [HttpGet("Course/View/{id}"), Route("/Course/View")]
+        public IActionResult Read(int id)
+        {
+            return View();
+        }
+
+
+        [HttpGet("Course/Load/{id}"), Route("/Course/Load")]
+        public IActionResult Load(int id)
+        {
+            var courseExists = db.Courses.Any(c => c.Id == id);
+
+            if (!courseExists)
+            {
+                return Json(new { message = "No course found!" });
+            }
+
+            var readCourse = db.Courses.FirstOrDefault(c => c.Id == id);
+            var readLessons = db.Lessons.Where(l => l.CourseId == readCourse.Id).Select(l=> new { l.Id, l.Name, l.Description, l.ResourceId});
+
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Json(new
+                {
+                    id = readCourse.Id,
+                    name = readCourse.Name,
+                    description = readCourse.Description,
+                    lessons = readLessons
+                });
+            }
+
+            var user = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            var readExercises = db.Exercises.Where(e => e.CourseId == readCourse.Id).Select(e => new { e.Id, e.Name, e.Description });
+            var isSubscribed = db.Subscriptions.Any(s => s.CourseId == readCourse.Id && s.UserId == user.Id);
+            var subscriberCount = db.Subscriptions.Count(s => s.CourseId == readCourse.Id);
+
+            return Json(new {
+                id = readCourse.Id,
+                name = readCourse.Name,
+                description = readCourse.Description,
+                lessons = readLessons,
+                exercises = readExercises,
+                canSubscribe = true, //used to check if user is logged when deciding whether to display subscribe button
+                isSubscribed = isSubscribed,
+                subscriberCount = subscriberCount});
         }
 
         [HttpGet, Authorize, Route("/Course/Create")]

@@ -208,19 +208,23 @@ textarea {
     background: rgb(102, 175, 233);
 }
 
-#createCourseContainer {
-    border: 1px solid #222;
+#createCourseContainer, #readCourseContainer {
+    border: 1px solid #e5e5e5;
     margin-top: 50px;
     min-height: 750px;
+    overflow: auto;
+    overflow-x: hidden;
+    word-wrap: break-word;
 }
 
-#createCourseTitleContainer {
+#createCourseTitleContainer, #courseNameContainer {
     background: rgba(107,186,112,1);
     height: 50px;
     color: whitesmoke; 
+    margin-bottom: 7px;
 }
 
-#createCourseTitle {
+#createCourseTitle, #courseName {
     font-size: 24px;
     line-height: 2;
     margin-left: 10px;
@@ -308,12 +312,6 @@ fieldset ul {
     margin-bottom: 50px;
 }
 
-#createCourseContainer {
-    overflow: auto;
-    overflow-x: hidden;
-    word-wrap: break-word;
-}
-
 .is-correct-checkbox {
     margin-left: 10px!important;
 }
@@ -324,4 +322,68 @@ fieldset ul {
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
+}
+
+#subscriptionContainer {
+    float: right;
+    margin-top: 10px;
+}
+
+#subscribeBtn {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+#subscriberCount {
+   color: whitesmoke;
+   text-align: center;
+   height: 100%;
+   margin-left: 10px;
+}
+
+#courseNameContainer {
+    margin-bottom: 0px;
+}
+
+#courseDescriptionContainer {
+    display: inline-block;
+    color: whitesmoke;
+    padding: 10px;
+}
+
+#lessonContainerTitle, #exerciseContainerTitle {
+    text-align: center;
+    font-size: 20px; 
+}
+
+#exerciseContainerTitle {
+    margin-top: 20px;
+}
+
+.lesson-element, .exercise-element {
+    border: 1px solid #e5e5e5;
+    margin-top: 20px;
+    padding: 0;
+}
+.lesson-number, .exercise-number {
+    display: inline-block;
+    float:left;
+    margin-left: 0;
+    width: 20px;
+    text-align: center;
+}
+
+.lesson-name-container, .exercise-name-container {
+    padding-left: 30px;
+    min-height: 30px;
+    font-weight: bold;
+}
+
+.lesson-description-container, .exercise-description-container {
+    min-height: 20px;
+}
+
+.view-btn, .solve-btn {
+    float: right;
+    margin: 5px;
 }
