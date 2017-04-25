@@ -57,7 +57,7 @@
                 }
             }).then((response) => {
                 if (response.data.message === 'Success!') {
-                    $window.location.href = '/User';
+                    $window.location.href = '/';
                 }
                 else {
                     $('#signInError').text(constants.signInError);

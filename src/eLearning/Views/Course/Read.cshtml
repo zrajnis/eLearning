@@ -1,5 +1,52 @@
 ﻿<div class="course-container" id="readCourseContainer">
-    <div id="readCourseTitleContainer" class="container">
-        <h1 id="readCourseTitle">Read a course</h1>
+    <div id="courseNameContainer" class="container" ng-cloak>
+        <h1 id="courseName">{{courseService.course.name}}</h1>
+    </div>
+    <div id="courseDescriptionContainer" class="bg-primary" ng-cloak>
+        {{courseService.course.description}}
+    </div>
+    <div id="subscriptionContainer" ng-cloak>
+        <div id="subscribeBtnContainer" ng-show="courseService.course.canSubscribe">           
+            <button id="subscribeBtn" class="btn btn-success">
+                <span ng-show="courseService.course.isSubscribed">Unsubscribe</span>
+                <span ng-show="!courseService.course.isSubscribed">Subscribe</span>
+            </button>
+            <div id="subscriberCount" class="bg-primary">{{courseService.course.subscriberCount}} Subs</div>
+        </div>
+    </div>
+    <div id="lessonContainer" class="row" ng-cloak>
+        <div id="lessonContainerTitle" class="col-lg-offset-4 col-lg-4">
+            <span id="lessonTitle">Lessons:</span>
+        </div>
+        <div ng-repeat="lesson in courseService.course.lessons track by $index" class="col-lg-offset-3 col-lg-6 lesson-element">
+            <span class="lesson-number bg-primary">{{$index + 1}}</span>
+            <div class="lesson-name-container bg-success">
+                {{lesson.name}}
+            </div>
+            <div class="lesson-description-container col-lg-10">
+                {{lesson.description}}
+            </div>
+            <div class="col-lg-2">
+                <button class="btn btn-primary view-btn">View</button>
+            </div>          
+        </div>
+    </div>
+    
+    <div id="exerciseContainer" class="row" ng-show="courseService.course.exercises.length > 0" ng-cloak>
+        <div id="exerciseContainerTitle" class="col-lg-offset-4 col-lg-4">
+            <span id="exerciseTitle">Exercises:</span>
+        </div>
+        <div ng-repeat="exercise in courseService.course.exercises track by $index" class="col-lg-offset-3 col-lg-6 exercise-element">
+            <span class="exercise-number bg-primary">{{$index + 1}}</span>
+            <div class="exercise-name-container bg-success">
+                {{exercise.name}}
+            </div>
+            <div class="exercise-description-container col-lg-10">
+                {{exercise.description}}
+            </div>
+            <div class="col-lg-2">
+                <button class="btn btn-primary solve-btn">Solve</button>
+            </div>
+        </div>
     </div>
 </div>

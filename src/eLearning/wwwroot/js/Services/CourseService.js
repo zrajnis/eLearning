@@ -1,4 +1,23 @@
 ﻿angular.module('eLearning').service('courseService', ['constants', '$http', '$timeout', '$window', function (constants, $http ,$timeout, $window) { 
+    const pageNameArray = window.location.href.split('/'); //check if page url is course/read
+    const action = pageNameArray[pageNameArray.length - 1];
+
+    if (action.includes('read') || action.includes('Read')) {
+        const id = action.split('=')[1]; //action will be action name + query string i.e. read?id=2
+        
+        $http({
+            method: "GET",
+            url: "/Course/Load?id=" + id,
+        }).then(response => {
+            if (response.data.message) {
+                window.location.href = '/Course';
+            }
+            else {
+                this.course = response.data;
+            }
+        });
+    }
+
     $('#createForm').on('keyup keypress', function (e) { //disable submit when enter is pressed
         var keyCode = e.keyCode || e.which;
         if (keyCode === 13) {
