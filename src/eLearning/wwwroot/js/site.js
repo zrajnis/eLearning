@@ -1,23 +1,5 @@
 ﻿const app = angular.module('eLearning', ['ngRoute', 'ngFileUpload']);
 
-app.config(function ($routeProvider) {
-    $routeProvider
-    .when("/", {
-        templateUrl: "Home",
-        controller: "HomeCtrl"
-    })
-    .when("/User", {
-        templateUrl: "User",
-        controller: "UserCtrl"
-    })
-    .when("/Search", {
-        templateUrl: "Home/Search"
-    })
-    .when("/User/Search", {
-        templateUrl: "/User/Search"
-    });
-});
-
 app.constant('constants', {
     firstNameRegex: /^[a-zA-Z0-9.'\s]{2,32}$/,
     lastNameRegex: /^[a-zA-Z0-9.'\s]{2,32}$/,
@@ -45,3 +27,53 @@ app.constant('constants', {
     signUpError: 'Sign up failed.',
     signInError: 'Sign in failed.'
 });
+
+interact('.draggable')
+  .draggable({
+      restrict: {
+          //restriction: "parent",
+          endOnly: true,
+          elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+      },
+      autoScroll: true,
+      onmove: window.dragMoveListener
+  })
+  .resizable({
+      edges: { left: true, right: true, bottom: true, top: true }
+  })
+  .on('resizemove', function (event) {
+      var target = event.target;
+      x = (parseFloat(target.getAttribute('data-x')) || 0),
+      y = (parseFloat(target.getAttribute('data-y')) || 0);
+
+      // update the element's style
+      target.style.width = event.rect.width + 'px';
+      target.style.height = event.rect.height + 'px';
+
+      // translate when resizing from top or left edges
+      x += event.deltaRect.left;
+      y += event.deltaRect.top;
+
+      target.style.webkitTransform = target.style.transform =
+          'translate(' + x + 'px,' + y + 'px)';
+
+      target.setAttribute('data-x', x);
+      target.setAttribute('data-y', y);
+     
+  });
+
+function dragMoveListener(event) {
+    var target = event.target,
+        // keep the dragged position in the data-x/data-y attributes
+        x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+        y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+    // translate the element
+    target.style.webkitTransform =
+    target.style.transform =
+      'translate(' + x + 'px, ' + y + 'px)';
+
+    // update the posiion attributes
+    target.setAttribute('data-x', x);
+    target.setAttribute('data-y', y);
+};

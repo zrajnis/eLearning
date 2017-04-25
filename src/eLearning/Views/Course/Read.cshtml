@@ -6,8 +6,8 @@
         {{courseService.course.description}}
     </div>
     <div id="subscriptionContainer" ng-cloak>
-        <div id="subscribeBtnContainer" ng-show="courseService.course.canSubscribe">           
-            <button id="subscribeBtn" class="btn btn-success">
+        <div id="subscribeBtnContainer">           
+            <button id="subscribeBtn" class="btn btn-success" ng-show="courseService.course.canSubscribe">
                 <span ng-show="courseService.course.isSubscribed">Unsubscribe</span>
                 <span ng-show="!courseService.course.isSubscribed">Subscribe</span>
             </button>
@@ -27,7 +27,7 @@
                 {{lesson.description}}
             </div>
             <div class="col-lg-2">
-                <button class="btn btn-primary view-btn">View</button>
+                <button class="btn btn-primary view-btn" ng-click="courseService.loadResource(lesson.resourceId)">View</button>
             </div>          
         </div>
     </div>
@@ -47,6 +47,14 @@
             <div class="col-lg-2">
                 <button class="btn btn-primary solve-btn">Solve</button>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="resourceDisplayModal" role="dialog" ng-cloak>
+    <div class="modal-dialog">
+        <div id="resourceDisplayContainer" class="modal-content draggable">
+            <iframe src={{courseService.resourceAddress}} id="resourceDisplay"></iframe>
         </div>
     </div>
 </div>
