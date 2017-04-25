@@ -9,6 +9,7 @@ using System;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using System.IO;
+using Microsoft.Extensions.PlatformAbstractions;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -81,6 +82,21 @@ namespace eLearning.Controllers
                 canSubscribe = true, //used to check if user is logged when deciding whether to display subscribe button
                 isSubscribed = isSubscribed,
                 subscriberCount = subscriberCount});
+        }
+
+        [HttpGet("Resource/Load/{id}"), Route("/Resource/Load")]
+        public IActionResult LoadResource(int id)
+        {
+            var appPath = PlatformServices.Default.Application.ApplicationBasePath;
+            var resourceExists = db.Resources.Any(r => r.Id == id);
+
+            appPath = appPath.Remove(appPath.Length - 24); //base path shows path to debug, we cut off unnecessary part so it shows to project
+            if (resourceExists)
+            {
+                var loadResource = db.Resources.FirstOrDefault(r => r.Id == id);
+                return PhysicalFile(appPath + loadResource.Path, "application/pdf");
+            }
+            return Json(new { message = "Resource not found." });
         }
 
         [HttpGet, Authorize, Route("/Course/Create")]

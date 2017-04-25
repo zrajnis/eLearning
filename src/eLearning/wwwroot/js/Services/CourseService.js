@@ -34,6 +34,11 @@
         exercises: []
     };
 
+    this.loadResource = id => {
+        this.resourceAddress = "http://localhost:55416/Resource//Load/?id=" + id; //load pdf in iframe
+        $('#resourceDisplayModal').modal('show');
+    }
+
     this.addLesson = formName => {
         if (formName.lessonsLength.$modelValue < 10) {
             formName.lessonsLength.$setTouched(true);

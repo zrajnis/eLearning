@@ -387,3 +387,10 @@ fieldset ul {
     float: right;
     margin: 5px;
 }
+
+#resourceDisplayContainer {
+    display:block; 
+    width:600px; 
+    height:800px; 
+    margin:auto;
+}

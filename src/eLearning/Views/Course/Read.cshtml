@@ -27,7 +27,7 @@
                 {{lesson.description}}
             </div>
             <div class="col-lg-2">
-                <button class="btn btn-primary view-btn">View</button>
+                <button class="btn btn-primary view-btn" ng-click="courseService.loadResource(lesson.resourceId)">View</button>
             </div>          
         </div>
     </div>
@@ -47,6 +47,14 @@
             <div class="col-lg-2">
                 <button class="btn btn-primary solve-btn">Solve</button>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="resourceDisplayModal" role="dialog">
+    <div class="modal-dialog">
+        <div id="resourceDisplayContainer"class="modal-content">
+            <iframe src={{courseService.resourceAddress}} style="width:600px; height:800px;" frameborder="0"></iframe>
         </div>
     </div>
 </div>
