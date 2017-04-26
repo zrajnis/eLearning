@@ -86,6 +86,47 @@ namespace eLearning.Controllers
                 subscriberCount = subscriberCount});
         }
 
+        [HttpPost, Authorize]
+        public IActionResult Subscribe([FromBody]int id)
+        {
+            var user = db.Users.First(u => u.UserName == User.Identity.Name);
+            var isSubscribed = db.Subscriptions.Any(s => s.UserId == user.Id && s.CourseId == id);
+
+            if (!isSubscribed)
+            {
+                Subscription newSubscription = new Subscription
+                {
+                    UserId = user.Id,
+                    CourseId = id
+                };
+
+                db.Subscriptions.Add(newSubscription);
+                db.SaveChanges();
+                return Json(new { message = "Success!" });
+            }
+
+            return Json(new { message = "Already subscribed." });
+        }
+
+        [HttpPost, Authorize]
+        public IActionResult Unsubscribe([FromBody]int id)
+        {
+            var user = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            var isSubscribed = db.Subscriptions.Any(s => s.UserId == user.Id && s.CourseId == id);
+
+            if (isSubscribed)
+            {
+                var removeSubscription = db.Subscriptions.First(s => s.UserId == user.Id && s.CourseId == id);
+
+                db.Subscriptions.Remove(removeSubscription);
+                db.SaveChanges();
+                return Json(new { message = "Success!" });
+            }
+
+            return Json(new { message = "Already unsubscribed." });
+        }
+
+
         [HttpGet("Resource/Load/{id}"), Route("/Resource/Load")]
         public IActionResult LoadResource(int id)
         {

@@ -7,13 +7,17 @@
     </div>
     <div id="subscriptionContainer" ng-cloak>
         <div id="subscribeBtnContainer">           
-            <button id="subscribeBtn" class="btn btn-success" ng-show="courseService.course.canSubscribe">
-                <span ng-show="courseService.course.isSubscribed">Unsubscribe</span>
-                <span ng-show="!courseService.course.isSubscribed">Subscribe</span>
+            <button id="subscribeBtn" class="btn btn-success" ng-show="courseService.course.canSubscribe && !courseService.course.isSubscribed" ng-click="courseService.subscribe()">
+                <span>Subscribe</span>
+            </button>
+            <button id="unsubscribeBtn" class="btn btn-success" ng-show="courseService.course.canSubscribe && courseService.course.isSubscribed" ng-click="courseService.unsubscribe()">
+                <span>Unsubscribe</span>
             </button>
             <div id="subscriberCount" class="bg-primary">{{courseService.course.approxSubCount}} Subs</div>
+            <div id="subcsribeError" class="error" ng-show="courseService.course.subscribeError || courseService.course.unsubscribeError">Already {{courseService.course.unsubscribeError ? "un " : ""}}subscribed.</div>
         </div>
     </div>
+    
     <div id="lessonContainer" class="row" ng-cloak>
         <div id="lessonContainerTitle" class="col-lg-offset-4 col-lg-4">
             <span id="lessonTitle">Lessons:</span>
