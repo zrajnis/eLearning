@@ -56,9 +56,11 @@
 </div>
 
 <div class="modal fade" id="resourceDisplayModal" role="dialog" ng-cloak>
-    <div class="modal-dialog">
+    <div class="modal-dialog" id="resourceDisplayModalDialog">
         <div id="resourceDisplayContainer" class="modal-content draggable">
             <iframe src={{courseService.resourceAddress}} id="resourceDisplay"></iframe>
         </div>
     </div>
 </div>
+
+<div id="loader" ng-hide="courseService.hideSpinner"></div>

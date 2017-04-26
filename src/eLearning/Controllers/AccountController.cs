@@ -23,14 +23,29 @@ namespace eLearning.Controllers
             db = context;
         }
 
+        [HttpGet, Authorize]
+        public IActionResult Load()
+        {
+            var user = db.Users.First(u => u.UserName == User.Identity.Name);
+            var myCourses = db.Courses.Where(c => c.Owner == user.Email).Select(mc => new { mc.Id, mc.Name });
+            var subscribedCourseIds = db.Subscriptions.Where(s => s.UserId == user.Id).Select(sc => sc.CourseId).ToArray();
+            var subscribedCourses = new List<Course>();
+
+            foreach (int element in subscribedCourseIds) {
+                var subscribedCourse = db.Courses.First(c => c.Id == element);
+                subscribedCourses.Add(subscribedCourse);
+            }
+            return Json(new { myCourses = myCourses, subscribedCourses = subscribedCourses.Select(s => new { s.Id, s.Name }) });
+        }
+
         [HttpPost]
         public async Task<IActionResult> SignUp([FromBody]User user)
         {
             if (ModelState.IsValid)
             {
-                var emailCount = db.Users.Count(u => u.Email == user.Email);
+                var emailExists = db.Users.Any(u => u.Email == user.Email);
 
-                if (emailCount > 0)
+                if (emailExists)
                 {
                     return Json(new { message = "Email already in use." });
                 }

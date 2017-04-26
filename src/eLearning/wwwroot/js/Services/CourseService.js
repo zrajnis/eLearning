@@ -1,4 +1,4 @@
-﻿angular.module('eLearning').service('courseService', ['constants', '$http', '$timeout', '$window', function (constants, $http ,$timeout, $window) { 
+﻿angular.module('eLearning').service('courseService', ['$rootScope', 'constants', '$http', '$timeout', '$window', function ($rootScope, constants, $http ,$timeout, $window) { 
     const pageNameArray = window.location.href.split('/'); //check if page url is course/read
     const action = pageNameArray[pageNameArray.length - 1];
 
@@ -15,6 +15,7 @@
             else {
                 this.course = response.data;
                 approximateSubs();
+                this.hideSpinner = true;
             }
         });
     }
@@ -38,9 +39,15 @@
         $('#subscribeBtn').addClass('unclickable'); //prevent request spamming
         $http.post("/Course/Subscribe", this.course.id).then(response => {
             if (response.data.message === 'Success!') {
+                const newCourse = {
+                    name: this.course.name,
+                    id: this.course.id
+                };
+
                 this.course.subscriberCount++;
                 this.course.isSubscribed = true;
                 approximateSubs();
+                $rootScope.$broadcast('subscribe', newCourse);
             }
             else {
                 this.course.subscribeError = true;
@@ -58,6 +65,7 @@
                 this.course.subscriberCount--;
                 this.course.isSubscribed = false;
                 approximateSubs();
+                $rootScope.$broadcast('unsubscribe', this.course.id);
             }
             else {
                 this.course.unsubscribeError = true;

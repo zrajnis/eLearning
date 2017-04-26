@@ -40,6 +40,30 @@
             </div>
         </div>
     </div>
+
+    <div id="sideMenu" class="nav navbar-inverse">
+        <div id="myCourseContainer">
+            <div id="myCoursesTitle">My courses:</div>
+            <div class="course-list-container"  ng-cloak>
+                <ul class="course-list list-group">
+                    <li class="my-course-element list-group-item" ng-repeat="course in user.myCourses"><a href="/Course/View?id={{course.id}}">{{course.name}}</a></li>
+                </ul>
+                <div ng-show="user.myCourses.length == 0" class="no-courses-msg">You haven't created a course.</div>
+            </div>
+            
+        </div>
+        <div id="subscribedCourseContainer">
+            <div id="subscribedCoursesTitle">Subscribed to:</div>
+            <div class="course-list-container" ng-cloak>
+                <ul class="course-list list-group">
+                    <li class="my-course-element list-group-item" ng-repeat="course in user.subscribedCourses"><a href="/Course/View?id={{course.id}}">{{course.name}}</a></li>
+                </ul>
+                <div ng-show="user.subscribedCourses.length == 0" class="no-courses-msg">You aren't subscribed to any courses.</div>
+            </div>
+        </div>
+        <a id="createLink" class="navbar-brand" href="/Course/Create">Create</a>
+    </div>
+
     <div class="container body-content">
         @RenderBody()
         <hr />
