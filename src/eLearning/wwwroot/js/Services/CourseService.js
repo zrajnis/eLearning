@@ -2,8 +2,8 @@
     const pageNameArray = window.location.href.split('/'); //check if page url is course/read
     const action = pageNameArray[pageNameArray.length - 1];
 
-    if (action.includes('view') || action.includes('View')) {
-        const id = action.split('=')[1]; //action will be action name + query string i.e. read?id=2
+    if (action.includes('view') || action.includes('View') || action.includes('update') || action.includes('Update')) {
+        const id = action.split('=')[1]; //action will be action name + query string i.e. view?id=2 or update?id=2
         
         $http({
             method: "GET",
@@ -34,10 +34,42 @@
         exercises: []
     };
 
+    this.subscribe = () => {
+        $('#subscribeBtn').addClass('unclickable'); //prevent request spamming
+        $http.post("/Course/Subscribe", this.course.id).then(response => {
+            if (response.data.message === 'Success!') {
+                this.course.subscriberCount++;
+                this.course.isSubscribed = true;
+                approximateSubs();
+            }
+            else {
+                alert('error');
+            }
+
+            $('#subscribeBtn').removeClass('unclickable');
+        });
+    };
+
+    this.unsubscribe = () => {
+        $('#subscribeBtn').addClass('unclickable'); //prevent request spamming
+        $http.post("/Course/Unsubscribe", this.course.id).then(response => {
+            if (response.data.message === 'Success!') {
+                this.course.subscriberCount--;
+                this.course.isSubscribed = false;
+                approximateSubs();
+            }
+            else {
+                alert('error');
+            }
+
+            $('#subscribeBtn').removeClass('unclickable');
+        });
+    };
+
     this.loadResource = id => {
         this.resourceAddress = "http://localhost:55416/Resource//Load/?id=" + id; //load pdf in iframe
         $('#resourceDisplayModal').modal('show');
-    }
+    };
 
     this.addLesson = formName => {
         if (formName.lessonsLength.$modelValue < 10) {
@@ -51,8 +83,7 @@
         else { //if user already created 10 lessons and tried to add another one,show error 
             formName.lessonsLength.$setTouched(true);
             formName.lessonsLength.$setValidity('pattern', false);
-            $timeout(() => formName.lessonsLength.$setValidity('pattern', true), 2000)
-
+            $timeout(() => formName.lessonsLength.$setValidity('pattern', true), 2000);
         }
     };
 

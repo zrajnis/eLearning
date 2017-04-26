@@ -156,14 +156,13 @@ textarea {
     font-size: 10px;
 }
 
-.changeBtn {
+.change-btn {
     height: 34px;
-    border-style: none;
-    border: 1px solid rgb(102, 175, 233);
-    border-radius: 4px;
-    background: rgb(102, 175, 233);
     color: whitesmoke;
     margin-left: 5px;
+    padding-right: 5px;
+    padding-left: 5px;
+    vertical-align: top;
 }
 
 #settingsFirstName, #settingsLastName, #settingsOldPassword, #settingsNewPassword, #settingsRePassword {
@@ -203,9 +202,10 @@ textarea {
 }
 
 #negativeDeactivateDecisionBtn {
-    border: 1px solid rgb(102, 175, 233);
-    border-radius: 4px;
-    background: rgb(102, 175, 233);
+    line-height: 0;
+    padding-right: 5px;
+    padding-left: 5px;
+    vertical-align: top;
 }
 
 #createCourseContainer, #readCourseContainer {
@@ -329,7 +329,7 @@ fieldset ul {
     margin-top: 10px;
 }
 
-#subscribeBtn {
+#subscribeBtn, #unsubscribeBtn {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 }
@@ -411,4 +411,8 @@ fieldset ul {
     height: 100%;
     display:block; 
     margin:auto; 
+}
+
+.unclickable {
+    pointer-events: none;
 }
