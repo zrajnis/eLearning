@@ -1,5 +1,5 @@
-﻿angular.module('eLearning').controller('UserCtrl', ['$scope', '$http', '$window', 'validateService', 'cleanUpService', 'courseService', 'constants',
-($scope, $http, $window, validateService, cleanUpService, courseService, constants) => {
+﻿angular.module('eLearning').controller('UserCtrl', ['$rootScope', '$scope', '$http', '$window', 'validateService', 'cleanUpService', 'courseService', 'constants',
+($rootScope, $scope, $http, $window, validateService, cleanUpService, courseService, constants) => {
     //get relevant user data thats going to be displayed in side menu
     $http({
         method: "GET",
@@ -11,6 +11,11 @@
         };
     });
 
+    $('#settingsModal').on('hidden.bs.modal', () => {
+        $scope.clearSettingsData();
+        $scope.$apply();
+    });
+
     $scope.firstNameError = true,
     $scope.lastNameError = true;
     $scope.oldPasswordError = true;
@@ -20,9 +25,19 @@
     $scope.courseService = courseService;
     $scope.constants = constants;
 
-    $('#settingsModal').on('hidden.bs.modal', () => {
-        $scope.clearSettingsData();
-        $scope.$apply();
+    $rootScope.$on('subscribe', (event, newCourse) => {
+        console.log(JSON.stringify(newCourse.id));
+        $scope.user.subscribedCourses.push(newCourse);
+    });
+
+    $rootScope.$on('unsubscribe', (event, courseId) => {
+        console.log(JSON.stringify(courseId));
+
+        $scope.user.subscribedCourses.forEach((course, index) => {
+            if (course.id === courseId) {
+                $scope.user.subscribedCourses.splice(index, 1);
+            }
+        });
     });
 
     $scope.signOut = () => {
