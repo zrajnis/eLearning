@@ -1,5 +1,16 @@
 ﻿angular.module('eLearning').controller('UserCtrl', ['$scope', '$http', '$window', 'validateService', 'cleanUpService', 'courseService', 'constants',
 ($scope, $http, $window, validateService, cleanUpService, courseService, constants) => {
+    //get relevant user data thats going to be displayed in side menu
+    $http({
+        method: "GET",
+        url: "/Account/Load",
+    }).then(response => {
+        $scope.user = {
+            myCourses: response.data.myCourses,
+            subscribedCourses: response.data.subscribedCourses
+        };
+    });
+
     $scope.firstNameError = true,
     $scope.lastNameError = true;
     $scope.oldPasswordError = true;

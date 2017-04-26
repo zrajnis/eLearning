@@ -40,6 +40,28 @@
             </div>
         </div>
     </div>
+
+    <div id="sideMenu" class="nav navbar-inverse">
+        <div id="myCourseContainer">
+            <div id="myCoursesTitle">My courses:</div>
+            <div class="course-list-container">
+                <ul class="course-list list-group" ng-cloak>
+                    <li class="my-course-element list-group-item" ng-repeat="course in user.myCourses"><a href="/Course/View?id={{course.id}}">{{course.name}}</a></li>
+                </ul>
+            </div>
+            
+        </div>
+        <div id="subscribedCourseContainer">
+            <div id="subscribedCoursesTitle">Subscribed to:</div>
+            <div class="course-list-container">
+                <ul class="course-list list-group" ng-cloak>
+                    <li class="my-course-element list-group-item" ng-repeat="course in user.subscribedCourses"><a href="/Course/View?id={{course.id}}">{{course.name}}</a></li>
+                </ul>
+            </div>
+        </div>
+        <a id="createLink" class="navbar-brand" href="/Course/Create">Create</a>
+    </div>
+
     <div class="container body-content">
         @RenderBody()
         <hr />
