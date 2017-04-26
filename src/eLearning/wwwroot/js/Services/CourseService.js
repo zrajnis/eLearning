@@ -43,7 +43,8 @@
                 approximateSubs();
             }
             else {
-                alert('error');
+                this.course.subscribeError = true;
+                $timeout(() => this.course.subscribeError = false, 2000);
             }
 
             $('#subscribeBtn').removeClass('unclickable');
@@ -59,7 +60,8 @@
                 approximateSubs();
             }
             else {
-                alert('error');
+                this.course.unsubscribeError = true;
+                $timeout(() => this.course.unsubscribeError = false, 2000);
             }
 
             $('#subscribeBtn').removeClass('unclickable');

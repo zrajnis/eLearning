@@ -334,6 +334,11 @@ fieldset ul {
     border-bottom-right-radius: 0;
 }
 
+#subcsribeError {
+    width: 75px!important;
+    position: relative!important;
+}
+
 #subscriberCount {
    color: whitesmoke;
    text-align: center;

@@ -14,8 +14,10 @@
                 <span>Unsubscribe</span>
             </button>
             <div id="subscriberCount" class="bg-primary">{{courseService.course.approxSubCount}} Subs</div>
+            <div id="subcsribeError" class="error" ng-show="courseService.course.subscribeError || courseService.course.unsubscribeError">Already {{courseService.course.unsubscribeError ? "un " : ""}}subscribed.</div>
         </div>
     </div>
+    
     <div id="lessonContainer" class="row" ng-cloak>
         <div id="lessonContainerTitle" class="col-lg-offset-4 col-lg-4">
             <span id="lessonTitle">Lessons:</span>
