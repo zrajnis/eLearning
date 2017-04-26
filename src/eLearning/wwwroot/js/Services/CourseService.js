@@ -15,6 +15,7 @@
             else {
                 this.course = response.data;
                 approximateSubs();
+                this.hideSpinner = true;
             }
         });
     }
