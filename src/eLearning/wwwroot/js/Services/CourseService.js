@@ -2,7 +2,7 @@
     const pageNameArray = window.location.href.split('/'); //check if page url is course/read
     const action = pageNameArray[pageNameArray.length - 1];
 
-    if (action.includes('view') || action.includes('View') || action.includes('update') || action.includes('Update')) {
+    if (action.toLowerCase().includes('view') || action.toLowerCase().includes('update')) {
         const id = action.split('=')[1]; //action will be action name + query string i.e. view?id=2 or update?id=2
         
         $http({
@@ -15,6 +15,21 @@
             else {
                 this.course = response.data;
                 approximateSubs();
+                this.hideSpinner = true;
+            }
+        });
+    }
+    else if (action.toLowerCase().includes('search')) {
+        const name = action.split('=')[1]; //action will be action name + query string i.e. view?id=2 or update?id=2
+        $http({
+            method: "GET",
+            url: "/Course/Find?name=" + name,
+        }).then(response => {
+            if (response.data.message) {
+                window.location.href = '/Course';
+            }
+            else {
+                this.searchResults = response.data.searchResults;
                 this.hideSpinner = true;
             }
         });
@@ -34,6 +49,10 @@
         lessons: [],
         exercises: []
     };
+
+    this.search = () => {
+        window.location.href = '/Course/Search?name=' + this.searchInput;
+    }
 
     this.subscribe = () => {
         $('#subscribeBtn').addClass('unclickable'); //prevent request spamming

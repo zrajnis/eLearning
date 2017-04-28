@@ -43,6 +43,12 @@ namespace eLearning.Controllers
             return View();
         }
 
+        [HttpGet("Course/Search/{name}"), Route("/Course/Search")]
+        public IActionResult Search(string name)
+        {
+            return View();
+        }
+
 
         [HttpGet("Course/Load/{id}"), Route("/Course/Load")]
         public IActionResult Load(int id)
@@ -84,6 +90,15 @@ namespace eLearning.Controllers
                 canSubscribe = true, //used to check if user is logged when deciding whether to display subscribe button
                 isSubscribed = isSubscribed,
                 subscriberCount = subscriberCount});
+        }
+
+        [HttpGet("Course/Find/{name}"), Route("/Course/Find")]
+        public IActionResult Find(string name)
+        {
+            var searchResults = db.Courses.Where(c => c.Name.Contains(name)).Select(c => new { c.Id, c.Name, c.Description, c.Owner });
+
+
+            return Json(new { searchResults = searchResults });
         }
 
         [HttpPost, Authorize]

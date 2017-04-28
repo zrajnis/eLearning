@@ -19,7 +19,7 @@
     </div>
     
     <div id="lessonContainer" class="row" ng-cloak>
-        <div id="lessonContainerTitle" class="col-lg-offset-4 col-lg-4">
+        <div id="lessonTitleContainer" class="col-lg-offset-4 col-lg-4">
             <span id="lessonTitle">Lessons:</span>
         </div>
         <div ng-repeat="lesson in courseService.course.lessons track by $index" class="col-lg-offset-3 col-lg-6 lesson-element">
@@ -37,7 +37,7 @@
     </div>
     
     <div id="exerciseContainer" class="row" ng-show="courseService.course.exercises.length > 0" ng-cloak>
-        <div id="exerciseContainerTitle" class="col-lg-offset-4 col-lg-4">
+        <div id="exerciseTitleContainer" class="col-lg-offset-4 col-lg-4">
             <span id="exerciseTitle">Exercises:</span>
         </div>
         <div ng-repeat="exercise in courseService.course.exercises track by $index" class="col-lg-offset-3 col-lg-6 exercise-element">

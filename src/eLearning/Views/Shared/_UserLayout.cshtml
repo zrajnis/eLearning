@@ -29,8 +29,10 @@
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">eLearning</a>
             </div>
             <div id="searchContainer">
-                <input class="form-control" type="text" name="search" id="searchBar" placeholder="Search for a course" /><button id="searchBtn"></button>
-                <label id="searchLabel" for="searchBar">Search for a course:</label>
+                <form id="searchForm" name="searchForm" ng-submit="courseService.search()">
+                    <input class="form-control" type="text" name="search" ng-model="courseService.searchInput" id="searchBar" placeholder="Search for a course" /><button id="searchBtn" type="submit"></button>
+                    <label id="searchLabel" for="searchBar">Search for a course:</label>
+                </form>
             </div>
             <div class="navbar-collapse collapse pull-right">
                 <ul class="nav navbar-nav">

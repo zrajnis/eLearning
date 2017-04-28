@@ -1,0 +1,22 @@
+﻿<div class="course-container" id="searchCourseContainer">
+    <div id="searchTitleContainer" class="container" ng-cloak>
+        <h1 id="searchTitle">Search results:</h1>
+    </div>
+
+    <div id="searchResultContainer" class="row" ng-cloak>
+        <div ng-repeat="result in courseService.searchResults track by $index" class="col-lg-offset-3 col-lg-6 lesson-element">
+            <span class="lesson-number bg-primary">{{$index + 1}}</span>
+            <div class="lesson-name-container bg-success">
+                {{result.name}}
+            </div>
+            <div class="lesson-description-container col-lg-10">
+                {{result.description}}
+            </div>
+            <div class="col-lg-2">
+                <button class="btn btn-primary view-btn" ng-click="courseService.loadResource(result.resourceId)">View</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="loader" ng-hide="courseService.hideSpinner"></div>
