@@ -2,9 +2,9 @@
     const pageNameArray = window.location.href.split('/'); //check if page url is course/read
     const action = pageNameArray[pageNameArray.length - 1];
 
-    if (action.includes('view') || action.includes('View') || action.includes('update') || action.includes('Update')) {
+    if (action.toLowerCase().includes('view') || action.toLowerCase().includes('update')) {
         const id = action.split('=')[1]; //action will be action name + query string i.e. view?id=2 or update?id=2
-        
+
         $http({
             method: "GET",
             url: "/Course/Load?id=" + id,
@@ -14,7 +14,24 @@
             }
             else {
                 this.course = response.data;
-                approximateSubs();
+                approximateSubs(this.course);
+                this.hideSpinner = true;
+            }
+        });
+    }
+    else if (action.toLowerCase().includes('search')) {
+        const name = action.split('=')[1]; //action will be action name + query string i.e. view?id=2 or update?id=2
+
+        $http({
+            method: "GET",
+            url: "/Course/Find?name=" + name,
+        }).then(response => {
+            if (response.data.message) {
+                window.location.href = '/Course';
+            }
+            else {
+                this.searchResults = response.data.searchResults;
+                this.searchResults.forEach((result, index) => approximateSubs(this.searchResults[index]));
                 this.hideSpinner = true;
             }
         });
@@ -35,6 +52,10 @@
         exercises: []
     };
 
+    this.search = () => {
+        window.location.href = '/Course/Search?name=' + this.searchInput;
+    }
+
     this.subscribe = () => {
         $('#subscribeBtn').addClass('unclickable'); //prevent request spamming
         $http.post("/Course/Subscribe", this.course.id).then(response => {
@@ -46,7 +67,7 @@
 
                 this.course.subscriberCount++;
                 this.course.isSubscribed = true;
-                approximateSubs();
+                approximateSubs(this.course);
                 $rootScope.$broadcast('subscribe', newCourse);
             }
             else {
@@ -64,7 +85,7 @@
             if (response.data.message === 'Success!') {
                 this.course.subscriberCount--;
                 this.course.isSubscribed = false;
-                approximateSubs();
+                approximateSubs(this.course);
                 $rootScope.$broadcast('unsubscribe', this.course.id);
             }
             else {
@@ -238,19 +259,19 @@
         fieldsetContainer.scrollTop(questionContainer.position().top + 75);
     };
 
-    const approximateSubs = () => {
-        const numOfDigits = this.course.subscriberCount.toString().length;
+    const approximateSubs = (obj) => {
+        const numOfDigits = obj.subscriberCount.toString().length;
         if (numOfDigits >= 4 && numOfDigits < 7) {
-            this.course.approxSubCount = parseInt(this.course.subscriberCount / 1000) + 'K';
+            obj.approxSubCount = parseInt(obj.subscriberCount / 1000) + 'K';
         }
         else if (numOfDigits >= 7 && numOfDigits < 10) {
-            this.course.approxSubCount = parseInt(this.course.subscriberCount / 1000000) + 'M';
+            obj.approxSubCount = parseInt(obj.subscriberCount / 1000000) + 'M';
         }
         else if(numOfDigits >= 10) {
-            this.course.approxSubCount = parseInt(this.course.subscriberCount / 1000000000) + 'B';
+            obj.approxSubCount = parseInt(obj.subscriberCount / 1000000000) + 'B';
         }
         else {
-            this.course.approxSubCount = this.course.subscriberCount;
+            obj.approxSubCount = obj.subscriberCount;
         }
     };
 }]);
