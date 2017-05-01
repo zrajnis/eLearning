@@ -38,6 +38,12 @@ namespace eLearning.Controllers
             return View();
         }
 
+        [HttpGet, Authorize, Route("/Course/Create")]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
         [HttpGet("Course/View/{id}"), Route("/Course/View")]
         public IActionResult Read(int id)
         {
@@ -50,9 +56,15 @@ namespace eLearning.Controllers
             return View();
         }
 
+        [HttpGet("Course/View/{id}"), Authorize, Route("/Course/Update")]
+        public IActionResult Update()
+        {
+            return View("Create");
+        }
 
-        [HttpGet("Course/Load/{id}"), Route("/Course/Load")]
-        public IActionResult Load(int id)
+
+        [HttpGet("Course/Get/{id}"), Route("/Course/Get")]
+        public IActionResult Get(int id) //gets lesson and exercise names, ids and descriptions for a course
         {
             var courseExists = db.Courses.Any(c => c.Id == id);
 
@@ -93,7 +105,105 @@ namespace eLearning.Controllers
                 subscriberCount = subscriberCount});
         }
 
-        [HttpGet("Course/Find/{name}"), Route("/Course/Find")]
+        [HttpGet("Course/Load/{id}"), Route("/Course/Load")] //loads all course data for a specific course
+        public IActionResult Load(int id)
+        {
+            var courseExists = db.Courses.Any(c => c.Id == id);
+
+            if (!courseExists)
+            {
+                return Json(new { message = "No course found!" });
+            }
+
+
+            if (!User.Identity.IsAuthenticated)
+            {
+                var readCourse = (from c in db.Courses
+                                      where c.Id == id
+                                      let lessons = (from l in db.Lessons
+                                                     where l.CourseId == id
+                                                     let resource = (from r in db.Resources
+                                                                     where r.Id == l.ResourceId
+                                                                     select r)
+                                                     select new { name = l.Name, description = l.Description, id = l.Id, resource = resource }).ToList()
+                                      let subscriberCount = (from s in db.Subscriptions
+                                                             where s.CourseId == id
+                                                             select s).Count()
+                                      select new
+                                      {
+                                          name = c.Name,
+                                          description = c.Description,
+                                          id = c.Id,
+                                          lessons = lessons,
+                                          subscriberCount = subscriberCount,
+                                          canSubscribe = true
+                                      });
+            }
+            //var readCourse = db.Courses.FirstOrDefault(c => c.Id == id);
+            //var readLessons = db.Lessons.Where(l => l.CourseId == readCourse.Id).Select(l => new { l.Id, l.Name, l.Description, l.ResourceId });
+            
+            //var subscriberCount = db.Subscriptions.Count(s => s.CourseId == readCourse.id);
+
+            /*if (!User.Identity.IsAuthenticated)
+            {
+                return Json(new
+                {
+                    course = readCourse,
+                    canSubscribe = false,
+                });
+            }*/
+
+            var user = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            var readUserCourse = (from c in db.Courses
+                              where c.Id == id
+                              let lessons = (from l in db.Lessons
+                                             where l.CourseId == id
+                                             let resource = (from r in db.Resources
+                                                             where r.Id == l.ResourceId
+                                                             select r)
+                                             select new { name = l.Name, description = l.Description, id = l.Id, resource = resource }).ToList()
+                              let subscriberCount = (from s in db.Subscriptions
+                                                     where s.CourseId == id
+                                                     select s).Count()
+                              let exercises = (from e in db.Exercises
+                                               where e.CourseId == id
+                                               let questions = (from q in db.Questions
+                                                                where q.ExerciseId == e.Id
+                                                                let answers = (from a in db.Answers
+                                                                               where a.QuestionId == q.Id
+                                                                               select a).ToList()
+                                                                select new { sentence = q.Sentence, points = q.Points, id = q.Id, answers = answers }).ToList()
+                                               orderby subscriberCount descending
+                                               select new
+                                               {
+                                                   name = e.Name,
+                                                   description = e.Description,
+                                                   id = e.Id,
+                                                   questions = questions
+                                               }).ToList()
+                              let isSubscribed = (from s in db.Subscriptions
+                                                  where  s.CourseId == id && s.UserId == user.Id
+                                                  select s).Any()
+                              select new
+                              {
+                                  name = c.Name,
+                                  description = c.Description,
+                                  id = c.Id,
+                                  lessons = lessons,
+                                  subscriberCount = subscriberCount,
+                                  exercises = exercises,
+                                  isSubscribed = isSubscribed,
+                                  canSubscribe = true
+                              });
+            //var readExercises = db.Exercises.Where(e => e.CourseId == readCourse.Id).Select(e => new { e.Id, e.Name, e.Description });
+            //var isSubscribed = db.Subscriptions.Any(s => s.CourseId == id && s.UserId == user.Id);
+            return Json(new
+            {
+                course = readUserCourse,
+            });
+        }
+
+        [HttpGet("Course/Find/{name}"), Route("/Course/Find")] //gets all courses that fit criteria
         public IActionResult Find(string name)
         {
             var searchResults = (from c in db.Courses
@@ -165,12 +275,6 @@ namespace eLearning.Controllers
                 return PhysicalFile(appPath + loadResource.Path, "application/pdf");
             }
             return Json(new { error = "Resource not found." });
-        }
-
-        [HttpGet, Authorize, Route("/Course/Create")]
-        public IActionResult Create()
-        {
-            return View();
         }
 
         [HttpPost, Authorize, Route("/Course/Create")]

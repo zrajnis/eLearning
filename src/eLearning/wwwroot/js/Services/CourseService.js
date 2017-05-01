@@ -2,7 +2,24 @@
     const pageNameArray = window.location.href.split('/'); //check if page url is course/read
     const action = pageNameArray[pageNameArray.length - 1];
 
-    if (action.toLowerCase().includes('view') || action.toLowerCase().includes('update')) {
+    if (action.toLowerCase().includes('view')) {
+        const id = action.split('=')[1]; //action will be action name + query string i.e. view?id=2 or update?id=2
+
+        $http({
+            method: "GET",
+            url: "/Course/Get?id=" + id,
+        }).then(response => {
+            if (response.data.message) {
+                window.location.href = '/Course';
+            }
+            else {
+                this.course = response.data;
+                approximateSubs(this.course);
+                this.hideSpinner = true;
+            }
+        });
+    }
+    else if (action.toLowerCase().includes('update')) {
         const id = action.split('=')[1]; //action will be action name + query string i.e. view?id=2 or update?id=2
 
         $http({
@@ -13,7 +30,8 @@
                 window.location.href = '/Course';
             }
             else {
-                this.course = response.data;
+                console.log(JSON.stringify(response.data.course[0]))
+                this.course = response.data.course[0];
                 approximateSubs(this.course);
                 this.hideSpinner = true;
             }
