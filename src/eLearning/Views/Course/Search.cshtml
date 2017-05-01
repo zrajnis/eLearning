@@ -5,15 +5,16 @@
 
     <div id="searchResultContainer" class="row" ng-cloak>
         <div ng-repeat="result in courseService.searchResults track by $index" class="col-lg-offset-3 col-lg-6 lesson-element">
-            <span class="lesson-number bg-primary">{{$index + 1}}</span>
-            <div class="lesson-name-container bg-success">
+            <span class="search-number">{{$index + 1}}</span>
+            <div class="search-name-container bg-primary">
                 {{result.name}}
             </div>
-            <div class="lesson-description-container col-lg-10">
+            <div class="search-description-container col-lg-10">
                 {{result.description}}
             </div>
             <div class="col-lg-2">
-                <button class="btn btn-primary view-btn" ng-click="courseService.loadResource(result.resourceId)">View</button>
+                <div class="sub-count-container bg-primary">{{result.approxSubCount}} Subs</div>
+                <a class="btn btn-primary view-btn" href="/Course/View?id={{result.id}}">View</a>
             </div>
         </div>
     </div>

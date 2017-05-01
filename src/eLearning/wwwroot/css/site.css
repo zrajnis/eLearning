@@ -361,7 +361,7 @@ fieldset ul {
 
 #lessonTitleContainer, #exerciseTitleContainer, #searchResultsTitleContainer {
     text-align: center;
-    font-size: 20px; 
+    font-size: 20px;
 }
 
 #exerciseContainerTitle {
@@ -373,7 +373,7 @@ fieldset ul {
     margin-top: 20px;
     padding: 0;
 }
-.lesson-number, .exercise-number {
+.lesson-number, .search-number, .exercise-number {
     display: inline-block;
     float:left;
     margin-left: 0;
@@ -381,13 +381,23 @@ fieldset ul {
     text-align: center;
 }
 
-.lesson-name-container, .exercise-name-container {
+.search-number {
+    background: rgba(107,186,112,1);
+    color: whitesmoke;
+}
+
+.lesson-name-container, .search-name-container, .exercise-name-container {
     padding-left: 30px;
     min-height: 30px;
     font-weight: bold;
+    color: #337ab7;
 }
 
-.lesson-description-container, .exercise-description-container {
+.search-name-container {
+    color: whitesmoke;
+}
+
+.lesson-description-container,search-description-container .exercise-description-container {
     min-height: 20px;
 }
 
@@ -529,4 +539,11 @@ fieldset ul {
 
 .no-courses-msg {
     margin-left: 5px;
+}
+
+.sub-count-container {
+   min-width: 55px;
+   height: 100%;
+   text-align: center;
+   background: rgba(107,186,112,1);
 }

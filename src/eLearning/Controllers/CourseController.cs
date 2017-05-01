@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using System.IO;
 using Microsoft.Extensions.PlatformAbstractions;
+using Microsoft.EntityFrameworkCore.Internal;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -95,8 +96,17 @@ namespace eLearning.Controllers
         [HttpGet("Course/Find/{name}"), Route("/Course/Find")]
         public IActionResult Find(string name)
         {
-            var searchResults = db.Courses.Where(c => c.Name.Contains(name)).Select(c => new { c.Id, c.Name, c.Description, c.Owner });
-
+            var searchResults = (from c in db.Courses
+                                 where c.Name.Contains(name)
+                                 let subscriberCount = (from s in db.Subscriptions where c.Id == s.CourseId select s).Count()
+                                 orderby subscriberCount descending
+                                 select new
+                                 {
+                                     name = c.Name,
+                                     description = c.Description,
+                                     id = c.Id,
+                                     subscriberCount = subscriberCount
+                                 }).ToList();
 
             return Json(new { searchResults = searchResults });
         }
