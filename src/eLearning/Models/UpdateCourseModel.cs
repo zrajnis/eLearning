@@ -10,7 +10,6 @@ namespace eLearning.Models
     public class UpdateCourseModel
     {
         public IList<IFormFile> Files { get; set; }
-        public IList<string> Resources { get; set; } //names of the files, so if user didnt change anything we just send the name of already existing file instead of reuploading the file itself
         [Required, MinLength(2), MaxLength(64)]
         public string Name { get; set; }
         [MinLength(2), MaxLength(240)]

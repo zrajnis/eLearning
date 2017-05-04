@@ -349,6 +349,8 @@ fieldset ul {
 
 #courseNameContainer {
     margin-bottom: 0px;
+    position: relative;
+    top: 0;
 }
 
 #courseDescriptionContainer {
@@ -539,4 +541,22 @@ fieldset ul {
    min-width: 55px;
    height: 100%;
    text-align: center;
+}
+#updateCreateBtnContainer{
+    position: relative;
+    margin-top: 0px;
+    width: 80px;
+    margin-left: calc(100% - 80px);
+}
+
+.course-action-btn-wrapper {
+    margin-right: 0;
+    display:block;
+}
+
+.course-action-btn-wrapper .btn {
+    width: 80px;
+    display:block;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
 }

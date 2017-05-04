@@ -58,9 +58,19 @@ namespace eLearning.Controllers
         }
 
         [HttpGet("Course/View/{id}"), Authorize, Route("/Course/Update")]
-        public IActionResult Update()
+        public IActionResult Update(int id)
         {
-            return View();
+            var courseExists = db.Courses.Any(c => c.Id == id);
+            if (courseExists)
+            {
+                var updateCourse = db.Courses.FirstOrDefault(uc => uc.Id == id);
+                if (updateCourse.Owner == User.Identity.Name)
+                {
+                    return View();
+                }
+            }
+
+            return Redirect("/Course");
         }
 
 
@@ -302,6 +312,7 @@ namespace eLearning.Controllers
             appPath = appPath.Remove(appPath.Length - 24);
 
             var updateCourse = db.Courses.FirstOrDefault(c => c.Id == cm.Id);
+
             updateCourse.Name = cm.Name;
             updateCourse.Description = cm.Description;
             db.Courses.Update(updateCourse);
@@ -494,6 +505,12 @@ namespace eLearning.Controllers
                     }
                 }
             }
+            return Json(new { message = "Success!" });
+        }
+
+        [HttpDelete, Authorize, Route("/Course/Delete")]
+        public async Task<IActionResult> Delete([FromBody] int id)
+        {
             return Json(new { message = "Success!" });
         }
 
