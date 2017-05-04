@@ -5,8 +5,8 @@
 
     <div id="searchResultContainer" class="row" ng-cloak>
         <div ng-repeat="result in courseService.searchResults track by $index" class="col-lg-offset-3 col-lg-6 lesson-element">
-            <span class="search-number">{{$index + 1}}</span>
-            <div class="search-name-container bg-primary">
+            <span class="search-number bg-primary">{{$index + 1}}</span>
+            <div class="search-name-container">
                 {{result.name}}
             </div>
             <div class="search-description-container col-lg-10">
@@ -14,7 +14,7 @@
             </div>
             <div class="col-lg-2">
                 <div class="sub-count-container bg-primary">{{result.approxSubCount}} Subs</div>
-                <a class="btn btn-primary view-btn" href="/Course/View?id={{result.id}}">View</a>
+                <a class="btn btn-success view-btn" href="/Course/View?id={{result.id}}">View</a>
             </div>
         </div>
     </div>

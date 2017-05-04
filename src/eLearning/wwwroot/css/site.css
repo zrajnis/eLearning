@@ -294,11 +294,11 @@ fieldset ul {
    word-break: break-all;
 }
 
-.create-error {
+.create-error, #updateError {
     color: red;
 }
 
-#createError {
+#createError, #updateError {
     text-align: center;
 }
 
@@ -373,17 +373,13 @@ fieldset ul {
     margin-top: 20px;
     padding: 0;
 }
+
 .lesson-number, .search-number, .exercise-number {
     display: inline-block;
     float:left;
     margin-left: 0;
     width: 20px;
     text-align: center;
-}
-
-.search-number {
-    background: rgba(107,186,112,1);
-    color: whitesmoke;
 }
 
 .lesson-name-container, .search-name-container, .exercise-name-container {
@@ -395,6 +391,7 @@ fieldset ul {
 
 .search-name-container {
     color: whitesmoke;
+    background: rgba(107,186,112,1);
 }
 
 .lesson-description-container,search-description-container .exercise-description-container {
@@ -426,8 +423,6 @@ fieldset ul {
     display:block; 
     margin:auto; 
 }
-
-
 
 .unclickable {
     pointer-events: none;
@@ -504,7 +499,6 @@ fieldset ul {
     width: 100%;
 }
 
-
 .my-course-element, .subscribed-course-element {
     border-radius: 0!important;
     border: none;
@@ -545,5 +539,4 @@ fieldset ul {
    min-width: 55px;
    height: 100%;
    text-align: center;
-   background: rgba(107,186,112,1);
 }
