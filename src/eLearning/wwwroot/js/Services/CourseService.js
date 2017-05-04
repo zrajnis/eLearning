@@ -30,8 +30,15 @@
                 window.location.href = '/Course';
             }
             else {
-                console.log(JSON.stringify(response.data.course[0]))
                 this.course = response.data.course[0];
+                this.originalCourse = this.course;
+                this.removed = {
+                    lessonIds: [],
+                    exerciseIds: [],
+                    questionIds: [],
+                    answerIds: []
+                };
+                this.originalResource = this.resource;
                 approximateSubs(this.course);
                 this.hideSpinner = true;
             }
@@ -244,6 +251,69 @@
         array.splice(index, 1);
     };
 
+    this.removeAndRemember = (array, index, type) => {
+        console.log('member ' + JSON.stringify(array[index]['id']));
+        if (array[index]['id'] != undefined) {
+            switch (type) {
+                case 'lesson':
+                    this.removed.lessonIds.push(array[index]['id']);
+                    break;
+                case 'exercise':
+                    this.removed.exerciseIds.push(array[index]['id']);
+                    break;
+                case 'question':
+                    this.removed.questionIds.push(array[index]['id']);
+                    break;
+                case 'answer':
+                    this.removed.answerIds.push(array[index]['id']);
+                    break;
+            }
+        }
+        this.remove(array, index);
+    };
+
+    this.updateCourse = formName => {
+        
+        if (formName.$valid) {
+            let fd = new FormData();
+
+            $.each($("input[type='file']"), (i, input) => { //append each uploaded file to the form data
+                fd.append('Files', input.files[0]);
+            });
+
+            fd.append('Id', this.course.id);
+            fd.append('Name', this.course.name);
+            fd.append('Description', this.course.description);
+
+            for (let i = 0; i < this.course.lessons.length; i++) {
+                fd.append('Lessons[]', JSON.stringify(this.course.lessons[i]));
+            }
+
+            for (let i = 0; i < this.course.exercises.length; i++) {
+                fd.append('Exercises[]', JSON.stringify(this.course.exercises[i]));
+            }
+            fd.append('Removed', JSON.stringify(this.removed));
+
+            $http.post('/Course/Update', fd, {
+                headers: { 'Content-Type': undefined }
+            }).then(response => {
+                if (response.data.message === 'Success!') {
+                    $window.location.href = '/';
+                }
+                else {
+                    $('#updateError').text(response.data.message);
+                    $timeout(() => {
+                        $('#updateError').text('');
+                    }, 2000);
+                }
+            });
+        }
+        else {
+            touchOnSubmit(formName);
+        }
+        
+    };
+
     const touchOnSubmit = formName => {
         angular.forEach(formName.$error, (field) => {
             angular.forEach(field, (errorField) => {
@@ -277,8 +347,9 @@
         fieldsetContainer.scrollTop(questionContainer.position().top + 75);
     };
 
-    const approximateSubs = (obj) => {
+    const approximateSubs = obj => {
         const numOfDigits = obj.subscriberCount.toString().length;
+
         if (numOfDigits >= 4 && numOfDigits < 7) {
             obj.approxSubCount = parseInt(obj.subscriberCount / 1000) + 'K';
         }

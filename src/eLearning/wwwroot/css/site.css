@@ -294,11 +294,11 @@ fieldset ul {
    word-break: break-all;
 }
 
-.create-error {
+.create-error, #updateError {
     color: red;
 }
 
-#createError {
+#createError, #updateError {
     text-align: center;
 }
 
