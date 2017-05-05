@@ -218,18 +218,24 @@ textarea {
     word-wrap: break-word;
 }
 
-#createCourseTitleContainer, #courseNameContainer, #searchTitleContainer {
+#createCourseTitleContainer, #courseNameContainer, #searchTitleContainer, #exerciseNameContainer {
     background: rgba(107,186,112,1);
     height: 50px;
     color: whitesmoke; 
     margin-bottom: 7px;
 }
 
-#createCourseTitle, #courseName, #searchTitle {
+#createCourseTitle, #courseName, #searchTitle, #exerciseName {
     font-size: 24px;
     line-height: 2;
     margin-left: 10px;
     margin-top: 0px;
+}
+
+#courseNameContainer, #exerciseNameContainer {
+    margin-bottom: 0px;
+    position: relative;
+    top: 0;
 }
 
 #createFormContainer {
@@ -347,13 +353,7 @@ fieldset ul {
    margin-left: 10px;
 }
 
-#courseNameContainer {
-    margin-bottom: 0px;
-    position: relative;
-    top: 0;
-}
-
-#courseDescriptionContainer {
+#courseDescriptionContainer, #exerciseDescriptionContainer {
     display: inline-block;
     color: whitesmoke;
     padding: 10px;
@@ -370,13 +370,13 @@ fieldset ul {
     margin-top: 20px;
 }
 
-.lesson-element, .exercise-element {
+.lesson-element, .exercise-element, .exercise-question {
     border: 1px solid #e5e5e5;
     margin-top: 20px;
     padding: 0;
 }
 
-.lesson-number, .search-number, .exercise-number {
+.lesson-number, .search-number, .exercise-number, .exercise-question-points {
     display: inline-block;
     float:left;
     margin-left: 0;
@@ -384,7 +384,7 @@ fieldset ul {
     text-align: center;
 }
 
-.lesson-name-container, .search-name-container, .exercise-name-container {
+.lesson-name-container, .search-name-container, .exercise-name-container, .exercise-question-sentence-container {
     padding-left: 30px;
     min-height: 30px;
     font-weight: bold;
@@ -558,4 +558,20 @@ fieldset ul {
     width: 80px;
     display:block;
     border-radius: 0;
+}
+
+#exerciseBody{
+    padding: 0;
+}
+
+.exercise-question-answer-list {
+    list-style: none;
+}
+
+.exercise-question-answer-list li{
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.exercise-question-answer-list li:last-child {
+    border-bottom: none;
 }

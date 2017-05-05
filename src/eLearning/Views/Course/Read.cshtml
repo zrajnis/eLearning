@@ -60,7 +60,7 @@
                 {{exercise.description}}
             </div>
             <div class="col-lg-2">
-                <button class="btn btn-primary solve-btn">Solve</button>
+                <button class="btn btn-primary solve-btn" ng-click="courseService.loadExercise(exercise.id)">Solve</button>
             </div>
         </div>
     </div>

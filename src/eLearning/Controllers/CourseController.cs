@@ -219,62 +219,6 @@ namespace eLearning.Controllers
             return Json(new { searchResults = searchResults });
         }
 
-        [HttpPost, Authorize]
-        public IActionResult Subscribe([FromBody]int id)
-        {
-            var user = db.Users.First(u => u.UserName == User.Identity.Name);
-            var isSubscribed = db.Subscriptions.Any(s => s.UserId == user.Id && s.CourseId == id);
-
-            if (!isSubscribed)
-            {
-                Subscription newSubscription = new Subscription
-                {
-                    UserId = user.Id,
-                    CourseId = id
-                };
-
-                db.Subscriptions.Add(newSubscription);
-                db.SaveChanges();
-                return Json(new { message = "Success!" });
-            }
-
-            return Json(new { message = "Already subscribed." });
-        }
-
-        [HttpPost, Authorize]
-        public IActionResult Unsubscribe([FromBody]int id)
-        {
-            var user = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-            var isSubscribed = db.Subscriptions.Any(s => s.UserId == user.Id && s.CourseId == id);
-
-            if (isSubscribed)
-            {
-                var removeSubscription = db.Subscriptions.First(s => s.UserId == user.Id && s.CourseId == id);
-
-                db.Subscriptions.Remove(removeSubscription);
-                db.SaveChanges();
-                return Json(new { message = "Success!" });
-            }
-
-            return Json(new { message = "Already unsubscribed." });
-        }
-
-
-        [HttpGet("Resource/Load/{id}"), Route("/Resource/Load")]
-        public IActionResult LoadResource(int id)
-        {
-            var appPath = PlatformServices.Default.Application.ApplicationBasePath;
-            var resourceExists = db.Resources.Any(r => r.Id == id);
-
-            appPath = appPath.Remove(appPath.Length - 24); //base path shows path to debug, we cut off unnecessary part so it points to project
-            if (resourceExists)
-            {
-                var loadResource = db.Resources.FirstOrDefault(r => r.Id == id);
-                return PhysicalFile(appPath + loadResource.Path, "application/pdf");
-            }
-            return Json(new { error = "Resource not found." });
-        }
-
         [HttpPost, Authorize, Route("/Course/Update")]
         public async Task<IActionResult> Update([FromForm]UpdateCourseModel cm)
         {

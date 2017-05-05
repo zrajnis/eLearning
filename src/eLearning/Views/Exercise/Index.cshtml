@@ -1,0 +1,54 @@
+﻿@{
+    Layout = "";
+}
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exercise</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    @Html.ApplicationInsightsJavaScript(TelemetryConfiguration)
+</head>
+<body id="exerciseBody" ng-app="eLearning" ng-controller="UserCtrl">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/angular/angular.js"></script>
+        <script src="~/lib/angular-route/angular-route.js"></script>
+        <script src="~/lib/interact/dist/interact.js"></script>
+        <script src="~/lib/ng-file-upload\ng-file-upload-shim.js"></script>
+        <script src="~/lib/ng-file-upload\ng-file-upload.js"></script> 
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/site.js"></script>
+        <script src="~/js/Controllers/UserController.js"></script>
+        <script src="~/js/Services/ValidateService.js"></script>
+        <script src="~/js/Services/CleanUpService.js"></script>
+        <script src="~/js/Services/CourseService.js"></script>
+
+
+    <div id="exerciseContainer">
+        <div id="exerciseNameContainer" class="container" ng-cloak>
+            <h1 id="exerciseName">{{courseService.loadExercise.name}}</h1>
+        </div>
+    </div>
+    <div id="exerciseDescriptionContainer" class="bg-primary" ng-cloak>
+        {{courseService.loadExercise.description}}
+    </div>
+    <div id="exerciseQuestionContainer">
+        <div class="exercise-question col-lg-offset-3 col-lg-6" ng-repeat="question in courseService.loadExercise.questions track by $index">
+            <span class="exercise-question-points bg-primary">
+                {{question.points}}
+            </span>
+            <div class="exercise-question-sentence-container bg-success">
+                {{question.sentence}}
+            </div> 
+            <ul class="exercise-question-answer-list">
+                <li class="exercise-answer" ng-repeat="answer in question.answers track by $index">
+                    {{answer.sentence}} <input type="checkbox" ng-model="courseService.exerciseAnswers[$parent.$index][$index]" />
+                </li>
+            </ul>
+            
+        </div>
+    </div>
+</body>
+</html>

@@ -61,6 +61,22 @@
             }
         });
     }
+    else if (action.toLowerCase().includes('exercise')) {
+        const id = action.split('=')[1]; //action will be action name + query string i.e. view?id=2 or update?id=2
+
+        $http({
+            method: "GET",
+            url: "/Exercise/Load?id=" + id,
+        }).then(response => {
+            if (response.data.message) {
+                window.location.href = '/Error';
+            }
+            else {
+                this.loadExercise = response.data.exercise[0];
+                this.hideSpinner = true;
+            }
+        });     
+    };
 
     $('#createForm').on('keyup keypress', function (e) { //disable submit when enter is pressed
         var keyCode = e.keyCode || e.which;
@@ -123,7 +139,12 @@
     };
 
     this.loadResource = id => {
-        this.resourceAddress = "http://localhost:55416/Resource//Load/?id=" + id; //load pdf in iframe
+        this.resourceAddress = "http://localhost:55416/Resource/Load/?id=" + id; //load pdf in iframe
+        $('#resourceDisplayModal').modal('show');
+    };
+
+    this.loadExercise = id => {
+        this.resourceAddress = "http://localhost:55416/Exercise?id=" + id; //load exercise in iframe
         $('#resourceDisplayModal').modal('show');
     };
 
@@ -206,7 +227,6 @@
             $timeout(() => answersLength.$setValidity('pattern', true), 2000);
         }
     };
-
 
     this.createCourse = formName => {
         if (formName.$valid) {
