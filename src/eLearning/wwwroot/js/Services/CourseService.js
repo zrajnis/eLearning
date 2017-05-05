@@ -317,13 +317,10 @@
     this.deleteCourse = () => {
         $http({
             method: "DELETE",
-            url: "/Course/Delete",
+            url: "/Course/Delete?id=" + this.course.id,
 			headers: { 
 				'Accept': 'application/vnd.hal+json',
-				'Content-Type': 'application/json' },
-            data: {
-                id: this.course.id
-            }
+				'Content-Type': 'application/json' }
         }).then(response => {
             if (response.data.message === 'Success!') {
                 window.location.href = '/Course';

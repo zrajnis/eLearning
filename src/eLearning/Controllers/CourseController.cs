@@ -150,19 +150,6 @@ namespace eLearning.Controllers
                                           canSubscribe = true
                                       });
             }
-            //var readCourse = db.Courses.FirstOrDefault(c => c.Id == id);
-            //var readLessons = db.Lessons.Where(l => l.CourseId == readCourse.Id).Select(l => new { l.Id, l.Name, l.Description, l.ResourceId });
-            
-            //var subscriberCount = db.Subscriptions.Count(s => s.CourseId == readCourse.id);
-
-            /*if (!User.Identity.IsAuthenticated)
-            {
-                return Json(new
-                {
-                    course = readCourse,
-                    canSubscribe = false,
-                });
-            }*/
 
             var user = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
             var readUserCourse = (from c in db.Courses
@@ -356,7 +343,7 @@ namespace eLearning.Controllers
             var courseId = updateCourse.Id;
             int index = 0; //used for iterating through files
 
-            foreach (string lesson in cm.Lessons)// TODO: figure out how to name files
+            foreach (string lesson in cm.Lessons)
             {
                 var resourceId = 0;
                 var filePath = appPath + "\\App_Data\\Resources\\" + updateCourse.Id + "-" + index + ".pdf";
@@ -508,9 +495,33 @@ namespace eLearning.Controllers
             return Json(new { message = "Success!" });
         }
 
-        [HttpDelete, Authorize, Route("/Course/Delete")]
-        public async Task<IActionResult> Delete([FromBody] int id)
+        [HttpDelete("{id}"), Authorize, Route("/Course/Delete")]
+        public IActionResult Delete( int id)
         {
+            var courseExists = db.Courses.Any(c => c.Id == id);
+
+            if(!courseExists)
+            {
+                return Json(new { message = "Course delete failed!" });
+            }
+
+            var deleteCourse = db.Courses.FirstOrDefault(c => c.Id == id);
+            if(deleteCourse.Owner != User.Identity.Name)
+            {
+                return Json(new { message = "You don't own the course!" });
+            }
+            var resourceIds = db.Lessons.Where(l => l.CourseId == id).Select(l => l.ResourceId).ToList();
+            foreach(int resourceId in resourceIds)
+            {
+                var removeResource = db.Resources.FirstOrDefault(r => r.Id == resourceId);
+                System.IO.File.Delete(removeResource.Path);
+                db.Resources.Remove(removeResource);
+                db.SaveChanges();
+            }
+
+            db.Courses.Remove(deleteCourse); //EF will delete lessons and excercises by itself, but resources i had to manually delete
+            db.SaveChanges();
+
             return Json(new { message = "Success!" });
         }
 
