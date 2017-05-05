@@ -314,6 +314,38 @@
         
     };
 
+    this.deleteCourse = () => {
+        $http({
+            method: "DELETE",
+            url: "/Course/Delete?id=" + this.course.id,
+			headers: { 
+				'Accept': 'application/vnd.hal+json',
+				'Content-Type': 'application/json' }
+        }).then(response => {
+            if (response.data.message === 'Success!') {
+                window.location.href = '/Course';
+            }
+            else {
+                $('#deleteError').text(response.data.message);
+                $timeout(() => {
+                    $('#deleteError').text('');
+                }, 2000);
+            }
+        });
+    }
+
+    this.checkMyCourse = (courseId, myCourses) => {
+        if (myCourses && myCourses.length > 0) {
+            for (let i = 0; i < myCourses.length; i++) {
+                if (courseId === myCourses[i].id) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    };
+
     const touchOnSubmit = formName => {
         angular.forEach(formName.$error, (field) => {
             angular.forEach(field, (errorField) => {
