@@ -151,7 +151,7 @@ namespace eLearning.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("Path");
+                    b.HasIndex("Path");
 
                     b.ToTable("Resources");
                 });

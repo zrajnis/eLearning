@@ -11,12 +11,12 @@
         }).then(response => {
             if (response.data.message) {
                 window.location.href = '/Course';
+                return;
             }
-            else {
-                this.course = response.data;
-                approximateSubs(this.course);
-                this.hideSpinner = true;
-            }
+            
+            this.course = response.data;
+            approximateSubs(this.course);
+            this.hideSpinner = true;
         });
     }
     else if (action.toLowerCase().includes('update')) {
@@ -28,20 +28,20 @@
         }).then(response => {
             if (response.data.message) {
                 window.location.href = '/Course';
+                return;
             }
-            else {
-                this.course = response.data.course[0];
-                this.originalCourse = this.course;
-                this.removed = {
-                    lessonIds: [],
-                    exerciseIds: [],
-                    questionIds: [],
-                    answerIds: []
-                };
-                this.originalResource = this.resource;
-                approximateSubs(this.course);
-                this.hideSpinner = true;
-            }
+
+            this.course = response.data.course[0];
+            this.originalCourse = this.course;
+            this.removed = {
+                lessonIds: [],
+                exerciseIds: [],
+                questionIds: [],
+                answerIds: []
+            };
+            this.originalResource = this.resource;
+            approximateSubs(this.course);
+            this.hideSpinner = true;
         });
     }
     else if (action.toLowerCase().includes('search')) {
@@ -53,12 +53,11 @@
         }).then(response => {
             if (response.data.message) {
                 window.location.href = '/Course';
+                return;
             }
-            else {
-                this.searchResults = response.data.searchResults;
-                this.searchResults.forEach((result, index) => approximateSubs(this.searchResults[index]));
-                this.hideSpinner = true;
-            }
+            this.searchResults = response.data.searchResults;
+            this.searchResults.forEach((result, index) => approximateSubs(this.searchResults[index]));
+            this.hideSpinner = true;
         });
     }
     else if (action.toLowerCase().includes('exercise')) {
@@ -70,11 +69,18 @@
         }).then(response => {
             if (response.data.message) {
                 window.location.href = '/Error';
+                return;
             }
-            else {
-                this.loadExercise = response.data.exercise[0];
-                this.hideSpinner = true;
-            }
+
+            this.loadExercise = response.data.exercise[0];
+            this.exerciseAnswers = [];
+            this.loadExercise.questions.forEach((question, questionIndex) => {
+                this.exerciseAnswers[questionIndex] = [];
+                question.answers.forEach((answer, answerIndex) => {
+                    this.exerciseAnswers[questionIndex][answerIndex] = false;
+                });
+            });
+            this.hideSpinner = true;
         });     
     };
 
@@ -229,42 +235,42 @@
     };
 
     this.createCourse = formName => {
-        if (formName.$valid) {
-            let fd = new FormData();
-
-            $.each($("input[type='file']"), (i, input) => { //append each uploaded file to the form data
-                fd.append('Files', input.files[0]);
-            });
-
-            fd.append('Name', this.course.name);
-            fd.append('Description', this.course.description);
-
-            for (let i = 0; i < this.course.lessons.length; i++) {
-                fd.append('Lessons[]', JSON.stringify(this.course.lessons[i]));
-            }
-
-            for (let i = 0; i < this.course.exercises.length; i++) {
-                fd.append('Exercises[]', JSON.stringify(this.course.exercises[i]));
-            }
-
-            $http.post('/Course/Create', fd, {
-                //transformRequest: angular.identity,
-                headers: { 'Content-Type': undefined }
-            }).then(response => {
-                if (response.data.message === 'Success!') {
-                    $window.location.href = '/Course/Create';
-                }
-                else {
-                    $('#createError').text(response.data.message);
-                    $timeout(() => {
-                        $('#createError').text('');
-                    }, 2000);
-                }
-            });
-        }
-        else {
+        if (!formName.$valid) {
             touchOnSubmit(formName);
+            return;
         }
+
+        let fd = new FormData();
+
+        $.each($("input[type='file']"), (i, input) => { //append each uploaded file to the form data
+            fd.append('Files', input.files[0]);
+        });
+
+        fd.append('Name', this.course.name);
+        fd.append('Description', this.course.description);
+
+        for (let i = 0; i < this.course.lessons.length; i++) {
+            fd.append('Lessons[]', JSON.stringify(this.course.lessons[i]));
+        }
+
+        for (let i = 0; i < this.course.exercises.length; i++) {
+            fd.append('Exercises[]', JSON.stringify(this.course.exercises[i]));
+        }
+
+        $http.post('/Course/Create', fd, {
+            //transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined }
+        }).then(response => {
+            if (response.data.message === 'Success!') {
+                $window.location.href = '/Course/Create';
+                return;
+            }
+
+            $('#createError').text(response.data.message);
+            $timeout(() => {
+                $('#createError').text('');
+            }, 2000);
+        });
     };
 
     this.remove = (array, index) => {
@@ -272,66 +278,51 @@
     };
 
     this.removeAndRemember = (array, index, type) => {
-        console.log('member ' + JSON.stringify(array[index]['id']));
-        if (array[index]['id'] != undefined) {
-            switch (type) {
-                case 'lesson':
-                    this.removed.lessonIds.push(array[index]['id']);
-                    break;
-                case 'exercise':
-                    this.removed.exerciseIds.push(array[index]['id']);
-                    break;
-                case 'question':
-                    this.removed.questionIds.push(array[index]['id']);
-                    break;
-                case 'answer':
-                    this.removed.answerIds.push(array[index]['id']);
-                    break;
-            }
+        if (array[index]['id'] !== undefined) {
+            this.removed[type + 'Ids'].push(array[index]['id']);
         }
         this.remove(array, index);
     };
 
     this.updateCourse = formName => {
         
-        if (formName.$valid) {
-            let fd = new FormData();
-
-            $.each($("input[type='file']"), (i, input) => { //append each uploaded file to the form data
-                fd.append('Files', input.files[0]);
-            });
-
-            fd.append('Id', this.course.id);
-            fd.append('Name', this.course.name);
-            fd.append('Description', this.course.description);
-
-            for (let i = 0; i < this.course.lessons.length; i++) {
-                fd.append('Lessons[]', JSON.stringify(this.course.lessons[i]));
-            }
-
-            for (let i = 0; i < this.course.exercises.length; i++) {
-                fd.append('Exercises[]', JSON.stringify(this.course.exercises[i]));
-            }
-            fd.append('Removed', JSON.stringify(this.removed));
-
-            $http.post('/Course/Update', fd, {
-                headers: { 'Content-Type': undefined }
-            }).then(response => {
-                if (response.data.message === 'Success!') {
-                    $window.location.href = '/';
-                }
-                else {
-                    $('#updateError').text(response.data.message);
-                    $timeout(() => {
-                        $('#updateError').text('');
-                    }, 2000);
-                }
-            });
-        }
-        else {
+        if (!formName.$valid) {
             touchOnSubmit(formName);
+            return;
         }
-        
+
+        let fd = new FormData();
+
+        $.each($("input[type='file']"), (i, input) => { //append each uploaded file to the form data
+            fd.append('Files', input.files[0]);
+        });
+
+        fd.append('Id', this.course.id);
+        fd.append('Name', this.course.name);
+        fd.append('Description', this.course.description);
+
+        for (let i = 0; i < this.course.lessons.length; i++) {
+            fd.append('Lessons[]', JSON.stringify(this.course.lessons[i]));
+        }
+
+        for (let i = 0; i < this.course.exercises.length; i++) {
+            fd.append('Exercises[]', JSON.stringify(this.course.exercises[i]));
+        }
+        fd.append('Removed', JSON.stringify(this.removed));
+
+        $http.post('/Course/Update', fd, {
+            headers: { 'Content-Type': undefined }
+        }).then(response => {
+            if (response.data.message === 'Success!') {
+                $window.location.href = '/';
+                return;
+            }
+
+            $('#updateError').text(response.data.message);
+            $timeout(() => {
+                $('#updateError').text('');
+            }, 2000);
+        });
     };
 
     this.deleteCourse = () => {
@@ -344,13 +335,13 @@
         }).then(response => {
             if (response.data.message === 'Success!') {
                 window.location.href = '/Course';
+                return;
             }
-            else {
-                $('#deleteError').text(response.data.message);
+
+            $('#deleteError').text(response.data.message);
                 $timeout(() => {
                     $('#deleteError').text('');
-                }, 2000);
-            }
+                }, 2000);    
         });
     }
 
@@ -362,7 +353,6 @@
                 }
             }
         }
-        
         return false;
     };
 
@@ -414,5 +404,35 @@
         else {
             obj.approxSubCount = obj.subscriberCount;
         }
+    };
+
+    this.calculateScore = () => {
+        let totalPoints = 0;
+        this.loadExercise.questions.forEach((question) => {
+            totalPoints +=  question.points;
+        });
+        let achievedPoints = 0;
+        this.loadExercise.questions.forEach((question, questionIndex) => {
+            let correctAnswerCnt = 0;
+            question.answers.forEach((answer, answerIndex) => {
+                correctAnswerCnt = answer.isCorrect ? ++correctAnswerCnt : correctAnswerCnt;
+            });
+            let answerMultiplier = 0;
+            question.answers.forEach((answer, answerIndex) => {
+                if (answer.isCorrect && this.exerciseAnswers[questionIndex][answerIndex] && correctAnswerCnt) {
+                    answerMultiplier += 1 / correctAnswerCnt;
+                }
+                else if ((answer.isCorrect && !this.exerciseAnswers[questionIndex][answerIndex] && correctAnswerCnt) ||
+                    (!answer.isCorrect && this.exerciseAnswers[questionIndex][answerIndex] && correctAnswerCnt) ||
+                    (!correctAnswerCnt && this.exerciseAnswers[questionIndex][answerIndex])) {
+                    answerMultiplier -= 1 / correctAnswerCnt;
+                }
+            });
+
+            answerMultiplier = answerMultiplier < 0 ? 0 : answerMultiplier;
+            achievedPoints += question.points * answerMultiplier;
+        });
+
+        const percentage = achievedPoints / totalPoints * 100;
     };
 }]);

@@ -249,17 +249,24 @@ namespace eLearning.Controllers
             db.Courses.Update(updateCourse);
             db.SaveChanges();
 
+            var existingResourceIds = db.Lessons.Where(l => l.CourseId == updateCourse.Id).Select(l => l.ResourceId).ToList();
+
+            foreach(int resourceId in existingResourceIds)
+            {
+                string path = db.Resources.Where(r => r.Id == resourceId).Select(r => r.Path).ToString();
+                System.IO.File.Delete(@path);
+            }
+
             JObject toRemove = JObject.Parse(cm.Removed);
             foreach(JValue lessonId in toRemove.GetValue("lessonIds"))
             {
                 int id = int.Parse(lessonId.ToString());
                 var removeLesson = db.Lessons.FirstOrDefault(a => a.Id == id);
-                var removeResoruce = db.Resources.FirstOrDefault(r => r.Id == removeLesson.ResourceId);
+                var removeResource = db.Resources.FirstOrDefault(r => r.Id == removeLesson.ResourceId);
                 db.Lessons.Remove(removeLesson);
                 db.SaveChanges();
-                db.Resources.Remove(removeResoruce);
+                db.Resources.Remove(removeResource);
                 db.SaveChanges();
-                System.IO.File.Delete(removeResoruce.Path);
 
             }
             foreach (JValue exerciseId in toRemove.GetValue("exerciseIds"))
@@ -289,15 +296,29 @@ namespace eLearning.Controllers
 
             foreach (string lesson in cm.Lessons)
             {
-                var resourceId = 0;
-                var filePath = appPath + "\\App_Data\\Resources\\" + updateCourse.Id + "-" + index + ".pdf";
-                if (System.IO.File.Exists(@filePath)) //delete old file
+                using (var stream = new FileStream("./App_Data/Resources/" + updateCourse.Id + "-" + index + ".pdf", FileMode.Create))//create new file
                 {
-                    System.IO.File.Delete(@filePath);
-                    var updateResource = db.Resources.FirstOrDefault(r => r.Path == "./App_Data/Resources/" + updateCourse.Id + "-" + index + ".pdf");
+                    await cm.Files[index].CopyToAsync(stream);               
+                }
+
+                JToken result;
+                JObject parsedObject = JObject.Parse(lesson);
+                if (parsedObject.TryGetValue("id", out result))
+                {
+                    int lessonId = int.Parse(parsedObject.GetValue("id").ToString());
+                    var updateLesson = db.Lessons.FirstOrDefault(l => l.Id == lessonId);
+                    updateLesson.Name = parsedObject.GetValue("name").ToString();
+                    updateLesson.Description = parsedObject.GetValue("description").ToString();
+                    db.Lessons.Update(updateLesson);
+                    db.SaveChanges();
+
+                    var updateResource = db.Resources.FirstOrDefault(r => r.Id == updateLesson.ResourceId);
+
                     updateResource.Name = cm.Files[index].FileName;
+                    updateResource.Path = "./App_Data/Resources/" + updateCourse.Id + "-" + index + ".pdf";
                     db.Resources.Update(updateResource);
                     db.SaveChanges();
+                    
                 }
                 else
                 {
@@ -309,30 +330,8 @@ namespace eLearning.Controllers
 
                     db.Resources.Add(newResource);
                     db.SaveChanges();
-                    resourceId = newResource.Id;
-                }
-                using (var stream = new FileStream("./App_Data/Resources/" + updateCourse.Id + "-" + index + ".pdf", FileMode.Create))//create new file
-                {
-                    await cm.Files[index].CopyToAsync(stream);
-                    
-                }
-                      
-                index++;
+                    int resourceId = newResource.Id;
 
-                JToken result;
-                JObject parsedObject = JObject.Parse(lesson);
-                if (parsedObject.TryGetValue("id", out result))
-                {
-                    int lessonId = int.Parse(parsedObject.GetValue("id").ToString());
-                    var updateLesson = db.Lessons.FirstOrDefault(l => l.Id == lessonId);
-                    updateLesson.Name = parsedObject.GetValue("name").ToString();
-                    updateLesson.Description = parsedObject.GetValue("description").ToString();
-
-                    db.Lessons.Update(updateLesson);
-                    db.SaveChanges();
-                }
-                else
-                {
                     var newLesson = new Lesson
                     {
                         Name = parsedObject.GetValue("name").ToString(),
@@ -344,7 +343,7 @@ namespace eLearning.Controllers
                     db.Lessons.Add(newLesson);
                     db.SaveChanges();
                 }
-               
+                index++;
             }
 
             if (cm.Exercises != null)
@@ -440,7 +439,7 @@ namespace eLearning.Controllers
         }
 
         [HttpDelete("{id}"), Authorize, Route("/Course/Delete")]
-        public IActionResult Delete( int id)
+        public IActionResult Delete(int id)
         {
             var courseExists = db.Courses.Any(c => c.Id == id);
 

@@ -8,7 +8,7 @@ using eLearning.Models;
 namespace eLearning.Migrations
 {
     [DbContext(typeof(eLearningContext))]
-    [Migration("20170422175507_InitialMigration")]
+    [Migration("20170507140358_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -152,7 +152,7 @@ namespace eLearning.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("Path");
+                    b.HasIndex("Path");
 
                     b.ToTable("Resources");
                 });

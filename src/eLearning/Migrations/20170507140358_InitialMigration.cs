@@ -36,7 +36,6 @@ namespace eLearning.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Resources", x => x.Id);
-                    table.UniqueConstraint("AK_Resources_Path", x => x.Path);
                 });
 
             migrationBuilder.CreateTable(
@@ -350,6 +349,11 @@ namespace eLearning.Migrations
                 name: "IX_Questions_ExerciseId",
                 table: "Questions",
                 column: "ExerciseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Resources_Path",
+                table: "Resources",
+                column: "Path");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Subscriptions_CourseId",

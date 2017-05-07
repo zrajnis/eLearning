@@ -222,8 +222,8 @@ C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Controllers\ExerciseCont
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Controllers\HomeController.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Controllers\ResourceController.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Controllers\SubscriptionController.cs
-C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Migrations\20170422175507_InitialMigration.cs
-C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Migrations\20170422175507_InitialMigration.Designer.cs
+C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Migrations\20170507140358_InitialMigration.cs
+C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Migrations\20170507140358_InitialMigration.Designer.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Migrations\eLearningContextModelSnapshot.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Models\Answer.cs
 C:\Users\Zvone\Documents\GitHub\eLearning\src\eLearning\Models\Course.cs

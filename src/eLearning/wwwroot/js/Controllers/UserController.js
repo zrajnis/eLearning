@@ -47,10 +47,10 @@
         }).then((response) => {
             if (response.data.message === 'Success!') {
                 $window.location.href = '/';
+                return;
             }
-            else {
-                alert(JSON.stringify(response.data.message)); //pretty much impossible scenario
-            }
+            alert(JSON.stringify(response.data.message)); //pretty much impossible scenario
+           
         });
     };
 

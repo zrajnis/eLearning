@@ -44,11 +44,11 @@
             </div> 
             <ul class="exercise-question-answer-list">
                 <li class="exercise-answer" ng-repeat="answer in question.answers track by $index">
-                    {{answer.sentence}} <input type="checkbox" ng-model="courseService.exerciseAnswers[$parent.$index][$index]" />
+                    {{answer.sentence}} <input type="checkbox" ng-model="courseService.exerciseAnswers[$parent.$index][$index]"/>
                 </li>
             </ul>
-            
         </div>
     </div>
+    <button type="button" class="btn btn-primary" ng-click="courseService.calculateScore()">Submit</button>
 </body>
 </html>
