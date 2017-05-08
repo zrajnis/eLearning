@@ -575,3 +575,22 @@ fieldset ul {
 .exercise-question-answer-list li:last-child {
     border-bottom: none;
 }
+
+.exercise-score-container {
+    float: right;
+    width: 100px;
+    background: rgba(107,186,112,1);
+    color: whitesmoke;
+    height: 30px;
+    line-height: 2;
+    text-align: left;
+}
+
+#exerciseSubmitBtnContainer > button{
+    margin-top: 20px;
+}
+
+.exercise-answer-checkbox {
+    float: right;
+    margin-right: 5px!important;
+}

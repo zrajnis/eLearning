@@ -102,7 +102,18 @@ namespace eLearning.Controllers
             }
 
             var user = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-            var readExercises = db.Exercises.Where(e => e.CourseId == readCourse.Id).Select(e => new { e.Id, e.Name, e.Description });
+            var readExercises = (from e in db.Exercises
+                                 where e.CourseId == id
+                                 let score = (from er in db.ExerciseResults
+                                               where er.ExerciseId == e.Id && er.UserId == user.Id
+                                               select er.Score).SingleOrDefault()
+                                 select new
+                                 {
+                                     id = e.Id,
+                                     name = e.Name,
+                                     description = e.Description,
+                                     score = score
+                                 }).ToList();
             var isSubscribed = db.Subscriptions.Any(s => s.CourseId == readCourse.Id && s.UserId == user.Id);
 
             return Json(new {
@@ -153,18 +164,18 @@ namespace eLearning.Controllers
 
             var user = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
             var readUserCourse = (from c in db.Courses
-                              where c.Id == id
-                              let lessons = (from l in db.Lessons
-                                             where l.CourseId == id
-                                             let resource = (from r in db.Resources
-                                                             where r.Id == l.ResourceId
-                                                             select r)
-                                             select new { name = l.Name, description = l.Description, id = l.Id, resource = resource }).ToList()
-                              let subscriberCount = (from s in db.Subscriptions
-                                                     where s.CourseId == id
-                                                     select s).Count()
-                              let exercises = (from e in db.Exercises
-                                               where e.CourseId == id
+                                  where c.Id == id
+                                  let lessons = (from l in db.Lessons
+                                                 where l.CourseId == id
+                                                 let resource = (from r in db.Resources
+                                                                 where r.Id == l.ResourceId
+                                                                 select r)
+                                                 select new { name = l.Name, description = l.Description, id = l.Id, resource = resource }).ToList()
+                                  let subscriberCount = (from s in db.Subscriptions
+                                                         where s.CourseId == id
+                                                         select s).Count()
+                                  let exercises = (from e in db.Exercises
+                                                   where e.CourseId == id            
                                                let questions = (from q in db.Questions
                                                                 where q.ExerciseId == e.Id
                                                                 let answers = (from a in db.Answers

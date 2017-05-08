@@ -1,4 +1,4 @@
-﻿angular.module('eLearning').service('cleanUpService', ['constants', function (constants) {
+﻿angular.module('eLearning').service('cleanUpService', ['constants', 'courseService', function (constants, courseService) {
     this.clearSignUpErrors = $scope => {
         $scope.errorExists = false;
         $('#signUpFirstNameError').text('');
@@ -66,5 +66,4 @@
         $scope.settingsNewPassword = '';
         $scope.settingsRePassword = '';
     };
-
 }]);

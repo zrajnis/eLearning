@@ -7,7 +7,7 @@
 
         $http({
             method: "GET",
-            url: "/Course/Get?id=" + id,
+            url: "/Course/Get?id=" + id
         }).then(response => {
             if (response.data.message) {
                 window.location.href = '/Course';
@@ -24,7 +24,7 @@
 
         $http({
             method: "GET",
-            url: "/Course/Load?id=" + id,
+            url: "/Course/Load?id=" + id
         }).then(response => {
             if (response.data.message) {
                 window.location.href = '/Course';
@@ -49,7 +49,7 @@
 
         $http({
             method: "GET",
-            url: "/Course/Find?name=" + name,
+            url: "/Course/Find?name=" + name
         }).then(response => {
             if (response.data.message) {
                 window.location.href = '/Course';
@@ -65,24 +65,19 @@
 
         $http({
             method: "GET",
-            url: "/Exercise/Load?id=" + id,
+            url: "/Exercise/Load?id=" + id
         }).then(response => {
             if (response.data.message) {
                 window.location.href = '/Error';
                 return;
             }
 
-            this.loadExercise = response.data.exercise[0];
+            this.loadedExercise = response.data.exercise[0];
             this.exerciseAnswers = [];
-            this.loadExercise.questions.forEach((question, questionIndex) => {
-                this.exerciseAnswers[questionIndex] = [];
-                question.answers.forEach((answer, answerIndex) => {
-                    this.exerciseAnswers[questionIndex][answerIndex] = false;
-                });
-            });
+            resetExerciseData();
             this.hideSpinner = true;
         });     
-    };
+    }
 
     $('#createForm').on('keyup keypress', function (e) { //disable submit when enter is pressed
         var keyCode = e.keyCode || e.which;
@@ -101,7 +96,7 @@
 
     this.search = () => {
         window.location.href = '/Course/Search?name=' + this.searchInput;
-    }
+    };
 
     this.subscribe = () => {
         $('#subscribeBtn').addClass('unclickable'); //prevent request spamming
@@ -176,7 +171,7 @@
                 name: null,
                 description: null,
                 questions: []
-            });;
+            });
             $timeout(() => scrollBottom('exercisesFieldsetElements'), 1);
         }
         else {
@@ -281,6 +276,7 @@
         if (array[index]['id'] !== undefined) {
             this.removed[type + 'Ids'].push(array[index]['id']);
         }
+
         this.remove(array, index);
     };
 
@@ -329,9 +325,10 @@
         $http({
             method: "DELETE",
             url: "/Course/Delete?id=" + this.course.id,
-			headers: { 
-				'Accept': 'application/vnd.hal+json',
-				'Content-Type': 'application/json' }
+            headers: {
+                'Accept': 'application/vnd.hal+json',
+                'Content-Type': 'application/json'
+            }
         }).then(response => {
             if (response.data.message === 'Success!') {
                 window.location.href = '/Course';
@@ -339,11 +336,11 @@
             }
 
             $('#deleteError').text(response.data.message);
-                $timeout(() => {
-                    $('#deleteError').text('');
-                }, 2000);    
+            $timeout(() => {
+                $('#deleteError').text('');
+            }, 2000);
         });
-    }
+    };
 
     this.checkMyCourse = (courseId, myCourses) => {
         if (myCourses && myCourses.length > 0) {
@@ -408,31 +405,88 @@
 
     this.calculateScore = () => {
         let totalPoints = 0;
-        this.loadExercise.questions.forEach((question) => {
+        this.loadedExercise.questions.forEach((question) => {
             totalPoints +=  question.points;
         });
         let achievedPoints = 0;
-        this.loadExercise.questions.forEach((question, questionIndex) => {
+        this.loadedExercise.questions.forEach((question, questionIndex) => {
             let correctAnswerCnt = 0;
+
             question.answers.forEach((answer, answerIndex) => {
                 correctAnswerCnt = answer.isCorrect ? ++correctAnswerCnt : correctAnswerCnt;
             });
+
+            let emptyAnswerCnt = 0;
             let answerMultiplier = 0;
+
             question.answers.forEach((answer, answerIndex) => {
                 if (answer.isCorrect && this.exerciseAnswers[questionIndex][answerIndex] && correctAnswerCnt) {
                     answerMultiplier += 1 / correctAnswerCnt;
                 }
-                else if ((answer.isCorrect && !this.exerciseAnswers[questionIndex][answerIndex] && correctAnswerCnt) ||
-                    (!answer.isCorrect && this.exerciseAnswers[questionIndex][answerIndex] && correctAnswerCnt) ||
-                    (!correctAnswerCnt && this.exerciseAnswers[questionIndex][answerIndex])) {
+                else if (answer.isCorrect && !this.exerciseAnswers[questionIndex][answerIndex] && correctAnswerCnt ||
+                    !answer.isCorrect && this.exerciseAnswers[questionIndex][answerIndex] && correctAnswerCnt ||
+                    !correctAnswerCnt && this.exerciseAnswers[questionIndex][answerIndex]) {
                     answerMultiplier -= 1 / correctAnswerCnt;
                 }
+                else if (!answer.isCorrect && !this.exerciseAnswers[questionIndex][answerIndex] && correctAnswerCnt === 0) {
+                    emptyAnswerCnt++;
+                }
             });
-
-            answerMultiplier = answerMultiplier < 0 ? 0 : answerMultiplier;
-            achievedPoints += question.points * answerMultiplier;
+            if (correctAnswerCnt === 0) { //in case there was a trick question with no checked answers
+                achievedPoints += emptyAnswerCnt === question.answers.length ? question.points : 0;
+            }
+            else {
+                answerMultiplier = answerMultiplier < 0 ? 0 : answerMultiplier;
+                achievedPoints += question.points * answerMultiplier;
+            }           
         });
 
-        const percentage = achievedPoints / totalPoints * 100;
+        const score = (achievedPoints / totalPoints * 100).toFixed(2);
+
+        $http({
+            method: "POST",
+            url: "/Exercise/Result",
+            headers: {
+                'Accept': 'application/vnd.hal+json',
+                'Content-Type': 'application/json'
+            },
+            data: {
+                Score: score,
+                Id: this.loadedExercise.id
+            }
+        }).then(response => {
+            if (response.data.message === 'Success!') {
+                resetExerciseData();
+                window.parent.updateScore(score, this.loadedExercise.id);
+                window.parent.closeModal();
+                return;
+            }
+
+            $('#deleteError').text(response.data.message);
+            $timeout(() => {
+                $('#deleteError').text('');
+            }, 2000);
+        });
+    };
+
+    window.closeModal = () => {
+        $('#resourceDisplayModal').modal('hide');
+    };
+
+    window.updateScore = (score, id) => {
+        this.course.exercises.forEach(exercise => {
+            if (exercise.id === id) {
+                exercise.score = score;
+                $rootScope.$broadcast('updateScore');
+            }
+        })
+    };
+    const resetExerciseData = () => {
+        this.loadedExercise.questions.forEach((question, questionIndex) => {
+            this.exerciseAnswers[questionIndex] = [];
+            question.answers.forEach((answer, answerIndex) => {
+                this.exerciseAnswers[questionIndex][answerIndex] = false;
+            });
+        });
     };
 }]);

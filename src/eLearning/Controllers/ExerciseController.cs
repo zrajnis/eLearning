@@ -52,5 +52,34 @@ namespace eLearning.Controllers
                 exercise = loadExercise,
             });
         }
+
+        [HttpPost("/Exercise/Result"), Authorize]
+        public IActionResult Result([FromBody]SolveExerciseModel se)
+        {
+            var user = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            var exerciseResultExists = db.ExerciseResults.Where(er => er.ExerciseId == se.Id && er.UserId == user.Id).Any();
+
+            if (exerciseResultExists)
+            {
+                var exerciseResult = db.ExerciseResults.FirstOrDefault(er => er.ExerciseId == se.Id && er.UserId == user.Id);
+                exerciseResult.Score = se.Score;
+                db.ExerciseResults.Update(exerciseResult);
+                db.SaveChanges();
+            }
+            else
+            {
+                var newExerciseResult = new ExerciseResult
+                {
+                    ExerciseId = se.Id,
+                    UserId = user.Id,
+                    Score = se.Score
+                };
+
+                db.ExerciseResults.Add(newExerciseResult);
+                db.SaveChanges();
+            }
+            return Json(new { message = "Success!" });
+        }
+
     }
 }
