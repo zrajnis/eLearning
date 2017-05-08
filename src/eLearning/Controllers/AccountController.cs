@@ -55,12 +55,19 @@ namespace eLearning.Controllers
 
                 if (result.Succeeded)
                 {
-                    return Json(new { message = "Success!" });
-                }
-                else
-                {
+                    var signInresult = await _signInManager.PasswordSignInAsync(user.Email, user.Password, true, false);
+
+                    if (signInresult.Succeeded)
+                    {
+
+                        return Json(new { message = "Success!" });
+                    }
+
                     return Json(new { message = "Sign up failed." });
-                } 
+                }
+
+                return Json(new { message = "Sign up failed." });
+
             }
 
             return Json(new { message = "Sign up failed." });
@@ -140,7 +147,7 @@ namespace eLearning.Controllers
                 }
                 else //only reason that can cause failure is that current password is incorrect (since we already found user and new password passed validations)
                 {
-                    errorList.Add(new { message = "Incorrect current password!", inputID = "settingsOldPassword" });
+                    errorList.Add(new { message = "Incorrect current password!", inputId = "settingsOldPassword", inputName = "oldPassword" });
                     return Json(new { errorList = errorList});
                 }
             }
@@ -148,15 +155,15 @@ namespace eLearning.Controllers
             {   
                 if (String.IsNullOrWhiteSpace(sm.OldPassword) || !passwordRegex.IsMatch(sm.OldPassword))
                 {
-                    errorList.Add(new { message = "Invalid old password!", inputID = "settingsOldPassword" });
+                    errorList.Add(new { message = "Invalid old password!", inputId = "settingsOldPassword", inputName = "oldPassword" });
                 }
                 if (String.IsNullOrWhiteSpace(sm.NewPassword) || !passwordRegex.IsMatch(sm.NewPassword))
                 {
-                    errorList.Add(new { message = "Invalid new password!", inputID = "settingsNewPassword" });
+                    errorList.Add(new { message = "Invalid new password!", inputId = "settingsNewPassword", inputName = "password" });
                 }
                 if(sm.NewPassword != sm.RePassword || String.IsNullOrWhiteSpace(sm.RePassword))
                 {
-                    errorList.Add(new { message = "Passwords must match!", inputID = "settingsRePassword" });
+                    errorList.Add(new { message = "Passwords must match!", inputId = "settingsRePassword", inputName = "rePassword" });
                 }
                 return Json(new { errorList = errorList });
             }

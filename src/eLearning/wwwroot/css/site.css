@@ -259,6 +259,10 @@ input:required {
     border: 1px solid red;
 }
 
+#signInEmail.ng-invalid.ng-touched, #signInPassword.ng-invalid.ng-touched {
+    border: 1px solid #ccc;
+}
+
 input[type=file].ng-invalid.ng-touched {
     border: inherit;
 }

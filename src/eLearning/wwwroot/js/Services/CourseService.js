@@ -1,4 +1,4 @@
-﻿angular.module('eLearning').service('courseService', ['$rootScope', 'constants', '$http', '$timeout', '$window', function ($rootScope, constants, $http ,$timeout, $window) { 
+﻿angular.module('eLearning').service('courseService', ['$rootScope', 'constants', 'validateService', '$http', '$timeout', '$window', function ($rootScope, constants, validateService, $http ,$timeout, $window) { 
     const pageNameArray = window.location.href.split('/'); //check if page url is course/read
     const action = pageNameArray[pageNameArray.length - 1];
 
@@ -231,7 +231,7 @@
 
     this.createCourse = formName => {
         if (!formName.$valid) {
-            touchOnSubmit(formName);
+            validateService.touchOnSubmit(formName);
             return;
         }
 
@@ -283,7 +283,7 @@
     this.updateCourse = formName => {
         
         if (!formName.$valid) {
-            touchOnSubmit(formName);
+            validateService.touchOnSubmit(formName);
             return;
         }
 
@@ -351,19 +351,6 @@
             }
         }
         return false;
-    };
-
-    const touchOnSubmit = formName => {
-        angular.forEach(formName.$error, (field) => {
-            angular.forEach(field, (errorField) => {
-                if (!errorField.$name.includes('Form')) {
-                    errorField.$setTouched();
-                }
-                else { //if error field has "Form" in its name, then it's ng-form, so we call the same function in order to touch its fields
-                    touchOnSubmit(errorField);
-                }
-            });
-        });
     };
 
     const scrollBottom = id => {
