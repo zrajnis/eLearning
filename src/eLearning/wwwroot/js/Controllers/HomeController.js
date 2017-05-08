@@ -11,7 +11,6 @@
         $scope.$apply();
     });
 
-    $scope.errorExists = false;
     $scope.constants = constants;
     $scope.courseService = courseService;
     $scope.clearSignUpData = () => cleanUpService.clearSignUpData($scope);
@@ -35,20 +34,19 @@
             }
         }).then((response) => {
             if (response.data.message === 'Success!') {
-                $('#signUpModal').modal('hide');
-                $('#signUpSuccessModal').modal('show');
+                $window.location.href = '/';
+                return;
             }
-            else {
-                if (response.data.message === 'Email already in use.') {
-                    $('#signUpEmailError').text(response.data.message);
-                    $('#signUpEmail').addClass('hasError');
-                }
 
-                $('#signUpError').text(constants.signUpError);
-                $timeout(() => {
-                    $('#signUpError').text('');
-                }, 2000);
+            if (response.data.message === 'Email already in use.') {
+                $('#signUpEmailError').text(response.data.message);
+                $('#signUpEmail').addClass('hasError');
             }
+
+            $('#signUpError').text(constants.signUpError);
+            $timeout(() => {
+                $('#signUpError').text('');
+            }, 2000);
         });
     };
 
@@ -71,13 +69,13 @@
         }).then((response) => {
             if (response.data.message === 'Success!') {
                 $window.location.href = '/';
+                return;
             }
-            else {
-                $('#signInError').text(constants.signInError);
-                $timeout(() => {
-                    $('#signInError').text('');
-                }, 2000);
-            }
+
+            $('#signInError').text(constants.signInError);
+            $timeout(() => {
+                $('#signInError').text('');
+            }, 2000);
         });
     };
 }]);

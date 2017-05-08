@@ -70,17 +70,22 @@
                 validateService.resetValidity(formName);
                 cleanUpService.clearSettingsData($scope);
             }
-            else {
-                if (response.data.errorList) { //password change can return multiple errors
-                    validateService.resetValidity(formName);
-
+            else { 
+                validateService.resetValidity(formName);
+                if (response.data.errorList) {
                     response.data.errorList.forEach((item) => {
-                        validateService.errorMsg(item.inputId, item.message);
+                        $scope[item.inputId + 'Error'] = true;
+                        let defaultMessage = $('#' + item.inputId + 'Error').text();
+                        alert(defaultMessage)
+                        $('#' + item.inputId + 'Error').text(item.message);
+                        $timeout(() => {
+                            $('#' + item.inputId + 'Error').text(defaultMessage);
+                            $scope[item.inputId + 'Error'] = false;
+                        }, 2000);
                     });
+                    return;
                 }
-                else { //otherwise its a single error from first or last name change
                     validateService.touchOnSubmit(formName);
-                }
             }
         });
     };
@@ -89,7 +94,6 @@
         const name = $('#' + inputId).attr('name');
         //if we're changing password check if any of password fields have an error, for other types of changes check if their field has an error
         if (!formName.$valid) {
-            alert('b')
             validateService.touchOnSubmit(formName);
             return;
         }
@@ -124,7 +128,10 @@
             }
             else {
                 $scope.deactivateDecision = false;
-                validateService.errorMsg('settingsDeactivate', response.data.message);
+                $scope.deactivateErrorMsg = response.data.message;
+                $timeout(() => {
+                    $scope.deactivateErrorMsg = '';
+                }, 2000);
             }
         });
     };

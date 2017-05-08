@@ -132,14 +132,14 @@
                         <label class="block-label" id="changePasswordLabel">Change password:</label>
                         <label for="settingsOldPassword" class="block-label" id="oldPasswordLabel">Old password:</label>
                         <input type="password" aria-labelledby="oldPasswordLabel changePasswordLabel" class="form-control settings-input" placeholder="i.e. ******" name="oldPassword" ng-model="settingsOldPassword" id="settingsOldPassword" ng-pattern="constants.passwordRegex" ng-required="true"/>
-                        <div class="error" id="settingsOldPasswordError" ng-show="!settingsPasswordForm.oldPassword.$valid && settingsPasswordForm.oldPassword.$touched">{{constants.passwordError}}</div>
+                        <div class="error" id="settingsOldPasswordError" ng-show="!settingsPasswordForm.oldPassword.$valid && settingsPasswordForm.oldPassword.$touched || settingsOldPasswordError">{{constants.passwordError}}</div>
                         <label for="settingsNewPassword" class="block-label" id="newPasswordLabel">New password:</label>
                         <input type="password" aria-labelledby="newPasswordLabel changePasswordLabel" class="form-control settings-input" placeholder="i.e. ******" name="password" ng-model="settingsNewPassword" id="settingsNewPassword" ng-pattern="constants.passwordRegex" ng-required="true"/>
-                        <div class="error" id="settingsNewPasswordError" ng-show="!settingsPasswordForm.password.$valid && settingsPasswordForm.password.$touched">{{constants.passwordError}}</div>
+                        <div class="error" id="settingsNewPasswordError" ng-show="!settingsPasswordForm.password.$valid && settingsPasswordForm.password.$touched || settingsNewPasswordError">{{constants.passwordError}}</div>
                         <label for="settingsRePassword" class="block-label" id="confirmPasswordLabel">Confirm password:</label>
                         <input type="password" aria-labelledby="confirmPasswordLabel changePasswordLabel" class="form-control settings-input" placeholder="i.e. ******" name="rePassword" ng-model="settingsRePassword" id="settingsRePassword" valid-when="settingsNewPassword === settingsRePassword" ng-required="true"/>
                         <button type="submit" class="change-btn btn btn-primary" id="passwordChangeBtn">Change</button>
-                        <div class="error" id="settingsRePasswordError" ng-show="!settingsPasswordForm.rePassword.$valid && settingsPasswordForm.rePassword.$touched">{{constants.rePasswordError}}</div>
+                        <div class="error" id="settingsRePasswordError" ng-show="!settingsPasswordForm.rePassword.$valid && settingsPasswordForm.rePassword.$touched || settingsRePasswordError">{{constants.rePasswordError}}</div>
                     </form>
                     <label class="block-label" for="deactivateBtn">Deactivate the account:</label>
                     <div ng-show="deactivateDecision" id="deactivateDecisionContainer">
@@ -149,7 +149,7 @@
                     </div>
                     <div ng-hide="deactivateDecision">
                         <button type="button" id="deactivateBtn" ng-click="deactivateDecision = !deactivateDecision">Deactivate</button>
-                        <div class="error" id="settingsDeactivateError"></div>
+                        <div class="error" id="settingsDeactivateError" ng-show="deactivateErrorMsg">{{deactivateErrorMsg}}</div>
                     </div>
                 </div>
                 <div class="modal-footer">

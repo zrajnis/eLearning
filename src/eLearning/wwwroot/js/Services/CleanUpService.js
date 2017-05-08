@@ -16,6 +16,7 @@
 
     this.clearSettingsData = $scope => {
         $scope.deactivateDecision = false;
+        $scope.deactivateErrorMsg = '';
         $scope.settingsFirstName = '';
         $scope.settingsLastName = '';
         $scope.settingsOldPassword = '';

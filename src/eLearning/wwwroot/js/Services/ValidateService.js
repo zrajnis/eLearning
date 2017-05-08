@@ -16,15 +16,7 @@
         formName.$setUntouched();
     };
 
-    this.errorMsg = (inputID, message) => {
-        $('#' + inputID + 'Error').text(message);
-        $('#' + inputID).addClass('hasError');
-        return true;
-    };
-
-    this.removeErrorMsg = inputID => {
-        $('#' + inputID + 'Error').text('');
-        $('#' + inputID).removeClass('hasError');
-        return false;
-    };
+    this.touchField = field => {
+        field.$touched = true;
+    }
 }]);
