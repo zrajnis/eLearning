@@ -1,5 +1,5 @@
-﻿angular.module('eLearning').controller('UserCtrl', ['$rootScope', '$scope', '$http', '$window', 'validateService', 'cleanUpService', 'courseService', 'constants',
-($rootScope, $scope, $http, $window, validateService, cleanUpService, courseService, constants) => {
+﻿angular.module('eLearning').controller('UserCtrl', ['$rootScope', '$scope', '$http', '$window', 'validateService', 'cleanUpService', 'courseService', 'constants', '$timeout',
+($rootScope, $scope, $http, $window, validateService, cleanUpService, courseService, constants, $timeout) => {
     //get relevant user data thats going to be displayed in side menu
     $http({
         method: "GET",
@@ -13,14 +13,11 @@
 
     $('#settingsModal').on('hidden.bs.modal', () => {
         $scope.clearSettingsData();
+        validateService.resetValidity($scope.settingsFirstNameForm);
+        validateService.resetValidity($scope.settingsLastNameForm);
+        validateService.resetValidity($scope.settingsPasswordForm);
         $scope.$apply();
     });
-
-    $scope.firstNameError = true,
-    $scope.lastNameError = true;
-    $scope.oldPasswordError = true;
-    $scope.passwordError = true;
-    $scope.rePasswordError = true;
 
     $scope.courseService = courseService;
     $scope.constants = constants;
@@ -58,60 +55,63 @@
     $scope.settingsValidateField = fieldId => validateService.validateField(fieldId, $scope);
     $scope.clearSettingsData = () => cleanUpService.clearSettingsData($scope);
 
-    $scope.changeDataHttpRequest = (name, inputId, data) => {
+    $scope.changeDataHttpRequest = (name, inputId, data, formName) => {
         $http({
             method: "PUT",
             url: "/Account/Change/" + name,
             data: data
         }).then(response => {
             if (response.data.message === 'Success!') {
-                $('#' + name + 'ChangeBtn').addClass('successBtn').text('Success');
-
-                setTimeout(() => {
-                    $('#' + name + 'ChangeBtn').removeClass('successBtn').text('Change');
+                $('#' + name + 'ChangeBtn').addClass('btn-success').text('Success');
+                $timeout(() => {
+                    $('#' + name + 'ChangeBtn').removeClass('btn-success').text('Change');
                 }, 2000);
 
+                validateService.resetValidity(formName);
                 cleanUpService.clearSettingsData($scope);
             }
             else {
                 if (response.data.errorList) { //password change can return multiple errors
-                    validateService.removeErrorMsg('settingsOldPassword');
-                    validateService.removeErrorMsg('settingsNewPassword');
-                    validateService.removeErrorMsg('settingsRePassword');
+                    validateService.resetValidity(formName);
 
                     response.data.errorList.forEach((item) => {
                         validateService.errorMsg(item.inputId, item.message);
                     });
                 }
                 else { //otherwise its a single error from first or last name change
-                    validateService.errorMsg(inputId, response.data.message);
+                    validateService.touchOnSubmit(formName);
                 }
             }
         });
     };
 
-    $scope.change = inputId => {
+    $scope.change = (inputId, formName) => {
         const name = $('#' + inputId).attr('name');
         //if we're changing password check if any of password fields have an error, for other types of changes check if their field has an error
-        if (name !== 'password' && !$scope[name + 'Error'] || name === 'password' && !$scope.oldPasswordError && !$scope.passwordError && !$scope.rePasswordError) {
-            let data = null;
-            switch (name) {
-                case 'firstName':
-                    data = { FirstName: $scope[inputId] };
-                    break;
-                case 'lastName':
-                    data = { LastName: $scope[inputId] };
-                    break;
-                case 'password':
-                    data = {
-                        OldPassword: $scope.settingsOldPassword,
-                        NewPassword: $scope.settingsNewPassword,
-                        RePassword: $scope.settingsRePassword
-                    };
-                    break;
-            }
-            $scope.changeDataHttpRequest(name, inputId, data);
+        if (!formName.$valid) {
+            alert('b')
+            validateService.touchOnSubmit(formName);
+            return;
         }
+
+        let data = null;
+
+        switch (name) {
+            case 'firstName':
+                data = { FirstName: $scope[inputId] };
+                break;
+            case 'lastName':
+                data = { LastName: $scope[inputId] };
+                break;
+            case 'password':
+                data = {
+                    OldPassword: $scope.settingsOldPassword,
+                    NewPassword: $scope.settingsNewPassword,
+                    RePassword: $scope.settingsRePassword
+                };
+                break;
+        }
+        $scope.changeDataHttpRequest(name, inputId, data, formName);
     };
 
     $scope.deactivate = () => {

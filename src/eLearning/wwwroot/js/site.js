@@ -22,10 +22,22 @@ app.constant('constants', {
     firstNameError: 'Please enter a valid first name.',
     lastNameError: 'Please enter a valid last name.',
     emailError: 'Please enter a valid email address.',
-    passwordError: 'Must have at least 1 digit and length over 5.',
+    passwordError: 'Must have at least 1 digit and length of 6.',
     rePasswordError: 'Passwords must match.',
     signUpError: 'Sign up failed.',
     signInError: 'Sign in failed.'
+});
+
+app.directive('validWhen', function () {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function (scope, elem, attrs, ngModel) {
+            return scope.$watch(attrs.validWhen, function (newVal) {
+                return ngModel.$setValidity('validWhen', newVal);
+            });
+        }
+    };
 });
 
 interact('.draggable')
