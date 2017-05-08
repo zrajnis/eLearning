@@ -39,8 +39,16 @@
             }
 
             if (response.data.message === 'Email already in use.') {
+                $scope.signUpEmailError = true;
+                let defaultMessage = $('#signUpEmailError').text();
+
                 $('#signUpEmailError').text(response.data.message);
                 $('#signUpEmail').addClass('hasError');
+                $timeout(() => {
+                    $scope.signUpEmailError = false;
+                    $('#signUpEmailError').text(defaultMessage);
+                    $('#signUpEmail').removeClass('hasError');
+                }, 2000);
             }
 
             $('#signUpError').text(constants.signUpError);

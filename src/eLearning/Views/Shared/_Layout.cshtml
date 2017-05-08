@@ -101,7 +101,7 @@
                         <div class="error" ng-show="!signUpForm.lastName.$valid && signUpForm.lastName.$touched">{{constants.lastNameError}}</div>
                         <label for="signUpEmail" class="block-label">Enter email:</label>
                         <input type="text" class="form-control signUp-input" placeholder="i.e. john@gmail.com" name="email" ng-model="signUpEmail" id="signUpEmail" ng-pattern="constants.emailRegex" ng-required="this"/>
-                        <div class="error" ng-show="!signUpForm.email.$valid && signUpForm.email.$touched">{{constants.emailError}}</div>
+                        <div class="error" ng-show="!signUpForm.email.$valid && signUpForm.email.$touched || signUpEmailError">{{constants.emailError}}</div>
                         <label for="signUpPassword" class="block-label">Enter password:</label>
                         <input type="password" class="form-control signUp-input" placeholder="i.e. ******" name="password" ng-model="signUpPassword"  id="signUpPassword" ng-pattern="constants.passwordRegex" ng-required="this"/>
                         <div class="error" ng-show="!signUpForm.password.$valid && signUpForm.password.$touched">{{constants.passwordError}}</div>

@@ -74,13 +74,15 @@
                 validateService.resetValidity(formName);
                 if (response.data.errorList) {
                     response.data.errorList.forEach((item) => {
-                        $scope[item.inputId + 'Error'] = true;
+                        $scope[item.inputId + 'Error'] = true;                       
                         let defaultMessage = $('#' + item.inputId + 'Error').text();
-                        alert(defaultMessage)
+                      
                         $('#' + item.inputId + 'Error').text(item.message);
+                        $('#' + item.inputId).addClass('hasError');
                         $timeout(() => {
-                            $('#' + item.inputId + 'Error').text(defaultMessage);
                             $scope[item.inputId + 'Error'] = false;
+                            $('#' + item.inputId + 'Error').text(defaultMessage);
+                            $('#' + item.inputId).removeClass('hasError');
                         }, 2000);
                     });
                     return;
@@ -92,7 +94,7 @@
 
     $scope.change = (inputId, formName) => {
         const name = $('#' + inputId).attr('name');
-        //if we're changing password check if any of password fields have an error, for other types of changes check if their field has an error
+
         if (!formName.$valid) {
             validateService.touchOnSubmit(formName);
             return;
