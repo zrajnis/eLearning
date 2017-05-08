@@ -7,16 +7,16 @@
 
         $http({
             method: "GET",
-            url: "/Course/Get?id=" + id,
+            url: "/Course/Get?id=" + id
         }).then(response => {
             if (response.data.message) {
                 window.location.href = '/Course';
+                return;
             }
-            else {
-                this.course = response.data;
-                approximateSubs(this.course);
-                this.hideSpinner = true;
-            }
+            
+            this.course = response.data;
+            approximateSubs(this.course);
+            this.hideSpinner = true;
         });
     }
     else if (action.toLowerCase().includes('update')) {
@@ -24,24 +24,24 @@
 
         $http({
             method: "GET",
-            url: "/Course/Load?id=" + id,
+            url: "/Course/Load?id=" + id
         }).then(response => {
             if (response.data.message) {
                 window.location.href = '/Course';
+                return;
             }
-            else {
-                this.course = response.data.course[0];
-                this.originalCourse = this.course;
-                this.removed = {
-                    lessonIds: [],
-                    exerciseIds: [],
-                    questionIds: [],
-                    answerIds: []
-                };
-                this.originalResource = this.resource;
-                approximateSubs(this.course);
-                this.hideSpinner = true;
-            }
+
+            this.course = response.data.course[0];
+            this.originalCourse = this.course;
+            this.removed = {
+                lessonIds: [],
+                exerciseIds: [],
+                questionIds: [],
+                answerIds: []
+            };
+            this.originalResource = this.resource;
+            approximateSubs(this.course);
+            this.hideSpinner = true;
         });
     }
     else if (action.toLowerCase().includes('search')) {
@@ -49,17 +49,34 @@
 
         $http({
             method: "GET",
-            url: "/Course/Find?name=" + name,
+            url: "/Course/Find?name=" + name
         }).then(response => {
             if (response.data.message) {
                 window.location.href = '/Course';
+                return;
             }
-            else {
-                this.searchResults = response.data.searchResults;
-                this.searchResults.forEach((result, index) => approximateSubs(this.searchResults[index]));
-                this.hideSpinner = true;
-            }
+            this.searchResults = response.data.searchResults;
+            this.searchResults.forEach((result, index) => approximateSubs(this.searchResults[index]));
+            this.hideSpinner = true;
         });
+    }
+    else if (action.toLowerCase().includes('exercise')) {
+        const id = action.split('=')[1]; //action will be action name + query string i.e. view?id=2 or update?id=2
+
+        $http({
+            method: "GET",
+            url: "/Exercise/Load?id=" + id
+        }).then(response => {
+            if (response.data.message) {
+                window.location.href = '/Error';
+                return;
+            }
+
+            this.loadedExercise = response.data.exercise[0];
+            this.exerciseAnswers = [];
+            resetExerciseData();
+            this.hideSpinner = true;
+        });     
     }
 
     $('#createForm').on('keyup keypress', function (e) { //disable submit when enter is pressed
@@ -79,7 +96,7 @@
 
     this.search = () => {
         window.location.href = '/Course/Search?name=' + this.searchInput;
-    }
+    };
 
     this.subscribe = () => {
         $('#subscribeBtn').addClass('unclickable'); //prevent request spamming
@@ -123,7 +140,12 @@
     };
 
     this.loadResource = id => {
-        this.resourceAddress = "http://localhost:55416/Resource//Load/?id=" + id; //load pdf in iframe
+        this.resourceAddress = "http://localhost:55416/Resource/Load/?id=" + id; //load pdf in iframe
+        $('#resourceDisplayModal').modal('show');
+    };
+
+    this.loadExercise = id => {
+        this.resourceAddress = "http://localhost:55416/Exercise?id=" + id; //load exercise in iframe
         $('#resourceDisplayModal').modal('show');
     };
 
@@ -149,7 +171,7 @@
                 name: null,
                 description: null,
                 questions: []
-            });;
+            });
             $timeout(() => scrollBottom('exercisesFieldsetElements'), 1);
         }
         else {
@@ -207,44 +229,43 @@
         }
     };
 
-
     this.createCourse = formName => {
-        if (formName.$valid) {
-            let fd = new FormData();
-
-            $.each($("input[type='file']"), (i, input) => { //append each uploaded file to the form data
-                fd.append('Files', input.files[0]);
-            });
-
-            fd.append('Name', this.course.name);
-            fd.append('Description', this.course.description);
-
-            for (let i = 0; i < this.course.lessons.length; i++) {
-                fd.append('Lessons[]', JSON.stringify(this.course.lessons[i]));
-            }
-
-            for (let i = 0; i < this.course.exercises.length; i++) {
-                fd.append('Exercises[]', JSON.stringify(this.course.exercises[i]));
-            }
-
-            $http.post('/Course/Create', fd, {
-                //transformRequest: angular.identity,
-                headers: { 'Content-Type': undefined }
-            }).then(response => {
-                if (response.data.message === 'Success!') {
-                    $window.location.href = '/Course/Create';
-                }
-                else {
-                    $('#createError').text(response.data.message);
-                    $timeout(() => {
-                        $('#createError').text('');
-                    }, 2000);
-                }
-            });
-        }
-        else {
+        if (!formName.$valid) {
             touchOnSubmit(formName);
+            return;
         }
+
+        let fd = new FormData();
+
+        $.each($("input[type='file']"), (i, input) => { //append each uploaded file to the form data
+            fd.append('Files', input.files[0]);
+        });
+
+        fd.append('Name', this.course.name);
+        fd.append('Description', this.course.description);
+
+        for (let i = 0; i < this.course.lessons.length; i++) {
+            fd.append('Lessons[]', JSON.stringify(this.course.lessons[i]));
+        }
+
+        for (let i = 0; i < this.course.exercises.length; i++) {
+            fd.append('Exercises[]', JSON.stringify(this.course.exercises[i]));
+        }
+
+        $http.post('/Course/Create', fd, {
+            //transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined }
+        }).then(response => {
+            if (response.data.message === 'Success!') {
+                $window.location.href = '/Course/Create';
+                return;
+            }
+
+            $('#createError').text(response.data.message);
+            $timeout(() => {
+                $('#createError').text('');
+            }, 2000);
+        });
     };
 
     this.remove = (array, index) => {
@@ -252,87 +273,74 @@
     };
 
     this.removeAndRemember = (array, index, type) => {
-        console.log('member ' + JSON.stringify(array[index]['id']));
-        if (array[index]['id'] != undefined) {
-            switch (type) {
-                case 'lesson':
-                    this.removed.lessonIds.push(array[index]['id']);
-                    break;
-                case 'exercise':
-                    this.removed.exerciseIds.push(array[index]['id']);
-                    break;
-                case 'question':
-                    this.removed.questionIds.push(array[index]['id']);
-                    break;
-                case 'answer':
-                    this.removed.answerIds.push(array[index]['id']);
-                    break;
-            }
+        if (array[index]['id'] !== undefined) {
+            this.removed[type + 'Ids'].push(array[index]['id']);
         }
+
         this.remove(array, index);
     };
 
     this.updateCourse = formName => {
         
-        if (formName.$valid) {
-            let fd = new FormData();
-
-            $.each($("input[type='file']"), (i, input) => { //append each uploaded file to the form data
-                fd.append('Files', input.files[0]);
-            });
-
-            fd.append('Id', this.course.id);
-            fd.append('Name', this.course.name);
-            fd.append('Description', this.course.description);
-
-            for (let i = 0; i < this.course.lessons.length; i++) {
-                fd.append('Lessons[]', JSON.stringify(this.course.lessons[i]));
-            }
-
-            for (let i = 0; i < this.course.exercises.length; i++) {
-                fd.append('Exercises[]', JSON.stringify(this.course.exercises[i]));
-            }
-            fd.append('Removed', JSON.stringify(this.removed));
-
-            $http.post('/Course/Update', fd, {
-                headers: { 'Content-Type': undefined }
-            }).then(response => {
-                if (response.data.message === 'Success!') {
-                    $window.location.href = '/';
-                }
-                else {
-                    $('#updateError').text(response.data.message);
-                    $timeout(() => {
-                        $('#updateError').text('');
-                    }, 2000);
-                }
-            });
-        }
-        else {
+        if (!formName.$valid) {
             touchOnSubmit(formName);
+            return;
         }
-        
+
+        let fd = new FormData();
+
+        $.each($("input[type='file']"), (i, input) => { //append each uploaded file to the form data
+            fd.append('Files', input.files[0]);
+        });
+
+        fd.append('Id', this.course.id);
+        fd.append('Name', this.course.name);
+        fd.append('Description', this.course.description);
+
+        for (let i = 0; i < this.course.lessons.length; i++) {
+            fd.append('Lessons[]', JSON.stringify(this.course.lessons[i]));
+        }
+
+        for (let i = 0; i < this.course.exercises.length; i++) {
+            fd.append('Exercises[]', JSON.stringify(this.course.exercises[i]));
+        }
+        fd.append('Removed', JSON.stringify(this.removed));
+
+        $http.post('/Course/Update', fd, {
+            headers: { 'Content-Type': undefined }
+        }).then(response => {
+            if (response.data.message === 'Success!') {
+                $window.location.href = '/';
+                return;
+            }
+
+            $('#updateError').text(response.data.message);
+            $timeout(() => {
+                $('#updateError').text('');
+            }, 2000);
+        });
     };
 
     this.deleteCourse = () => {
         $http({
             method: "DELETE",
             url: "/Course/Delete?id=" + this.course.id,
-			headers: { 
-				'Accept': 'application/vnd.hal+json',
-				'Content-Type': 'application/json' }
+            headers: {
+                'Accept': 'application/vnd.hal+json',
+                'Content-Type': 'application/json'
+            }
         }).then(response => {
             if (response.data.message === 'Success!') {
                 window.location.href = '/Course';
+                return;
             }
-            else {
-                $('#deleteError').text(response.data.message);
-                $timeout(() => {
-                    $('#deleteError').text('');
-                }, 2000);
-            }
+
+            $('#deleteError').text(response.data.message);
+            $timeout(() => {
+                $('#deleteError').text('');
+            }, 2000);
         });
-    }
+    };
 
     this.checkMyCourse = (courseId, myCourses) => {
         if (myCourses && myCourses.length > 0) {
@@ -342,7 +350,6 @@
                 }
             }
         }
-        
         return false;
     };
 
@@ -394,5 +401,92 @@
         else {
             obj.approxSubCount = obj.subscriberCount;
         }
+    };
+
+    this.calculateScore = () => {
+        let totalPoints = 0;
+        this.loadedExercise.questions.forEach((question) => {
+            totalPoints +=  question.points;
+        });
+        let achievedPoints = 0;
+        this.loadedExercise.questions.forEach((question, questionIndex) => {
+            let correctAnswerCnt = 0;
+
+            question.answers.forEach((answer, answerIndex) => {
+                correctAnswerCnt = answer.isCorrect ? ++correctAnswerCnt : correctAnswerCnt;
+            });
+
+            let emptyAnswerCnt = 0;
+            let answerMultiplier = 0;
+
+            question.answers.forEach((answer, answerIndex) => {
+                if (answer.isCorrect && this.exerciseAnswers[questionIndex][answerIndex] && correctAnswerCnt) {
+                    answerMultiplier += 1 / correctAnswerCnt;
+                }
+                else if (answer.isCorrect && !this.exerciseAnswers[questionIndex][answerIndex] && correctAnswerCnt ||
+                    !answer.isCorrect && this.exerciseAnswers[questionIndex][answerIndex] && correctAnswerCnt ||
+                    !correctAnswerCnt && this.exerciseAnswers[questionIndex][answerIndex]) {
+                    answerMultiplier -= 1 / correctAnswerCnt;
+                }
+                else if (!answer.isCorrect && !this.exerciseAnswers[questionIndex][answerIndex] && correctAnswerCnt === 0) {
+                    emptyAnswerCnt++;
+                }
+            });
+            if (correctAnswerCnt === 0) { //in case there was a trick question with no checked answers
+                achievedPoints += emptyAnswerCnt === question.answers.length ? question.points : 0;
+            }
+            else {
+                answerMultiplier = answerMultiplier < 0 ? 0 : answerMultiplier;
+                achievedPoints += question.points * answerMultiplier;
+            }           
+        });
+
+        const score = (achievedPoints / totalPoints * 100).toFixed(2);
+
+        $http({
+            method: "POST",
+            url: "/Exercise/Result",
+            headers: {
+                'Accept': 'application/vnd.hal+json',
+                'Content-Type': 'application/json'
+            },
+            data: {
+                Score: score,
+                Id: this.loadedExercise.id
+            }
+        }).then(response => {
+            if (response.data.message === 'Success!') {
+                resetExerciseData();
+                window.parent.updateScore(score, this.loadedExercise.id);
+                window.parent.closeModal();
+                return;
+            }
+
+            $('#deleteError').text(response.data.message);
+            $timeout(() => {
+                $('#deleteError').text('');
+            }, 2000);
+        });
+    };
+
+    window.closeModal = () => {
+        $('#resourceDisplayModal').modal('hide');
+    };
+
+    window.updateScore = (score, id) => {
+        this.course.exercises.forEach(exercise => {
+            if (exercise.id === id) {
+                exercise.score = score;
+                $rootScope.$broadcast('updateScore');
+            }
+        })
+    };
+    const resetExerciseData = () => {
+        this.loadedExercise.questions.forEach((question, questionIndex) => {
+            this.exerciseAnswers[questionIndex] = [];
+            question.answers.forEach((answer, answerIndex) => {
+                this.exerciseAnswers[questionIndex][answerIndex] = false;
+            });
+        });
     };
 }]);

@@ -2,11 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace eLearning.Models
 {
+    [NotMapped]
     public class UpdateCourseModel
     {
         public IList<IFormFile> Files { get; set; }

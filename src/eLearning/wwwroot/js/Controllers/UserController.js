@@ -26,18 +26,19 @@
     $scope.constants = constants;
 
     $rootScope.$on('subscribe', (event, newCourse) => {
-        console.log(JSON.stringify(newCourse.id));
         $scope.user.subscribedCourses.push(newCourse);
     });
 
     $rootScope.$on('unsubscribe', (event, courseId) => {
-        console.log(JSON.stringify(courseId));
-
         $scope.user.subscribedCourses.forEach((course, index) => {
             if (course.id === courseId) {
                 $scope.user.subscribedCourses.splice(index, 1);
             }
         });
+    });
+
+    $rootScope.$on('updateScore', event => {
+        $scope.$apply();
     });
 
     $scope.signOut = () => {
@@ -47,10 +48,10 @@
         }).then((response) => {
             if (response.data.message === 'Success!') {
                 $window.location.href = '/';
+                return;
             }
-            else {
-                alert(JSON.stringify(response.data.message)); //pretty much impossible scenario
-            }
+            alert(JSON.stringify(response.data.message)); //pretty much impossible scenario
+           
         });
     };
 
